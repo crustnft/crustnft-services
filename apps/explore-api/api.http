@@ -1,2 +1,21 @@
 ### Health-check
 GET http://localhost:3000/health
+
+
+### Get contracts
+GET http://localhost:3000/api/v1/contracts?pageSize=10
+
+
+### Create Contract
+POST http://localhost:3000/api/v1/contracts
+content-type: application/json
+
+{
+  "id":"1",
+  "txHash":"tx-hash",
+  "address":"address",
+  "chainId":56,
+  "contractContent":"long long long content"
+}
+
+
