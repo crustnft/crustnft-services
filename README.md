@@ -1,5 +1,14 @@
 # Crust-NFT-Explore
 
+## Prerequisite
+
+## Development
+
+### explore-api
+
+- envs `cp -n apps/explore-api/.env.sample apps/explore-api/.env.local`
+- start `npm run start explore-api`
+
 ## Deployment
 
 ### Local
