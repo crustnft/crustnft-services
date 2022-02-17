@@ -22,8 +22,10 @@ SERVICE_NAME=explore-api
 
 npx nx run ${SERVICE_NAME}:build:production
 
-gcloud functions deploy ${SERVICE_NAME} --entry-point=api --runtime nodejs16 \
- --source=dist/apps/${SERVICE_NAME} \
+gcloud functions deploy ${SEVICE_NAME} --entry-point=api --runtime nodejs16 \
+ --source=dist/apps/${SEVICE_NAME} \
+ --region=us-east1 \
+ --set-env-vars APP_ENV=prod \
  --trigger-http --allow-unauthenticated
 
 ```
