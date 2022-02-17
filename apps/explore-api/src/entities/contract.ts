@@ -1,5 +1,9 @@
 import datastore from '../clients/datastore';
 import { SERVICE_NAME } from '../constants';
+import {
+  ContractQueryParams,
+  CreateContractDto,
+} from '../endpoints/contracts/types';
 
 const ENTITY_NAME = `${process.env.APP_ENV}-${SERVICE_NAME}-contract`;
 
@@ -70,7 +74,7 @@ function createEntity(dto) {
   return entity;
 }
 
-export async function insertEntity(contractDto) {
+export async function insertEntity(contractDto: CreateContractDto) {
   const entities = createEntity(contractDto);
   return datastore.insert(entities);
 }
@@ -86,8 +90,12 @@ export async function findById(contractId) {
   return datastore.get(key);
 }
 
-export async function search(pageSize, pageCursor) {
+export async function search(queryParams: ContractQueryParams) {
+  const { pageSize, pageCursor, account } = queryParams;
   let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
+  if (account) {
+    query = query.filter('account', '=', account);
+  }
   if (pageCursor) {
     query = query.start(pageCursor);
   }

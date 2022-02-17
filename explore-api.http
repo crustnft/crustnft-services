@@ -6,7 +6,7 @@ GET http://localhost:3000/health
 GET http://localhost:3000/api/v1/contracts/0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35
 
 ### Get contracts
-GET http://localhost:3000/api/v1/contracts?pageSize=10
+GET http://localhost:3000/api/v1/contracts?pageSize=10&account=0xa647e98d78f56075dcc894ed273146d3be1bbe03
 
 
 ### Create Contract

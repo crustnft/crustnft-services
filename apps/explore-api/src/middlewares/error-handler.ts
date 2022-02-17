@@ -9,11 +9,22 @@ export function errorHandler() {
       console.log('errorHandler: ', error);
       if (HttpError.isHttpError(error)) {
         ctx.status = error.statusCode;
-        return (ctx.body = {
+        if (error.statusCode === 400) {
+          ctx.body = {
+            error: {
+              message: HttpError[400].name,
+              details: error.details,
+            },
+          };
+          return;
+        }
+        ctx.body = {
           error: {
             message: error.message,
+            details: error.details,
           },
-        });
+        };
+        return;
       }
       ctx.status = 500;
       ctx.body = {

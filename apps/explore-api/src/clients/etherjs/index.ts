@@ -21,7 +21,7 @@ function getChain(chainId: number) {
   if (foundChain) {
     return foundChain;
   }
-  throw new Error(`Not supported chainId: ${chainId}`);
+  throw new Error(`Given chainId is not supported`);
 }
 
 export default getProviderInstance;

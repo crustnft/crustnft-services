@@ -7,3 +7,8 @@ export interface Contract {
 }
 
 export type CreateContractDto = Contract;
+
+export type ContractQueryParams = Partial<Contract> & {
+  pageSize: number;
+  pageCursor?: string;
+};

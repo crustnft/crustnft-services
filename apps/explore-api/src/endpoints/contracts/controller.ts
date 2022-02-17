@@ -1,5 +1,6 @@
 import { Context } from 'koa';
 import * as service from './service';
+import { ContractQueryParams } from './types';
 
 export async function create(ctx: Context) {
   ctx.body = {
@@ -8,8 +9,9 @@ export async function create(ctx: Context) {
 }
 
 export async function search(ctx: Context) {
-  const { pageSize = 10, pageCursor } = ctx.query;
-  const [data, pagination] = await service.search(pageSize, pageCursor);
+  const [data, pagination] = await service.search(
+    ctx.query as unknown as ContractQueryParams
+  );
   ctx.body = {
     data,
     pagination,
@@ -17,8 +19,9 @@ export async function search(ctx: Context) {
 }
 
 export async function findById(ctx: Context) {
-  const data = await service.findById(ctx.params.txHash as string);
+  const txHash = ctx.params.txHash as string;
+  const [first] = await service.findById(txHash);
   ctx.body = {
-    data,
+    data: first,
   };
 }
