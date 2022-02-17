@@ -15,3 +15,10 @@ export async function search(ctx: Context) {
     pagination,
   };
 }
+
+export async function findById(ctx: Context) {
+  const data = await service.findById(ctx.params.txHash as string);
+  ctx.body = {
+    data,
+  };
+}
