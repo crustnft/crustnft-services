@@ -1,0 +1,33 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-t',
+        'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$SHORT_SHA',
+        '--build-arg=SERVICE_NAME=${_SERVICE_NAME}',
+        '--target=production',
+        '.',
+      ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$SHORT_SHA']
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:326.0.0
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_APP_ENV}-${_SERVICE_NAME}
+      - --image=gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$SHORT_SHA
+      - --platform=managed
+      - --region=${_REGION}
+      - --project=$PROJECT_ID
+      - --allow-unauthenticated
+      - --set-env-vars=APP_ENV=${_APP_ENV}
+
+substitutions:
+  _APP_ENV: prod
+  _REGION: us-east1
+  _SERVICE_NAME: explore-api
+
+images:
+  - 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$SHORT_SHA'
