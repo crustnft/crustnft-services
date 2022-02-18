@@ -13,6 +13,7 @@
   "dependencies": {
     "@google-cloud/datastore": "^6.6.2",
     "@google-cloud/functions-framework": "^3.0.0",
+    "@koa/cors": "^3.1.0",
     "@koa/router": "^10.1.1",
     "dotenv": "^16.0.0",
     "ethers": "^5.5.4",
@@ -21,7 +22,6 @@
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
-    "koa-cors": "^0.0.16",
     "koa-logger": "^3.2.1",
     "koa-router": "^10.1.1",
     "lint-staged": "^12.3.4",
