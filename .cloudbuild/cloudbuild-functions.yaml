@@ -1,0 +1,35 @@
+steps:
+  - name: node:16-bullseye
+    entrypoint: npm
+    args: ['install']
+
+  - name: node:16-bullseye
+    entrypoint: npm
+    args: ['run', 'lint', '${_SERVICE_NAME}']
+
+  - name: node:16-bullseye
+    entrypoint: npm
+    args: ['run', 'test', '${_SERVICE_NAME}']
+
+  - name: node:16-bullseye
+    entrypoint: npm
+    args:
+      ['run', 'build', '${_SERVICE_NAME}', '--', '--configuration=production']
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:326.0.0
+    entrypoint: gcloud
+    args:
+      - functions
+      - deploy
+      - ${_APP_ENV}-${_SERVICE_NAME}
+      - --source=./dist/apps/${_SERVICE_NAME}
+      - --platform=managed
+      - --region=${_REGION}
+      - --project=$PROJECT_ID
+      - --allow-unauthenticated
+      - --set-env-vars=APP_ENV=${_APP_ENV}
+
+substitutions:
+  _APP_ENV: prod
+  _REGION: us-east1
+  _SERVICE_NAME: explore-api

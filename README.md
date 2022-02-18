@@ -22,22 +22,12 @@ docker build -t explore-api --build-arg=SERVICE_NAME=explore-api  --target=produ
 - [Cloud Functions](https://cloud.google.com/sdk/gcloud/reference/functions/deploy)
 
 ```
-#!/bin/sh
-
-SERVICE_NAME=explore-api
-
-npx nx run ${SERVICE_NAME}:build:production
-
-gcloud functions deploy ${SEVICE_NAME} --entry-point=api --runtime nodejs16 \
- --source=dist/apps/${SEVICE_NAME} \
- --region=us-east1 \
- --set-env-vars APP_ENV=prod \
- --trigger-http --allow-unauthenticated
+gcloud builds submit --config .cloudbuild/cloudbuild-functions.yaml . --substitutions=_APP_ENV=stage
 
 ```
 
 - [Cloud Run](https://cloud.google.com/sdk/gcloud/reference/run/deploy)
 
 ```
-gcloud builds submit --config cloudbuild-runs.yaml . --substitutions=SHORT_SHA=local,APP_ENV=stage
+gcloud builds submit --config .cloudbuild/cloudbuild-runs.yaml . --substitutions=SHORT_SHA=local,_APP_ENV=stage,_REGION=abc-xyz
 ```
