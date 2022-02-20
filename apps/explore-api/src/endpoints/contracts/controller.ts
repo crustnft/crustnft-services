@@ -20,8 +20,8 @@ export async function search(ctx: Context) {
 
 export async function findById(ctx: Context) {
   const txHash = ctx.params.txHash as string;
-  const [first] = await service.findById(txHash);
+  const data = await service.findById(txHash);
   ctx.body = {
-    data: first,
+    data,
   };
 }

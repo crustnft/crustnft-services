@@ -24,5 +24,6 @@ export async function search(queryParams: UserQueryParams) {
 }
 
 export async function findById(txHash: string) {
-  return UserEntity.findById(txHash);
+  const [firstUser] = await UserEntity.findById(txHash);
+  return firstUser;
 }

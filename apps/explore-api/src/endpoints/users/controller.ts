@@ -26,8 +26,8 @@ export async function search(ctx: Context) {
 
 export async function findById(ctx: Context) {
   const accountAddress = ctx.params.accountAddress as string;
-  const [first] = await service.findById(accountAddress);
+  const user = await service.findById(accountAddress);
   ctx.body = {
-    data: first,
+    data: user,
   };
 }

@@ -7,7 +7,7 @@ export interface User {
 }
 
 export type CreateUserDto = User;
-export type UpdateUserDto = User;
+export type UpdateUserDto = Partial<User> & { nonce: string };
 
 export type UserQueryParams = Partial<User> & {
   pageSize: number;

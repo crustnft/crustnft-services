@@ -1,4 +1,5 @@
 import { TransactionReceipt } from '@ethersproject/abstract-provider';
+import { ethers } from 'ethers';
 import getProviderInstance from '../clients/etherjs';
 import { Contract } from '../endpoints/contracts/types';
 
@@ -9,6 +10,15 @@ export async function checkTransaction(contract: Contract) {
   if (!isValid(receipt, account, contractAddress)) {
     throw new Error(`TxHash does not meet requirements`);
   }
+}
+
+export function verifySignature(
+  account: string,
+  signature: string,
+  userNonce: string
+) {
+  const decodedAddress = ethers.utils.verifyMessage(userNonce, signature);
+  return account.toLowerCase() === decodedAddress.toLowerCase();
 }
 
 function isValid(

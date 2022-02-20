@@ -25,6 +25,10 @@ const UserSchema: DatastoreEntitySchema = {
       name: 'displayName',
     },
     {
+      name: 'nonce',
+      defaultValue: '',
+    },
+    {
       name: 'coverUrl',
       defaultValue: '',
     },

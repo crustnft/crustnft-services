@@ -44,3 +44,4 @@ node_modules
 
 deploy*.sh
 .env.local
+.env

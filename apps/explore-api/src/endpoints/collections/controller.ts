@@ -19,10 +19,18 @@ export async function search(ctx: Context) {
 }
 
 export async function findById(ctx: Context) {
-  const accountAddress = ctx.params.accountAddress as string;
-  const [first] = await service.findById(accountAddress);
+  const collectionId = ctx.params.collectionId as string;
+  const data = await service.findById(collectionId);
   ctx.body = {
-    data: first,
+    data,
+  };
+}
+
+export async function deleteById(ctx: Context) {
+  const collectionId = ctx.params.collectionId as string;
+  await service.deleteById(collectionId);
+  ctx.body = {
+    data: collectionId,
   };
 }
 

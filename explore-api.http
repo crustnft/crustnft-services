@@ -1,16 +1,45 @@
+# Correct .env.sample in root folder to use this file, reference: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+
+@baseUrl = {{$dotenv EXPLORE_API_ENDPOINT}}
+@accessToken = {{$dotenv EXPLORE_API_ACCESS_TOKEN}}
+
 ### Health-check
-GET http://localhost:3000/health
+GET {{baseUrl}}/health
+
+
+##### Authentication #####
+
+### Challenge login
+POST {{baseUrl}}/api/v1/authentication/challenge-login
+content-type: application/json
+
+{
+  "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030"
+}
+
+
+### login
+POST {{baseUrl}}/api/v1/authentication/login
+content-type: application/json
+
+{
+  "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
+  "signature":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030"
+}
+
+
 
 ##### Contracts ######
 ### Get contractByTxHash
-GET http://localhost:3000/api/v1/contracts/0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35
+GET {{baseUrl}}/api/v1/contracts/0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35
 
 ### Get contracts
-GET http://localhost:3000/api/v1/contracts?pageSize=10&account=0xa647e98d78f56075dcc894ed273146d3be1bbe03
+GET {{baseUrl}}/api/v1/contracts?pageSize=10&account=0xa647e98d78f56075dcc894ed273146d3be1bbe03
 
 
 ### Create Contract Stage
-POST http://localhost:3000/api/v1/contracts
+POST {{baseUrl}}/api/v1/contracts
 content-type: application/json
 
 {
@@ -23,7 +52,7 @@ content-type: application/json
 
 
 ### Create Contract Prod
-POST http://localhost:3000/api/v1/contracts
+POST {{baseUrl}}/api/v1/contracts
 content-type: application/json
 
 {
@@ -37,11 +66,11 @@ content-type: application/json
 ##### Users ######
 
 ### Get user
-GET http://localhost:3000/api/v1/users/0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030
+GET {{baseUrl}}/api/v1/users/0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030
 
 
 ### Create user
-POST http://localhost:3000/api/v1/users
+POST {{baseUrl}}/api/v1/users
 content-type: application/json
 
 {
@@ -51,7 +80,8 @@ content-type: application/json
 }
 
 ### Update user
-PUT http://localhost:3000/api/v1/users
+PUT {{baseUrl}}/api/v1/users
+Authorization: Bearer {{accessToken}}
 content-type: application/json
 
 {
@@ -66,11 +96,12 @@ content-type: application/json
 ##### Collections ######
 
 ### Get collection
-GET http://localhost:3000/api/v1/collections/56-0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030
+GET {{baseUrl}}/api/v1/collections/56-0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030
 
 
 ### Create collection
-POST http://localhost:3000/api/v1/collections
+POST {{baseUrl}}/api/v1/collections
+Authorization: Bearer {{accessToken}}
 content-type: application/json
 
 {
@@ -81,7 +112,8 @@ content-type: application/json
 }
 
 ### Update collection
-PUT http://localhost:3000/api/v1/collections
+PUT {{baseUrl}}/api/v1/collections
+Authorization: Bearer {{accessToken}}
 content-type: application/json
 
 {

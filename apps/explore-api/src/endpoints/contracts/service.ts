@@ -21,5 +21,6 @@ export async function search(queryParams: ContractQueryParams) {
 }
 
 export async function findById(txHash: string) {
-  return ContractEntity.findById(txHash);
+  const [firstContract] = await ContractEntity.findById(txHash);
+  return firstContract;
 }

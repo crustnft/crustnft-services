@@ -1,4 +1,5 @@
 import Router from '@koa/router';
+import { checkAuthentication } from '../../middlewares/authentication';
 import { validateRequestBody } from '../../middlewares/validate-request';
 
 import * as userController from './controller';
@@ -13,6 +14,7 @@ router.post(
 );
 router.put(
   '/',
+  checkAuthentication,
   validateRequestBody(CreateUserDtoSchema),
   userController.update
 );

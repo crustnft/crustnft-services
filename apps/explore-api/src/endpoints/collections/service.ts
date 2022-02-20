@@ -22,8 +22,14 @@ export async function search(queryParams: CollectionQueryParams) {
   return CollectionEntity.search(queryParams);
 }
 
-export async function findById(txHash: string) {
-  return CollectionEntity.findById(txHash);
+export async function findById(collectionId: string) {
+  const [firstCollection] = await CollectionEntity.findById(collectionId);
+  return firstCollection;
+}
+
+export async function deleteById(collectionId: string) {
+  await CollectionEntity.removeById(collectionId);
+  return collectionId;
 }
 
 export async function update(updateCollectionDto: UpdateCollectionDto) {
