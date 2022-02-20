@@ -1,13 +1,16 @@
 import datastore from '../clients/datastore';
-import { SERVICE_NAME } from '../constants';
 import {
   ContractQueryParams,
   CreateContractDto,
 } from '../endpoints/contracts/types';
+import { SERVICE_NAME } from '../constants';
+import { getAppEnv } from '../utils/environment';
+import { mappingDtoToColumns } from './helper';
+import { DatastoreEntitySchema } from './types';
 
-const ENTITY_NAME = `${process.env.APP_ENV}-${SERVICE_NAME}-contract`;
+const ENTITY_NAME = `${getAppEnv()}-${SERVICE_NAME}-contract`;
 
-const ContractSchema = {
+const ContractSchema: DatastoreEntitySchema = {
   name: ENTITY_NAME,
   columns: [
     {
@@ -33,43 +36,15 @@ const ContractSchema = {
   ],
 };
 
-function dtoToData(dto) {
-  return ContractSchema.columns.map((colum) => {
-    const columName = colum.name;
-    const excludeFromIndexes = colum.excludeFromIndexes ?? false;
-    let fieldData = {};
-    if (columName in dto) {
-      fieldData = {
-        name: columName,
-        value: dto[columName],
-      };
-    } else if (colum.defaultValue) {
-      fieldData = {
-        name: columName,
-        value:
-          typeof colum.defaultValue === 'function'
-            ? colum.defaultValue()
-            : colum.defaultValue,
-      };
-    } else {
-      throw new Error(`Missing ${columName} field.`);
-    }
-    return {
-      ...fieldData,
-      excludeFromIndexes,
-    };
-  });
-}
-
 export function getKey(contractId) {
-  return datastore.key([ENTITY_NAME, datastore.int(contractId)]);
+  return datastore.key([ENTITY_NAME, contractId]);
 }
 
 function createEntity(dto) {
   const key = datastore.key([ENTITY_NAME, dto.txHash]);
   const entity = {
     key,
-    data: dtoToData(dto),
+    data: mappingDtoToColumns(dto, ContractSchema),
   };
   return entity;
 }
@@ -80,18 +55,17 @@ export async function insertEntity(contractDto: CreateContractDto) {
 }
 
 export async function removeById(contractId) {
-  const key = datastore.key([ENTITY_NAME, contractId]);
-  await datastore.delete(key);
-  return key;
+  const key = getKey(contractId);
+  return datastore.delete(key);
 }
 
 export async function findById(contractId) {
-  const key = datastore.key([ENTITY_NAME, contractId]);
+  const key = getKey(contractId);
   return datastore.get(key);
 }
 
 export async function search(queryParams: ContractQueryParams) {
-  const { pageSize, pageCursor, account } = queryParams;
+  const { pageSize = 100, pageCursor, account } = queryParams;
   let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
   if (account) {
     query = query.filter('account', '=', account);

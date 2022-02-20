@@ -1,7 +1,7 @@
 ### Health-check
 GET http://localhost:3000/health
 
-
+##### Contracts ######
 ### Get contractByTxHash
 GET http://localhost:3000/api/v1/contracts/0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35
 
@@ -32,4 +32,62 @@ content-type: application/json
   "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
   "contractAddress":"0x0a064a4c650d9b9580c37fe8c319e22971e02e21",
   "contractContent":"long long long content"
+}
+
+##### Users ######
+
+### Get user
+GET http://localhost:3000/api/v1/users/0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030
+
+
+### Create user
+POST http://localhost:3000/api/v1/users
+content-type: application/json
+
+{
+  "displayName":"Hello World",
+  "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
+  "socialUrls":["https://twitter.com/hello-world","https://fb.com/hello-world","https://instagram.com/hello-world"]
+}
+
+### Update user
+PUT http://localhost:3000/api/v1/users
+content-type: application/json
+
+{
+  "displayName":"Hello World - 16 - 19",
+  "coverUrl":"https://this.is.my.cover/abc",
+  "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
+  "socialUrls":["https://twitter.com/hello-world","https://fb.com/hello-world","https://instagram.com/hello-world"]
+}
+
+
+
+##### Collections ######
+
+### Get collection
+GET http://localhost:3000/api/v1/collections/56-0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030
+
+
+### Create collection
+POST http://localhost:3000/api/v1/collections
+content-type: application/json
+
+{
+  "description":"Hello World",
+  "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
+  "id":"56-0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
+  "socialUrls":["https://twitter.com/hello-world","https://fb.com/hello-world","https://instagram.com/hello-world"]
+}
+
+### Update collection
+PUT http://localhost:3000/api/v1/collections
+content-type: application/json
+
+{
+  "description":" o oko ko ok ok ok o LGD vs RNG",
+  "coverUrl":"https://this.is.my.cover/abc",
+  "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
+  "id":"56-0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
+  "socialUrls":["https://twitter.com/hello-world","https://fb.com/hello-world","https://instagram.com/hello-world"]
 }

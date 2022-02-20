@@ -1,7 +1,7 @@
 import './utils/load-env';
 import app from './app';
 import type { HttpFunction } from '@google-cloud/functions-framework/build/src/functions';
-import { isCloudFunctions } from './utils/runtime-environment';
+import { isCloudFunctions } from './utils/environment';
 
 const port = process.env.PORT || 3000;
 
