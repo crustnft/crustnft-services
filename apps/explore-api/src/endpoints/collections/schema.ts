@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { ACCOUNT_REGEX } from '../../constants/regex';
-import { CreateCollectionDto } from './types';
+import { CollectionQueryParams, CreateCollectionDto } from './types';
 
 export const CreateCollectionDtoSchema = Joi.object<CreateCollectionDto>({
   id: Joi.string()
@@ -15,4 +15,11 @@ export const CreateCollectionDtoSchema = Joi.object<CreateCollectionDto>({
   avatarUrl: Joi.optional(),
   coverUrl: Joi.optional(),
   description: Joi.optional(),
+});
+
+export const SearchCollectionSchema = Joi.object<CollectionQueryParams>({
+  account: Joi.string().empty('').pattern(ACCOUNT_REGEX),
+  pageSize: Joi.number().greater(0),
+  order: Joi.optional(),
+  pageCursor: Joi.optional(),
 });

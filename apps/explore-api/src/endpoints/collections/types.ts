@@ -13,4 +13,5 @@ export type UpdateCollectionDto = Collection;
 export type CollectionQueryParams = Partial<Collection> & {
   pageSize: number;
   pageCursor?: string;
+  order?: string;
 };

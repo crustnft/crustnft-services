@@ -65,13 +65,20 @@ export async function findById(contractId) {
 }
 
 export async function search(queryParams: ContractQueryParams) {
-  const { pageSize = 100, pageCursor, account } = queryParams;
+  const { pageSize = 100, pageCursor, account, order } = queryParams;
   let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
   if (account) {
     query = query.filter('account', '=', account);
   }
   if (pageCursor) {
     query = query.start(pageCursor);
+  }
+
+  if (order) {
+    const [orderField, direction] = order.split(' ');
+    query = query.order(orderField, {
+      descending: direction === 'desc',
+    });
   }
 
   return datastore.runQuery(query);

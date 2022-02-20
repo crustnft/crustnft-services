@@ -1,6 +1,9 @@
 import Router from '@koa/router';
 import { checkAuthentication } from '../../middlewares/authentication';
-import { validateRequestBody } from '../../middlewares/validate-request';
+import {
+  validateRequestBody,
+  validateRequestQuery,
+} from '../../middlewares/validate-request';
 
 import * as collectionController from './controller';
 import { CreateCollectionDtoSchema } from './schema';
@@ -29,6 +32,10 @@ router.delete(
   collectionController.deleteById
 );
 
-router.get('/', collectionController.search);
+router.get(
+  '/',
+  validateRequestQuery(CreateCollectionDtoSchema),
+  collectionController.search
+);
 
 export default router.routes();

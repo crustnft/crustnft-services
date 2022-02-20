@@ -79,10 +79,17 @@ export async function remove(collectionId) {
 }
 
 export async function search(queryParams: CollectionQueryParams) {
-  const { pageSize = 100, pageCursor } = queryParams;
+  const { pageSize = 100, pageCursor, order } = queryParams;
   let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
   if (pageCursor) {
     query = query.start(pageCursor);
+  }
+
+  if (order) {
+    const [orderField, direction] = order.split(' ');
+    query = query.order(orderField, {
+      descending: direction === 'desc',
+    });
   }
 
   return datastore.runQuery(query);
