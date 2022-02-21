@@ -12,8 +12,8 @@ export const CreateCollectionDtoSchema = Joi.object<CreateCollectionDto>({
     ),
   account: Joi.string().empty('').required().pattern(ACCOUNT_REGEX),
   socialUrls: Joi.optional(),
-  avatarUrl: Joi.optional(),
-  coverUrl: Joi.optional(),
+  avatarCID: Joi.optional(),
+  coverCID: Joi.optional(),
   description: Joi.optional(),
 });
 

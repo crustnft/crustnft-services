@@ -18,7 +18,7 @@ const UserSchema: DatastoreEntitySchema = {
       name: 'account',
     },
     {
-      name: 'avatarUrl',
+      name: 'avatarCID',
       defaultValue: '',
     },
     {
@@ -29,7 +29,7 @@ const UserSchema: DatastoreEntitySchema = {
       defaultValue: '',
     },
     {
-      name: 'coverUrl',
+      name: 'coverCID',
       defaultValue: '',
     },
     {

@@ -2,8 +2,8 @@ export interface Collection {
   account: string;
   id: string;
   socialUrls?: string[];
-  avatarUrl?: string;
-  coverUrl?: string;
+  avatarCID?: string;
+  coverCID?: string;
   description?: string;
 }
 

@@ -2,8 +2,8 @@ export interface User {
   account: string;
   displayName: string;
   socialUrls?: string[];
-  avatarUrl?: string;
-  coverUrl?: string;
+  avatarCID?: string;
+  coverCID?: string;
 }
 
 export type CreateUserDto = User;

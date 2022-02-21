@@ -21,11 +21,11 @@ const CollectionSchema: DatastoreEntitySchema = {
       name: 'account',
     },
     {
-      name: 'avatarUrl',
+      name: 'avatarCID',
       defaultValue: '',
     },
     {
-      name: 'coverUrl',
+      name: 'coverCID',
       defaultValue: '',
     },
     {
