@@ -1,0 +1,8 @@
+# Correct .env.sample in root folder to use this file, reference: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+
+@baseUrl = {{$dotenv NFT_GENERATOR_API_ENDPOINT}}
+@accessToken = {{$dotenv NFT_GENERATOR_API_ACCESS_TOKEN}}
+
+### Health-check
+GET {{baseUrl}}/health

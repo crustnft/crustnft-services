@@ -1,6 +1,7 @@
 {
   "version": 2,
   "projects": {
-    "explore-api": "apps/explore-api"
+    "explore-api": "apps/explore-api",
+    "nft-generator-api": "apps/nft-generator-api"
   }
 }
