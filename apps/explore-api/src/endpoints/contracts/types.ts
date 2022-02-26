@@ -12,4 +12,5 @@ export type ContractQueryParams = Partial<Contract> & {
   pageSize: number;
   pageCursor?: string;
   order?: string;
+  offset?: number;
 };
