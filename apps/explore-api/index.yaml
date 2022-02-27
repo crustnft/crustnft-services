@@ -3,42 +3,41 @@ indexes:
   - kind: local-explore-api-contract
     ancestor: no
     properties:
-    - name: account
-    - name: createdAt
-      direction: desc
+      - name: account
+      - name: createdAt
+        direction: desc
 
   - kind: local-explore-api-contract
     ancestor: no
     properties:
-    - name: account
-    - name: createdAt
-      direction: asc
+      - name: account
+      - name: createdAt
+        direction: asc
 
   - kind: stage-explore-api-contract
     ancestor: no
     properties:
-    - name: account
-    - name: createdAt
-      direction: desc
+      - name: account
+      - name: createdAt
+        direction: desc
 
   - kind: stage-explore-api-contract
     ancestor: no
     properties:
-    - name: account
-    - name: createdAt
-      direction: asc
+      - name: account
+      - name: createdAt
+        direction: asc
 
   - kind: prod-explore-api-contract
     ancestor: no
     properties:
-    - name: account
-    - name: createdAt
-      direction: desc
+      - name: account
+      - name: createdAt
+        direction: desc
 
   - kind: prod-explore-api-contract
     ancestor: no
     properties:
-    - name: account
-    - name: createdAt
-      direction: asc
-
+      - name: account
+      - name: createdAt
+        direction: asc

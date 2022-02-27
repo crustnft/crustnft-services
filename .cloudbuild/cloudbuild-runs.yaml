@@ -1,4 +1,16 @@
 steps:
+  - name: node:16-bullseye
+    entrypoint: npm
+    args: ['install']
+
+  - name: node:16-bullseye
+    entrypoint: npm
+    args: ['run', 'lint', '${_SERVICE_NAME}']
+
+  - name: node:16-bullseye
+    entrypoint: npm
+    args: ['run', 'test', '${_SERVICE_NAME}']
+
   - name: 'gcr.io/cloud-builders/docker'
     args:
       [
