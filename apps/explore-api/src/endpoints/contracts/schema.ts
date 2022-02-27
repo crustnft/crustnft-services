@@ -30,4 +30,5 @@ export const SearchContractSchema = Joi.object<ContractQueryParams>({
   pageSize: Joi.number().greater(0),
   pageCursor: Joi.optional(),
   order: Joi.optional(),
+  offset: Joi.optional(),
 });

@@ -65,11 +65,16 @@ export async function findById(contractId) {
 }
 
 export async function search(queryParams: ContractQueryParams) {
-  const { pageSize = 100, pageCursor, account, order } = queryParams;
+  const { pageSize = 100, pageCursor, account, order, offset } = queryParams;
   let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
   if (account) {
     query = query.filter('account', '=', account);
   }
+
+  if (offset) {
+    query = query.offset(offset);
+  }
+
   if (pageCursor) {
     query = query.start(pageCursor);
   }
