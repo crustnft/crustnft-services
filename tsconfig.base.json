@@ -16,7 +16,9 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@crustnft-explore/util-config-api": ["libs/util-config-api/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

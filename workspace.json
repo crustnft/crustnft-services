@@ -2,6 +2,7 @@
   "version": 2,
   "projects": {
     "explore-api": "apps/explore-api",
-    "nft-generator-api": "apps/nft-generator-api"
+    "nft-generator-api": "apps/nft-generator-api",
+    "util-config-api": "libs/util-config-api"
   }
 }

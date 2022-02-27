@@ -1,7 +1,9 @@
+import { getAppEnv } from '@crustnft-explore/util-config-api';
 import datastore from '../clients/datastore';
 import { SERVICE_NAME } from '../constants';
+import { NftGeneratorDto } from '../endpoints/nft-collections/types';
 
-const ENTITY_NAME = `${process.env.APP_ENV}-${SERVICE_NAME}-contract`;
+const ENTITY_NAME = `${getAppEnv()}-${SERVICE_NAME}-nft-generator`;
 
 const ContractSchema = {
   name: ENTITY_NAME,
@@ -10,16 +12,10 @@ const ContractSchema = {
       name: 'id',
     },
     {
-      name: 'txHash',
+      name: 'status',
     },
     {
-      name: 'address',
-    },
-    {
-      name: 'chainId',
-    },
-    {
-      name: 'contractContent',
+      name: 'medias',
       excludeFromIndexes: true,
     },
   ],
@@ -41,12 +37,12 @@ function dtoToData(dto) {
   });
 }
 
-export function getKey(contractId) {
-  return datastore.key([ENTITY_NAME, datastore.int(contractId)]);
+export function getKey(id: string) {
+  return datastore.key([ENTITY_NAME, id]);
 }
 
-function createEntity(dto) {
-  const key = datastore.key([ENTITY_NAME]);
+function createEntity(dto: NftGeneratorDto) {
+  const key = getKey(dto.id);
   const entity = {
     key,
     data: dtoToData(dto),
@@ -54,25 +50,33 @@ function createEntity(dto) {
   return entity;
 }
 
+export async function insertEntity(contractDto: NftGeneratorDto) {
+  const entities = createEntity(contractDto);
+  return datastore.insert(entities);
+}
+
 export async function saveEntity(contractDto) {
   const entities = createEntity(contractDto);
   return datastore.save(entities);
 }
 
-export async function removeById(contractId) {
-  const key = datastore.key([ENTITY_NAME, datastore.int(contractId)]);
+export async function removeById(id: string) {
+  const key = getKey(id);
   await datastore.delete(key);
   return key;
 }
 
-export async function findById(contractIds) {
-  const keys = contractIds.map((contractId) =>
-    datastore.key([ENTITY_NAME, datastore.int(contractId)])
-  );
+export async function findByIdList(ids: string[]) {
+  const keys = ids.map((id) => getKey(id));
   return datastore.get(keys);
 }
 
-export async function search(pageSize, pageCursor) {
+export async function findById(id: string) {
+  const key = getKey(id);
+  return datastore.get(key);
+}
+
+export async function search(pageSize: number, pageCursor: string) {
   let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
   if (pageCursor) {
     query = query.start(pageCursor);

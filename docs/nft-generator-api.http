@@ -6,3 +6,54 @@
 
 ### Health-check
 GET {{baseUrl}}/health
+
+
+### Media
+
+### Create media upload url
+# @name generateMedia
+POST {{baseUrl}}/api/v1/medias/
+content-type: application/json
+
+{
+  "fileName":"1.png",
+  "contentType": "image/png"
+}
+
+###
+
+@signedUploadUrl = {{generateMedia.response.body.data}}
+
+PUT {{signedUploadUrl}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+
+Content-Disposition: form-data; name="image"; filename="1.png"
+Content-Type: image/png
+
+< /Users/duc.nguyen/Downloads/wizeline_pride_zoom.png
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+
+
+### NFT Collections
+
+### Initiate nft collection generator
+POST {{baseUrl}}/api/v1/ntf-collections/
+content-type: application/json
+
+{
+  "medias":[
+    {
+      "category":"background",
+      "mediaId":"hello-id"
+    }
+  ]
+}
+
+
+
+### Get generator status
+GET {{baseUrl}}/api/v1/ntf-collections/589e4386-73db-4336-b4ee-a5ab86273245
+content-type: application/json

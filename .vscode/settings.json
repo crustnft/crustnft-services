@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["bodyparser", "cloudbuild", "middlewares"]
+  "cSpell.words": [
+    "bodyparser",
+    "cloudbuild",
+    "cloudsdktool",
+    "crustnft",
+    "gcloud",
+    "middlewares",
+    "pino"
+  ]
 }

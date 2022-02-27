@@ -16,17 +16,19 @@ steps:
     args:
       ['run', 'build', '${_SERVICE_NAME}', '--', '--configuration=production']
 
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:326.0.0
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args:
       - functions
       - deploy
       - ${_APP_ENV}-${_SERVICE_NAME}
       - --source=./dist/apps/${_SERVICE_NAME}
-      - --platform=managed
+      - --trigger-http
+      - --entry-point=api
+      - --runtime=nodejs16
+      - --allow-unauthenticated
       - --region=${_REGION}
       - --project=$PROJECT_ID
-      - --allow-unauthenticated
       - --set-env-vars=APP_ENV=${_APP_ENV}
 
 substitutions:

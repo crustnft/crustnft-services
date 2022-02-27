@@ -11,7 +11,7 @@ steps:
       ]
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}:$SHORT_SHA']
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:326.0.0
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
     entrypoint: gcloud
     args:
       - run
