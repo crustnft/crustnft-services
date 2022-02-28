@@ -123,7 +123,7 @@ content-type: application/json
 
 {
   "description":" o oko ko ok ok ok o LGD vs RNG",
-  "coverUrl":"https://this.is.my.cover/abc",
+  "coverCID":"https://this.is.my.cover/abc",
   "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
   "id":"56-0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
   "socialUrls":["https://twitter.com/hello-world","https://fb.com/hello-world","https://instagram.com/hello-world"]
