@@ -42,6 +42,15 @@ const TEST_CHAINS = [
     rpcUrl: 'https://rinkeby.infura.io/v3/741c5f1257a24106934fe4105c784478',
     blockExplorerUrl: 'https://rinkeby.etherscan.io',
   },
+  {
+    name: 'BSC Testnet',
+    currencySymbol: 'tBNB',
+    icon: './static/icons/networks/binance.svg',
+    iconDark: './static/icons/networks/binance-dark.png',
+    chainId: 97,
+    rpcUrl: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
+    blockExplorerUrl: 'https://testnet.bscscan.com/',
+  },
 ];
 
 const noneProduction = process.env.APP_ENV !== 'prod';
