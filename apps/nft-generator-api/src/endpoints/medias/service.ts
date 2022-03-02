@@ -4,6 +4,7 @@ import storage from '../../clients/storage';
 const { NFT_GENERATOR_UPLOAD_BUCKET } = process.env;
 
 export async function createMedia(fileName: string, contentType: string) {
+  //TODO: Limit the size of media
   const options = {
     version: 'v4',
     action: 'write',

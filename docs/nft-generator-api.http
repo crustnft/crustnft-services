@@ -14,10 +14,11 @@ GET {{baseUrl}}/health
 # @name generateMedia
 POST {{baseUrl}}/api/v1/medias/
 content-type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
-  "fileName":"1.png",
-  "contentType": "image/png"
+  "fileName":"{{$guid}}",
+  "contentType": "image/jpeg"
 }
 
 ###
@@ -42,6 +43,7 @@ Content-Type: image/png
 ### Initiate nft collection generator
 POST {{baseUrl}}/api/v1/ntf-collections/
 content-type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "medias":[
@@ -57,3 +59,4 @@ content-type: application/json
 ### Get generator status
 GET {{baseUrl}}/api/v1/ntf-collections/589e4386-73db-4336-b4ee-a5ab86273245
 content-type: application/json
+Authorization: Bearer {{accessToken}}
