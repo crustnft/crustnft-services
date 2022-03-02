@@ -26,16 +26,9 @@ Authorization: Bearer {{accessToken}}
 @signedUploadUrl = {{generateMedia.response.body.data}}
 
 PUT {{signedUploadUrl}}
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Type: image/jpeg
 
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-
-Content-Disposition: form-data; name="image"; filename="1.png"
-Content-Type: image/png
-
-< /Users/duc.nguyen/Downloads/wizeline_pride_zoom.png
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-
+< /Users/duc.nguyen/Downloads/marra-_Gnbso4pl7M-unsplash.jpeg
 
 
 ### NFT Collections
@@ -49,7 +42,11 @@ Authorization: Bearer {{accessToken}}
   "medias":[
     {
       "category":"background",
-      "mediaId":"hello-id"
+      "mediaId":"4f8d4517-4ea6-4c0b-b9bf-577fa8bf3496"
+    },
+    {
+      "category":"head",
+      "mediaId":"809e9b5e-7df9-44a6-a469-07beeca95890"
     }
   ]
 }

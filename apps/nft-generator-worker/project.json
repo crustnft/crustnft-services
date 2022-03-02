@@ -1,19 +1,19 @@
 {
-  "root": "apps/explore-api",
-  "sourceRoot": "apps/explore-api/src",
+  "root": "apps/nft-generator-worker",
+  "sourceRoot": "apps/nft-generator-worker/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:build",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/explore-api",
-        "main": "apps/explore-api/src/main.ts",
-        "tsConfig": "apps/explore-api/tsconfig.app.json",
+        "outputPath": "dist/apps/nft-generator-worker",
+        "main": "apps/nft-generator-worker/src/main.ts",
+        "tsConfig": "apps/nft-generator-worker/tsconfig.app.json",
         "assets": [
-          "apps/explore-api/src/assets",
+          "apps/nft-generator-worker/src/assets",
           {
-            "input": "apps/explore-api",
+            "input": "apps/nft-generator-worker",
             "glob": ".env.{prod,test,local}",
             "output": "."
           }
@@ -31,21 +31,21 @@
     "serve": {
       "executor": "@nrwl/node:execute",
       "options": {
-        "buildTarget": "explore-api:build"
+        "buildTarget": "nft-generator-worker:build"
       }
     },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/explore-api/**/*.ts"]
+        "lintFilePatterns": ["apps/nft-generator-worker/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/explore-api"],
+      "outputs": ["coverage/apps/nft-generator-worker"],
       "options": {
-        "jestConfig": "apps/explore-api/jest.config.js",
+        "jestConfig": "apps/nft-generator-worker/jest.config.js",
         "passWithNoTests": true
       }
     }

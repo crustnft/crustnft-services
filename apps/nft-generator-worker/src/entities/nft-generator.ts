@@ -1,9 +1,8 @@
 import { getAppEnv } from '@crustnft-explore/util-config-api';
 import datastore from '../clients/datastore';
-import { SERVICE_NAME } from '../constants';
 import { NftGeneratorDto } from '../endpoints/nft-collections/types';
 
-const ENTITY_NAME = `${getAppEnv()}-${SERVICE_NAME}-collections`;
+const ENTITY_NAME = `${getAppEnv()}-nft-generator-api-collections`;
 
 const ContractSchema = {
   name: ENTITY_NAME,
