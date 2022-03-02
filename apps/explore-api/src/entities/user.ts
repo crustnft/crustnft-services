@@ -6,8 +6,10 @@ import {
 } from '../endpoints/users/types';
 import { SERVICE_NAME } from '../constants';
 import { getAppEnv } from '../utils/environment';
-import { mappingDtoToColumns } from './helper';
-import { DatastoreEntitySchema } from './types';
+import {
+  mappingDtoToColumns,
+  DatastoreEntitySchema,
+} from '@crustnft-explore/util-entity';
 
 const ENTITY_NAME = `${getAppEnv()}-${SERVICE_NAME}-user`;
 

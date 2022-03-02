@@ -6,8 +6,10 @@ import {
   UpdateCollectionDto,
 } from '../endpoints/collections/types';
 import { getAppEnv } from '../utils/environment';
-import { mappingDtoToColumns } from './helper';
-import { DatastoreEntitySchema } from './types';
+import {
+  mappingDtoToColumns,
+  DatastoreEntitySchema,
+} from '@crustnft-explore/util-entity';
 
 const ENTITY_NAME = `${getAppEnv()}-${SERVICE_NAME}-collection`;
 

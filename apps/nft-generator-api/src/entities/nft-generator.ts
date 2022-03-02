@@ -2,10 +2,14 @@ import { getAppEnv } from '@crustnft-explore/util-config-api';
 import datastore from '../clients/datastore';
 import { SERVICE_NAME } from '../constants';
 import { NftGeneratorDto } from '../endpoints/nft-collections/types';
+import {
+  mappingDtoToColumns,
+  DatastoreEntitySchema,
+} from '@crustnft-explore/util-entity';
 
 const ENTITY_NAME = `${getAppEnv()}-${SERVICE_NAME}-collections`;
 
-const ContractSchema = {
+const CollectionSchema: DatastoreEntitySchema = {
   name: ENTITY_NAME,
   columns: [
     {
@@ -18,24 +22,12 @@ const ContractSchema = {
       name: 'medias',
       excludeFromIndexes: true,
     },
+    {
+      name: 'createdAt',
+      defaultValue: () => new Date(),
+    },
   ],
 };
-
-function dtoToData(dto) {
-  return ContractSchema.columns.map((colum) => {
-    const columName = colum.name;
-    const excludeFromIndexes = colum.excludeFromIndexes ?? false;
-    if (columName in dto) {
-      return {
-        name: columName,
-        value: dto[columName],
-        excludeFromIndexes,
-      };
-    } else {
-      throw new Error(`Missing ${columName} field.`);
-    }
-  });
-}
 
 export function getKey(id: string) {
   return datastore.key([ENTITY_NAME, id]);
@@ -45,7 +37,7 @@ function createEntity(dto: NftGeneratorDto) {
   const key = getKey(dto.id);
   const entity = {
     key,
-    data: dtoToData(dto),
+    data: mappingDtoToColumns(dto, CollectionSchema),
   };
   return entity;
 }
