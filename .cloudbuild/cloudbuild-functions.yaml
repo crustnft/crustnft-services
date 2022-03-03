@@ -44,4 +44,4 @@ steps:
 substitutions:
   _APP_ENV: prod
   _REGION: us-east1
-  _SERVICE_NAME: explore-api
+  _SERVICE_NAME: nft-generator-api
