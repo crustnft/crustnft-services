@@ -14,7 +14,7 @@
           "apps/explore-api/src/assets",
           {
             "input": "apps/explore-api",
-            "glob": ".env.{prod,test,local}",
+            "glob": ".env.{prod,test,local,stage}",
             "output": "."
           }
         ]

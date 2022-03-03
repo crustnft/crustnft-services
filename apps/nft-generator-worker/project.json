@@ -14,7 +14,7 @@
           "apps/nft-generator-worker/src/assets",
           {
             "input": "apps/nft-generator-worker",
-            "glob": ".env.{prod,test,local}",
+            "glob": ".env.{prod,test,local,stage}",
             "output": "."
           }
         ]
