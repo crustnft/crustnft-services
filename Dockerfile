@@ -35,7 +35,7 @@ ENV NODE_ENV=production
 ENV NODE_PATH=.
 
 COPY ./ .
-RUN npx nx run ${SEVICE_NAME}:build:production
+RUN npx nx run ${SERVICE_NAME}:build:production
 
 # Production image
 FROM node:16-bullseye-slim as production
