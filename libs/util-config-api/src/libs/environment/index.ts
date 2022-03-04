@@ -5,3 +5,7 @@ export function isCloudFunctions() {
 export function getAppEnv() {
   return process.env.APP_ENV || 'local';
 }
+
+export function isLocal() {
+  return getAppEnv() === 'local';
+}

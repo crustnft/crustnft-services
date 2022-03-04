@@ -31,3 +31,10 @@ gcloud builds submit --config .cloudbuild/cloudbuild-functions.yaml . --substitu
 ```
 gcloud builds submit --config .cloudbuild/cloudbuild-runs.yaml . --substitutions=SHORT_SHA=local,_APP_ENV=stage,_REGION=abc-xyz
 ```
+
+# IPFS
+
+## Gateway
+
+- https://gw.crustapps.net/ipfs/CID
+- https://gateway.ipfs.io/ipfs/CID

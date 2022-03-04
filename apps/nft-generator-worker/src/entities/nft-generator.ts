@@ -42,13 +42,13 @@ function createEntity(dto: NftGeneratorDto) {
 }
 
 export async function insertEntity(contractDto: NftGeneratorDto) {
-  const entities = createEntity(contractDto);
-  return datastore.insert(entities);
+  const entity = createEntity(contractDto);
+  return datastore.insert(entity);
 }
 
-export async function saveEntity(contractDto) {
-  const entities = createEntity(contractDto);
-  return datastore.save(entities);
+export async function updateEntity(updateDto) {
+  const entity = createEntity(updateDto);
+  return datastore.update(entity);
 }
 
 export async function removeById(id: string) {

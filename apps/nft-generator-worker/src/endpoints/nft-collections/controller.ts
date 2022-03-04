@@ -8,11 +8,3 @@ export async function create(req: Request, res: Response) {
     data: initiatedCollection,
   });
 }
-
-export async function findOne(req: Request, res: Response) {
-  const { nftId } = req.params;
-  const collection = await service.findOne(nftId);
-  res.json({
-    data: collection,
-  });
-}
