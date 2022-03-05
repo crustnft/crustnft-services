@@ -17,6 +17,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@crustnft-explore/data-access": ["libs/data-access/src/index.ts"],
+      "@crustnft-explore/entity-nft-generator": [
+        "libs/entity-nft-generator/src/index.ts"
+      ],
       "@crustnft-explore/util-config-api": [
         "libs/util-config-api/src/index.ts"
       ],

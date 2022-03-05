@@ -1,13 +1,12 @@
 import { getAppEnv } from '@crustnft-explore/util-config-api';
-import datastore from '../clients/datastore';
-import { SERVICE_NAME } from '../constants';
-import { NftGeneratorDto } from '../endpoints/nft-collections/types';
+import { NftGeneratorDto } from '@crustnft-explore/data-access';
+import datastore from '../client/datastore';
 import {
   mappingDtoToColumns,
   DatastoreEntitySchema,
 } from '@crustnft-explore/util-entity';
 
-const ENTITY_NAME = `${getAppEnv()}-${SERVICE_NAME}-collections`;
+const ENTITY_NAME = `${getAppEnv()}-nft-generator-api-collections`;
 
 const CollectionSchema: DatastoreEntitySchema = {
   name: ENTITY_NAME,
@@ -43,13 +42,13 @@ function createEntity(dto: NftGeneratorDto) {
 }
 
 export async function insertEntity(contractDto: NftGeneratorDto) {
-  const entities = createEntity(contractDto);
-  return datastore.insert(entities);
+  const entity = createEntity(contractDto);
+  return datastore.insert(entity);
 }
 
-export async function saveEntity(contractDto) {
-  const entities = createEntity(contractDto);
-  return datastore.save(entities);
+export async function updateEntity(updateDto) {
+  const entity = createEntity(updateDto);
+  return datastore.update(entity);
 }
 
 export async function removeById(id: string) {

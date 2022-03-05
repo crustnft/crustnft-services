@@ -1,6 +1,6 @@
 import { Logger } from '@crustnft-explore/util-config-api';
 import createHttpError from 'http-errors';
-import * as nftGeneratorEntity from '../../entities/nft-generator';
+import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-generator';
 import {
   deleteFiles,
   downloadFile,

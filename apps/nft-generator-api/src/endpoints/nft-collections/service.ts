@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { CreateNftGeneratorDto } from './types';
-import * as nftGeneratorEntity from '../../entities/nft-generator';
+import { CreateNftGeneratorDto } from '@crustnft-explore/data-access';
+import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-generator';
 import storage from '../../clients/storage';
 import createHttpError from 'http-errors';
 

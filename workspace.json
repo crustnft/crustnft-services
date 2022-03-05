@@ -1,6 +1,8 @@
 {
   "version": 2,
   "projects": {
+    "data-access": "libs/data-access",
+    "entity-nft-generator": "libs/entity-nft-generator",
     "explore-api": "apps/explore-api",
     "nft-generator-api": "apps/nft-generator-api",
     "nft-generator-worker": "apps/nft-generator-worker",

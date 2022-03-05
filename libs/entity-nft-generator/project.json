@@ -1,0 +1,23 @@
+{
+  "root": "libs/entity-nft-generator",
+  "sourceRoot": "libs/entity-nft-generator/src",
+  "projectType": "library",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/entity-nft-generator/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/entity-nft-generator"],
+      "options": {
+        "jestConfig": "libs/entity-nft-generator/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

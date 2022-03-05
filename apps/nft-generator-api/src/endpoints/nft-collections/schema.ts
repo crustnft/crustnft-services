@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { CreateNftGeneratorDto } from './types';
+import { CreateNftGeneratorDto } from '@crustnft-explore/data-access';
 
 export const InitialNftGeneratorDtoSchema = Joi.object<CreateNftGeneratorDto>({
   medias: Joi.array()

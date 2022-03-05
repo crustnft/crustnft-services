@@ -12,4 +12,5 @@ module.exports = {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/nft-generator-worker',
+  setupFiles: ['<rootDir>/tests/config.js'],
 };
