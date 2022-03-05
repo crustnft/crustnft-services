@@ -22,6 +22,11 @@ const CollectionSchema: DatastoreEntitySchema = {
       excludeFromIndexes: true,
     },
     {
+      name: 'ipfsFiles',
+      defaultValue: [],
+      excludeFromIndexes: true,
+    },
+    {
       name: 'createdAt',
       defaultValue: () => new Date(),
     },
@@ -46,9 +51,31 @@ export async function insertEntity(contractDto: NftGeneratorDto) {
   return datastore.insert(entity);
 }
 
-export async function updateEntity(updateDto) {
-  const entity = createEntity(updateDto);
-  return datastore.update(entity);
+export async function updateEntity(id: string, updateDto) {
+  const key = getKey(id);
+  const transaction = datastore.transaction();
+  try {
+    await transaction.run();
+    const [existingCollection] = await transaction.get(key);
+    if (existingCollection) {
+      const updateData = mappingDtoToColumns(
+        { ...existingCollection, ...updateDto },
+        CollectionSchema
+      );
+      transaction.update({
+        key,
+        data: updateData,
+      });
+      await transaction.commit();
+      return updateData;
+    } else {
+      await transaction.rollback();
+      throw new Error('Collection not existed');
+    }
+  } catch (error) {
+    await transaction.rollback();
+    throw new Error(error.message);
+  }
 }
 
 export async function removeById(id: string) {

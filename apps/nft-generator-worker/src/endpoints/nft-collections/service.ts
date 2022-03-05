@@ -16,10 +16,11 @@ const logger = Logger('nft-collections:service');
 const { NFT_GENERATOR_UPLOAD_BUCKET, NFT_GENERATOR_CREATED_BUCKET } =
   process.env;
 
+const BACKGROUND_CATEGORY = 'background';
+
 export async function createNftGenerator(generatorDto: NftGeneratorDto) {
   const nftCollectionRecord = await findOne(generatorDto.id);
-  await nftGeneratorEntity.updateEntity({
-    ...nftCollectionRecord,
+  await nftGeneratorEntity.updateEntity(generatorDto.id, {
     status: 'started',
   });
   await startGenerator(nftCollectionRecord);
@@ -31,9 +32,8 @@ export async function findOne(id: string) {
   return first;
 }
 
-const BACKGROUND_CATEGORY = 'background';
-
 async function startGenerator(nftCollectionRecord: NftCollection) {
+  const collectionId = nftCollectionRecord.id;
   const backgroundMedia = nftCollectionRecord.medias.find(
     (media) => media.category === BACKGROUND_CATEGORY
   );
@@ -59,7 +59,7 @@ async function startGenerator(nftCollectionRecord: NftCollection) {
   );
 
   logger.debug('Downloaded files');
-  const folderName = nftCollectionRecord.id;
+  const folderName = collectionId;
   const createdFilePaths = [];
   for await (const nft of nftGenerator(
     backgroundFile.content,
@@ -86,5 +86,10 @@ async function startGenerator(nftCollectionRecord: NftCollection) {
   await deleteFiles(NFT_GENERATOR_CREATED_BUCKET, createdFilePaths);
 
   logger.debug(`Delete folder: ${createdFilePaths}`);
+
+  await nftGeneratorEntity.updateEntity(collectionId, {
+    status: 'completed',
+    ipfsFiles,
+  });
   return ipfsFiles;
 }
