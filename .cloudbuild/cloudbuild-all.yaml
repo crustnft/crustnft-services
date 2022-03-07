@@ -1,0 +1,123 @@
+steps:
+  - name: node:16-bullseye
+    entrypoint: npm
+    args: ['install']
+
+  - name: node:16-bullseye
+    entrypoint: npx
+    args: ['nx', 'run-many', '--target=lint', '--all=true']
+
+  - name: node:16-bullseye
+    entrypoint: npx
+    args: ['nx', 'run-many', '--target=test', '--all=true']
+
+  - name: node:16-bullseye
+    entrypoint: npx
+    args:
+      [
+        'nx',
+        'run-many',
+        '--target=build',
+        '--all=true',
+        '--configuration=production',
+      ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-f',
+        'Dockerfile.prod',
+        '-t',
+        'gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA',
+        '--build-arg=SERVICE_NAME=explore-api',
+        '.',
+      ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA']
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - datastore
+      - indexes
+      - create
+      - apps/explore-api/index.yaml
+      - --quiet
+      - --verbosity=info
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: 'deploy-explore-api'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_APP_ENV}-explore-api
+      - --image=gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA
+      - --platform=managed
+      - --region=${_REGION}
+      - --project=$PROJECT_ID
+      - --allow-unauthenticated
+      - --set-env-vars=APP_ENV=${_APP_ENV}
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - datastore
+      - indexes
+      - create
+      - apps/nft-generator-api/index.yaml
+      - --quiet
+      - --verbosity=info
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: 'deploy-nft-generator-api'
+    entrypoint: gcloud
+    args:
+      - functions
+      - deploy
+      - ${_APP_ENV}-nft-generator-api
+      - --source=./dist/apps/nft-generator-api
+      - --trigger-http
+      - --entry-point=api
+      - --runtime=nodejs16
+      - --allow-unauthenticated
+      - --region=${_REGION}
+      - --project=$PROJECT_ID
+      - --set-env-vars=APP_ENV=${_APP_ENV}
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      [
+        'build',
+        '-f',
+        'Dockerfile.prod',
+        '-t',
+        'gcr.io/$PROJECT_ID/nft-generator-worker:$SHORT_SHA',
+        '--build-arg=SERVICE_NAME=nft-generator-worker',
+        '.',
+      ]
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/nft-generator-worker:$SHORT_SHA']
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    id: 'deploy-nft-generator-worker'
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_APP_ENV}-nft-generator-worker
+      - --image=gcr.io/$PROJECT_ID/nft-generator-worker:$SHORT_SHA
+      - --platform=managed
+      - --region=${_REGION}
+      - --project=$PROJECT_ID
+      - --set-env-vars=APP_ENV=${_APP_ENV}
+
+substitutions:
+  _APP_ENV: stage
+  _REGION: us-east1
+
+images:
+  - 'gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA'

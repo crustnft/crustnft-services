@@ -7,7 +7,8 @@
     "build": "nx build",
     "test": "nx test",
     "lint": "nx lint",
-    "format": "nx format:write"
+    "format": "nx format:write",
+    "clean": "npx rimraf dist coverage"
   },
   "private": true,
   "dependencies": {

@@ -1,0 +1,19 @@
+FROM node:16-bullseye-slim
+
+LABEL description="NodeJS production ready image"
+
+WORKDIR /workdir
+
+ARG SERVICE_NAME
+
+ENV NODE_ENV=production
+ENV NODE_PATH=.
+
+RUN ls -alrh .
+
+COPY ./dist/apps/${SERVICE_NAME} /workdir/
+COPY ./package-lock.json /workdir/package-lock.json
+
+RUN npm install --only=production
+
+CMD ["node", "main.js"]

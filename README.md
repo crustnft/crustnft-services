@@ -32,6 +32,12 @@ gcloud builds submit --config .cloudbuild/cloudbuild-functions.yaml . --substitu
 gcloud builds submit --config .cloudbuild/cloudbuild-runs.yaml . --substitutions=SHORT_SHA=local,_APP_ENV=stage,_REGION=abc-xyz
 ```
 
+- All in one
+
+```
+gcloud builds submit --config .cloudbuild/cloudbuild-all.yaml . --substitutions=SHORT_SHA=local,_APP_ENV=stage,_REGION=us-east1
+```
+
 # IPFS
 
 ## Gateway
