@@ -7,9 +7,7 @@ export async function checkTransaction(contract: Contract) {
   const { chainId, txHash, account, contractAddress } = contract;
   const provider = getProviderInstance(chainId);
   const receipt = await provider.getTransactionReceipt(txHash);
-  if (!isValid(receipt, account, contractAddress)) {
-    throw new Error(`TxHash does not meet requirements`);
-  }
+  validateReceipt(txHash, receipt, account, contractAddress);
 }
 
 export function verifySignature(
@@ -21,14 +19,22 @@ export function verifySignature(
   return account.toLowerCase() === decodedAddress.toLowerCase();
 }
 
-function isValid(
+function validateReceipt(
+  txHash: string,
   receipt: TransactionReceipt,
   account: string,
   contract: string
 ) {
-  return (
+  if (!receipt) {
+    throw new Error(`Can not get receipt for txHash: ${txHash}`);
+  }
+
+  const isValid =
     receipt?.from.toLowerCase() === account.toLowerCase() &&
     contract.toLowerCase() === receipt.contractAddress.toLowerCase() &&
-    receipt.status === 1
-  );
+    receipt.status === 1;
+
+  if (!isValid) {
+    throw new Error(`TxHash does not meet requirements`);
+  }
 }
