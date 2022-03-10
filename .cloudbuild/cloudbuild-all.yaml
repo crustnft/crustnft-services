@@ -56,10 +56,11 @@ steps:
       - ${_APP_ENV}-explore-api
       - --image=gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA
       - --platform=managed
+      - --ingress=all
+      - --allow-unauthenticated
       - --service-account=${_SERVICE_ACCOUNT}
       - --region=${_REGION}
       - --project=$PROJECT_ID
-      - --allow-unauthenticated
       - --set-env-vars=APP_ENV=${_APP_ENV}
 
   - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
@@ -113,6 +114,7 @@ steps:
       - ${_APP_ENV}-nft-generator-worker
       - --image=gcr.io/$PROJECT_ID/nft-generator-worker:$SHORT_SHA
       - --platform=managed
+      - --ingress=all
       - --allow-unauthenticated
       - --memory=1Gi
       - --timeout=60m
