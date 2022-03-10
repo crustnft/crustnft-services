@@ -1,3 +1,4 @@
+import 'source-map-support/register';
 import './utils/load-env';
 import app from './app';
 import { isCloudFunctions } from './utils/runtime-environment';

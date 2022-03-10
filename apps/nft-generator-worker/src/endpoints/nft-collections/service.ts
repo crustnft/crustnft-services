@@ -1,5 +1,6 @@
 import { Logger } from '@crustnft-explore/util-config-api';
 import createHttpError from 'http-errors';
+import { TaskStatus } from '@crustnft-explore/data-access';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-generator';
 import {
   deleteFiles,
@@ -7,7 +8,10 @@ import {
   downloadFiles,
   uploadFile,
 } from '../../services/gcsService';
-import { uploadToIPFS } from '../../services/ipfsService';
+import {
+  convertToDatastoreTypes,
+  uploadToIPFS,
+} from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
 import { NftCollection, NftGeneratorDto } from './types';
 
@@ -21,10 +25,18 @@ const BACKGROUND_CATEGORY = 'background';
 export async function createNftGenerator(generatorDto: NftGeneratorDto) {
   const nftCollectionRecord = await findOne(generatorDto.id);
   await nftGeneratorEntity.updateEntity(generatorDto.id, {
-    status: 'started',
+    status: TaskStatus.Assigned,
   });
-  await startGenerator(nftCollectionRecord);
-  return nftCollectionRecord;
+
+  const ipfsFiles = await startGenerator(nftCollectionRecord);
+
+  const updateEntity = {
+    status: TaskStatus.Assigned,
+    ipfsFiles: convertToDatastoreTypes(ipfsFiles),
+  };
+
+  await nftGeneratorEntity.updateEntity(generatorDto.id, updateEntity);
+  return { ...generatorDto, ...updateEntity, id: generatorDto.id };
 }
 
 export async function findOne(id: string) {
@@ -58,6 +70,10 @@ async function startGenerator(nftCollectionRecord: NftCollection) {
     fileIdList
   );
 
+  await nftGeneratorEntity.updateEntity(collectionId, {
+    status: TaskStatus.Processing,
+  });
+
   logger.debug('Downloaded files');
   const folderName = collectionId;
   const createdFilePaths = [];
@@ -87,9 +103,5 @@ async function startGenerator(nftCollectionRecord: NftCollection) {
 
   logger.debug(`Delete folder: ${createdFilePaths}`);
 
-  await nftGeneratorEntity.updateEntity(collectionId, {
-    status: 'completed',
-    ipfsFiles,
-  });
   return ipfsFiles;
 }

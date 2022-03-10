@@ -22,6 +22,7 @@
       "configurations": {
         "production": {
           "optimization": true,
+          "sourceMap": true,
           "extractLicenses": true,
           "generatePackageJson": true,
           "inspect": false

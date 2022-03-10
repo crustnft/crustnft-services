@@ -12,3 +12,11 @@ export interface NftGeneratorDto {
   status: string;
   medias: Media[];
 }
+
+export enum TaskStatus {
+  Pending = 'pending',
+  Assigned = 'assigned',
+  Processing = 'processing',
+  Completed = 'completed',
+  Canceled = 'canceled',
+}

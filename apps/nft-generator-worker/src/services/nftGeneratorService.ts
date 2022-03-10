@@ -10,7 +10,7 @@ export function nftGenerator(background: Buffer, layers: Buffer[]) {
       const normalizedLayers = await normalizeImages(background, layers);
       const nftList = getPermutations(normalizedLayers);
       for (const nft of nftList) {
-        logger.debug(`Start generate NFT: ${nft.name}`);
+        logger.debug(`Start generate NFT ${nft.name}`);
         const content = await compositeImages(background, nft.layers);
         yield {
           name: nft.name,
@@ -22,10 +22,10 @@ export function nftGenerator(background: Buffer, layers: Buffer[]) {
 }
 
 function getPermutations(layers: Buffer[]) {
-  const members = Array.from(Array(layers.length), (_, x) => x);
+  const members = Array.from(Array(layers.length), (_, x) => x + 1);
   const permutations = createPermutation(members);
   return permutations.map((permutation) => ({
     name: permutation.join(''),
-    layers: permutation.map((item: number) => layers[item]),
+    layers: permutation.map((item: number) => layers[item - 1]),
   }));
 }

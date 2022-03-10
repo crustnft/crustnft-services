@@ -24,7 +24,8 @@
           "optimization": true,
           "extractLicenses": true,
           "generatePackageJson": true,
-          "inspect": false
+          "inspect": false,
+          "sourceMap": true
         }
       }
     },

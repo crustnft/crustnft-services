@@ -18,7 +18,7 @@ Authorization: Bearer {{accessToken}}
 
 {
   "fileName":"{{$guid}}",
-  "contentType": "image/jpeg"
+  "contentType": "image/png"
 }
 
 ###
@@ -26,9 +26,9 @@ Authorization: Bearer {{accessToken}}
 @signedUploadUrl = {{generateMedia.response.body.data}}
 
 PUT {{signedUploadUrl}}
-Content-Type: image/jpeg
+Content-Type: image/png
 
-< /Users/duc.nguyen/Downloads/marra-_Gnbso4pl7M-unsplash.jpeg
+< /Users/duc.nguyen/Downloads/crust-nft/nb-4.png
 
 
 ### NFT Collections

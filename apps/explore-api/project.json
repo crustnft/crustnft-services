@@ -21,10 +21,11 @@
       },
       "configurations": {
         "production": {
-          "optimization": true,
+          "optimization": false,
           "extractLicenses": true,
           "generatePackageJson": true,
-          "inspect": false
+          "inspect": false,
+          "sourceMap": true
         }
       }
     },

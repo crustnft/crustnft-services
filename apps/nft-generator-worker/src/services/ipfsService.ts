@@ -26,10 +26,21 @@ export async function uploadToIPFS(fromBucketName: string, fileIds: string[]) {
   return addResults;
 }
 
+export function convertToDatastoreTypes(addResults: any[]) {
+  return addResults.map(({ path, cid, size }) => ({
+    path: path,
+    cid: cid.toV1().toString(),
+    size,
+  }));
+}
+
 function asyncReadFileIterable(bucketName: string, fileIdList: string[]) {
   return {
     async *[Symbol.asyncIterator]() {
       for (const fileId of fileIdList) {
+        logger.debug(
+          `Beginning download file from GCS, bucket: ${bucketName}, fileId: ${fileId}`
+        );
         const content = await downloadFile(bucketName, fileId);
         logger.debug(
           `Downloaded file from GCS, bucket: ${bucketName}, fileId: ${fileId}`

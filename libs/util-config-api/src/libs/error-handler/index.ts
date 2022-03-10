@@ -9,7 +9,7 @@ export function errorHandler() {
     if (!error) {
       return next();
     }
-    logger.error('errorHandler: ', error);
+    logger.error({ err: error }, `errorHandler - ${error.message}`);
     if (HttpError.isHttpError(error)) {
       res.status(error.statusCode);
       return res.json({

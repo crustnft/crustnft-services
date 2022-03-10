@@ -37,7 +37,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA']
 
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
     entrypoint: gcloud
     args:
       - datastore
@@ -47,7 +47,7 @@ steps:
       - --quiet
       - --verbosity=info
 
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
     id: 'deploy-explore-api'
     entrypoint: gcloud
     args:
@@ -56,12 +56,13 @@ steps:
       - ${_APP_ENV}-explore-api
       - --image=gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA
       - --platform=managed
+      - --service-account=${_SERVICE_ACCOUNT}
       - --region=${_REGION}
       - --project=$PROJECT_ID
       - --allow-unauthenticated
       - --set-env-vars=APP_ENV=${_APP_ENV}
 
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
     entrypoint: gcloud
     args:
       - datastore
@@ -71,7 +72,7 @@ steps:
       - --quiet
       - --verbosity=info
 
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
     id: 'deploy-nft-generator-api'
     entrypoint: gcloud
     args:
@@ -83,6 +84,7 @@ steps:
       - --entry-point=api
       - --runtime=nodejs16
       - --allow-unauthenticated
+      - --service-account=${_SERVICE_ACCOUNT}
       - --region=${_REGION}
       - --project=$PROJECT_ID
       - --set-env-vars=APP_ENV=${_APP_ENV}
@@ -102,7 +104,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/nft-generator-worker:$SHORT_SHA']
 
-  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
     id: 'deploy-nft-generator-worker'
     entrypoint: gcloud
     args:
@@ -111,6 +113,10 @@ steps:
       - ${_APP_ENV}-nft-generator-worker
       - --image=gcr.io/$PROJECT_ID/nft-generator-worker:$SHORT_SHA
       - --platform=managed
+      - --allow-unauthenticated
+      - --memory=1Gi
+      - --timeout=60m
+      - --service-account=${_SERVICE_ACCOUNT}
       - --region=${_REGION}
       - --project=$PROJECT_ID
       - --set-env-vars=APP_ENV=${_APP_ENV}
@@ -118,6 +124,8 @@ steps:
 substitutions:
   _APP_ENV: stage
   _REGION: us-east1
+  _SERVICE_ACCOUNT: stage-crust-nft-explore@crustnft.iam.gserviceaccount.com
 
 images:
   - 'gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/nft-generator-worker:$SHORT_SHA'

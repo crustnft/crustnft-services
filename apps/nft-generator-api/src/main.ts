@@ -1,5 +1,7 @@
 import './utils/load-env';
 import app from './app';
+import 'source-map-support/register';
+
 import { isCloudFunctions } from './utils/runtime-environment';
 
 const port = process.env.PORT || 3001;
