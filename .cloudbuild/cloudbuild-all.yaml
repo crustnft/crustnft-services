@@ -115,7 +115,7 @@ steps:
       - --image=gcr.io/$PROJECT_ID/nft-generator-worker:$SHORT_SHA
       - --platform=managed
       - --ingress=all
-      - --allow-unauthenticated
+      - --no-allow-unauthenticated
       - --memory=1Gi
       - --timeout=60m
       - --service-account=${_SERVICE_ACCOUNT}

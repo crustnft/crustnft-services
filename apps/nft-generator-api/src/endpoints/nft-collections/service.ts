@@ -8,6 +8,7 @@ import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-generator';
 import storage from '../../clients/storage';
 import createHttpError from 'http-errors';
 import { Logger } from '@crustnft-explore/util-config-api';
+import { getGoogleClientHeaders } from '../../clients/google-auth';
 
 const { NFT_GENERATOR_UPLOAD_BUCKET, NFT_GENERATOR_WORKER_API } = process.env;
 const logger = Logger('nft-collection/service');
@@ -57,7 +58,17 @@ export async function findOne(id: string) {
 
 async function triggerWorker(taskId: string) {
   const url = `${NFT_GENERATOR_WORKER_API}/api/v1/ntf-collections`;
-  await axios.post(url, {
-    id: taskId,
-  });
+  logger.debug(`url: ${url}`);
+  const tokenResponse = await getGoogleClientHeaders(url);
+  axios.post(
+    url,
+    {
+      id: taskId,
+    },
+    {
+      headers: {
+        Authorization: tokenResponse.Authorization,
+      },
+    }
+  );
 }
