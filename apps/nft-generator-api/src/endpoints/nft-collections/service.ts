@@ -58,8 +58,8 @@ export async function findOne(id: string) {
 
 async function triggerWorker(taskId: string) {
   const url = `${NFT_GENERATOR_WORKER_API}/api/v1/ntf-collections`;
-  logger.debug(`url: ${url}`);
-  const tokenResponse = await getGoogleClientHeaders(url);
+  logger.debug(`trigger Worker url: ${url}`);
+  const { Authorization } = await getGoogleClientHeaders(url);
   axios.post(
     url,
     {
@@ -67,7 +67,7 @@ async function triggerWorker(taskId: string) {
     },
     {
       headers: {
-        Authorization: tokenResponse.Authorization,
+        Authorization,
       },
     }
   );
