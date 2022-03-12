@@ -42,12 +42,15 @@ export async function compositeImages(
   background: Buffer,
   layerBuffers: Buffer[]
 ) {
-  logger.debug('Start composite images');
+  logger.debug(`Start composite background with ${layerBuffers.length} layers`);
   const toComposeLayers = layerBuffers.map((buffer) => ({
     input: buffer,
     top: 0,
     left: 0,
   }));
 
-  return sharp(background).composite(toComposeLayers).toBuffer();
+  return sharp(background)
+    .composite(toComposeLayers)
+    .toFormat('jpeg')
+    .toBuffer();
 }

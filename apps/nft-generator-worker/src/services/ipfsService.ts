@@ -1,13 +1,13 @@
 import { Logger } from '@crustnft-explore/util-config-api';
+import { urlSource } from 'ipfs-http-client';
 import ipfs from '../clients/ipfs-http-client';
-import { downloadFile } from './gcsService';
 
 const logger = Logger('ipfsService');
 
 const ADD_OPTIONS = {
   pin: true,
   wrapWithDirectory: true,
-  timeout: 100000,
+  timeout: 100_000,
 };
 
 export async function uploadToIPFS(fromBucketName: string, fileIds: string[]) {
@@ -17,7 +17,9 @@ export async function uploadToIPFS(fromBucketName: string, fileIds: string[]) {
 
   const addResults = [];
   for await (const file of ipfs.addAll(
-    asyncReadFileIterable(fromBucketName, fileIds),
+    fileIds.map((fileId) =>
+      urlSource(`https://storage.googleapis.com/${fromBucketName}/${fileId}`)
+    ) as any,
     ADD_OPTIONS
   )) {
     addResults.push(file);
@@ -32,21 +34,4 @@ export function convertToDatastoreTypes(addResults: any[]) {
     cid: cid.toV1().toString(),
     size,
   }));
-}
-
-function asyncReadFileIterable(bucketName: string, fileIdList: string[]) {
-  return {
-    async *[Symbol.asyncIterator]() {
-      for (const fileId of fileIdList) {
-        logger.debug(
-          `Beginning download file from GCS, bucket: ${bucketName}, fileId: ${fileId}`
-        );
-        const content = await downloadFile(bucketName, fileId);
-        logger.debug(
-          `Downloaded file from GCS, bucket: ${bucketName}, fileId: ${fileId}`
-        );
-        yield content;
-      }
-    },
-  };
 }

@@ -27,6 +27,11 @@ const CollectionSchema: DatastoreEntitySchema = {
       excludeFromIndexes: true,
     },
     {
+      name: 'gcsFiles',
+      defaultValue: [],
+      excludeFromIndexes: true,
+    },
+    {
       name: 'createdAt',
       defaultValue: () => new Date(),
     },

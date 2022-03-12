@@ -3,7 +3,6 @@ import createHttpError from 'http-errors';
 import { TaskStatus } from '@crustnft-explore/data-access';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-generator';
 import {
-  deleteFiles,
   downloadFile,
   downloadFiles,
   uploadFile,
@@ -14,6 +13,7 @@ import {
 } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
 import { NftCollection, NftGeneratorDto } from './types';
+import { JPEG_FILE_EXTENSION, JPEG_MIME_TYPE } from '../../constants/image';
 
 const logger = Logger('nft-collections:service');
 
@@ -23,20 +23,22 @@ const { NFT_GENERATOR_UPLOAD_BUCKET, NFT_GENERATOR_CREATED_BUCKET } =
 const BACKGROUND_CATEGORY = 'background';
 
 export async function createNftGenerator(generatorDto: NftGeneratorDto) {
-  const nftCollectionRecord = await findOne(generatorDto.id);
-  await nftGeneratorEntity.updateEntity(generatorDto.id, {
+  const collectionId = generatorDto.id;
+  const nftCollectionRecord = await findOne(collectionId);
+  await nftGeneratorEntity.updateEntity(collectionId, {
     status: TaskStatus.Assigned,
   });
 
   const ipfsFiles = await startGenerator(nftCollectionRecord);
 
   const updateEntity = {
-    status: TaskStatus.Assigned,
+    status: TaskStatus.Completed,
     ipfsFiles: convertToDatastoreTypes(ipfsFiles),
   };
 
-  await nftGeneratorEntity.updateEntity(generatorDto.id, updateEntity);
-  return { ...generatorDto, ...updateEntity, id: generatorDto.id };
+  await nftGeneratorEntity.updateEntity(collectionId, updateEntity);
+
+  return findOne(collectionId);
 }
 
 export async function findOne(id: string) {
@@ -62,7 +64,6 @@ async function startGenerator(nftCollectionRecord: NftCollection) {
 
   const fileIdList = nftCollectionRecord.medias
     .filter((media) => media.category !== BACKGROUND_CATEGORY)
-    // .slice(0,2) for testing
     .map((media) => media.mediaId);
 
   const downloadedFileList = await downloadFiles(
@@ -82,15 +83,20 @@ async function startGenerator(nftCollectionRecord: NftCollection) {
     downloadedFileList.map(({ content }) => content)
   )) {
     const { name: fileName, content } = nft;
-    const filePath = `${folderName}/${fileName}`;
+    const filePath = `${folderName}/${fileName}.${JPEG_FILE_EXTENSION}`;
     await uploadFile(
       NFT_GENERATOR_CREATED_BUCKET,
       filePath,
       content,
-      'image/png'
+      JPEG_MIME_TYPE
     );
     logger.debug(`Uploaded to GCS: ${filePath}`);
     createdFilePaths.push(filePath);
+    await nftGeneratorEntity.updateEntity(collectionId, {
+      gcsFiles: createdFilePaths.map((path) => ({
+        id: path,
+      })),
+    });
   }
   logger.debug(`Uploaded files to ${NFT_GENERATOR_CREATED_BUCKET}`);
 
@@ -98,10 +104,6 @@ async function startGenerator(nftCollectionRecord: NftCollection) {
     NFT_GENERATOR_CREATED_BUCKET,
     createdFilePaths
   );
-
-  await deleteFiles(NFT_GENERATOR_CREATED_BUCKET, createdFilePaths);
-
-  logger.debug(`Delete folder: ${createdFilePaths}`);
 
   return ipfsFiles;
 }
