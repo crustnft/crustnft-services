@@ -45,6 +45,7 @@ async function validateMedia(createDto: CreateNftGeneratorDto) {
       storage.bucket(NFT_GENERATOR_UPLOAD_BUCKET).file(media.mediaId).exists()
     )
   );
+  logger.debug(existedList, 'Checking existing results.');
   const allFound = existedList.every(([existed]) => existed);
   if (!allFound) {
     throw createHttpError(500, 'At least one mediaId is not existed');

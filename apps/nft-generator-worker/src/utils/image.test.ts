@@ -19,12 +19,12 @@ describe('image ', () => {
   test('prefer ratio is bigger', () => {
     expect(getFitSize(preferHeight, preferWidth, 14, 10)).toEqual({
       height: 1400,
-      width: 999,
+      width: 1000,
     });
 
     expect(getFitSize(preferHeight, preferWidth, 14000, 10000)).toEqual({
       height: 1400,
-      width: 999,
+      width: 1000,
     });
   });
 
@@ -47,6 +47,18 @@ describe('image ', () => {
     expect(getFitSize(preferHeight, preferWidth, 4000, 200)).toEqual({
       height: 1500,
       width: 75,
+    });
+  });
+
+  test('prefer ratio is smaller', () => {
+    expect(getFitSize(2500, 2000, 404, 618)).toEqual({
+      height: 1308,
+      width: 2000,
+    });
+
+    expect(getFitSize(2500, 2000, 480, 480)).toEqual({
+      height: 2001,
+      width: 2000,
     });
   });
 });
