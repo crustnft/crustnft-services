@@ -123,6 +123,24 @@ steps:
       - --project=$PROJECT_ID
       - --set-env-vars=APP_ENV=${_APP_ENV}
 
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
+    id: 'deploy-cleanup-worker'
+    entrypoint: gcloud
+    args:
+      - functions
+      - deploy
+      - ${_APP_ENV}-cleanup-worker
+      - --source=./dist/apps/cleanup-worker
+      - --trigger-http
+      - --entry-point=api
+      - --runtime=nodejs16
+      - --timeout=540s
+      - --no-allow-unauthenticated
+      - --service-account=${_SERVICE_ACCOUNT}
+      - --region=${_REGION}
+      - --project=$PROJECT_ID
+      - --set-env-vars=APP_ENV=${_APP_ENV}
+
 substitutions:
   _APP_ENV: stage
   _REGION: us-east1

@@ -1,0 +1,18 @@
+# Correct .env.sample in root folder to use this file, reference: https://marketplace.visualstudio.com/items?itemName=humao.rest-client
+
+
+@baseUrl = {{$dotenv CLEANUP_WORKER_ENDPOINT}}
+
+### Health-check
+GET {{baseUrl}}/health
+
+
+### NFT Collections
+
+### Generage nft collection
+POST {{baseUrl}}/api/v1/cleanup-worker
+content-type: application/json
+
+{
+  "message":"hello-world"
+}

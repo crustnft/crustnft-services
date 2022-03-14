@@ -32,7 +32,9 @@
     "serve": {
       "executor": "@nrwl/node:execute",
       "options": {
-        "buildTarget": "nft-generator-api:build"
+        "buildTarget": "nft-generator-api:build",
+        "inspect": true,
+        "port": 9230
       }
     },
     "lint": {
