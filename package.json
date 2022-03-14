@@ -81,7 +81,8 @@
     "*.{js,ts,tsx,json,css,md}": "npm run format"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "npx lint-staged",
+    "pre-push": "npx nx run-many --target=test --all=true"
   },
   "engines": {
     "npm": ">=8.0.0",
