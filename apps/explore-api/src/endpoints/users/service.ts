@@ -1,6 +1,11 @@
 import createHttpError from 'http-errors';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UserQueryParams,
+  UserSession,
+} from '@crustnft-explore/data-access';
 import * as UserEntity from '../../entities/user';
-import { UserQueryParams, CreateUserDto, UpdateUserDto } from './types';
 
 export async function save(createUserDto: CreateUserDto) {
   try {
@@ -14,7 +19,16 @@ export async function save(createUserDto: CreateUserDto) {
   }
 }
 
-export async function update(updateUserDto: UpdateUserDto) {
+export async function update(
+  updateUserDto: UpdateUserDto,
+  currentUser?: UserSession
+) {
+  if (currentUser) {
+    const existing = await findById(updateUserDto.account);
+    if (currentUser.account !== existing?.account) {
+      throw Error('Can not edit other user profile');
+    }
+  }
   await UserEntity.update(updateUserDto);
   return updateUserDto;
 }

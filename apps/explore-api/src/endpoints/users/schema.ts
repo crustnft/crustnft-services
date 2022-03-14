@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { ACCOUNT_REGEX } from '../../constants/regex';
-import { CreateUserDto } from './types';
+import { CreateUserDto } from '@crustnft-explore/data-access';
 
 export const CreateUserDtoSchema = Joi.object<CreateUserDto>({
   displayName: Joi.string().empty('').required(),

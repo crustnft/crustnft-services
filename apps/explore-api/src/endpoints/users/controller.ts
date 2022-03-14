@@ -1,6 +1,6 @@
 import { Context } from 'koa';
 import * as service from './service';
-import { UserQueryParams } from './types';
+import { UserQueryParams } from '@crustnft-explore/data-access';
 
 export async function create(ctx: Context) {
   ctx.body = {
@@ -10,7 +10,7 @@ export async function create(ctx: Context) {
 
 export async function update(ctx: Context) {
   ctx.body = {
-    data: await service.update(ctx.request.body),
+    data: await service.update(ctx.request.body, ctx.state.user),
   };
 }
 

@@ -1,15 +1,15 @@
 import datastore from '../clients/datastore';
-import {
-  UserQueryParams,
-  CreateUserDto,
-  UpdateUserDto,
-} from '../endpoints/users/types';
 import { SERVICE_NAME } from '../constants';
 import { getAppEnv } from '../utils/environment';
 import {
   mappingDtoToColumns,
   DatastoreEntitySchema,
 } from '@crustnft-explore/util-entity';
+import {
+  CreateUserDto,
+  UpdateUserDto,
+  UserQueryParams,
+} from '@crustnft-explore/data-access';
 
 const ENTITY_NAME = `${getAppEnv()}-${SERVICE_NAME}-user`;
 

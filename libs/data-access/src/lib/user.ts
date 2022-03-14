@@ -13,3 +13,7 @@ export type UserQueryParams = Partial<User> & {
   pageSize: number;
   pageCursor?: string;
 };
+
+export interface UserSession {
+  account: string;
+}
