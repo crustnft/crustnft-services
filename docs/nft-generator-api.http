@@ -2,7 +2,7 @@
 
 
 @baseUrl = {{$dotenv NFT_GENERATOR_API_ENDPOINT}}
-@accessToken = {{$dotenv NFT_GENERATOR_API_ACCESS_TOKEN}}
+@accessToken = {{$dotenv EXPLORE_API_ACCESS_TOKEN}}
 
 ### Health-check
 GET {{baseUrl}}/health
@@ -33,27 +33,70 @@ Content-Type: image/png
 
 ### NFT Collections
 
-### Initiate nft collection generator
+### Create nft collection generator
 POST {{baseUrl}}/api/v1/ntf-collections/
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "medias":[
+  "images":[
     {
-      "category":"background",
-      "mediaId":"4f8d4517-4ea6-4c0b-b9bf-577fa8bf3496"
+      "name":"background",
+      "id":"d1199842-d735-4b2f-9a78-f4f80e81df4f"
     },
     {
-      "category":"head",
-      "mediaId":"809e9b5e-7df9-44a6-a469-07beeca95890"
+      "name":"head1",
+      "id":"8383ffa8-51c8-4b75-9214-fcfe31d7127c"
+    },
+     {
+      "name":"head",
+      "id":"giphy2.webp"
+    },
+     {
+      "name":"head",
+      "id":"giphy3.gif"
     }
-  ]
+  ],
+  "layers":[
+     {
+      "id": "IDLayer1",
+      "name": "Background",
+      "imageIds": ["d1199842-d735-4b2f-9a78-f4f80e81df4f", "giphy2.webp"]
+    },
+    {
+      "id": "IDLayer2",
+      "name": "Costume",
+      "imageIds": ["8383ffa8-51c8-4b75-9214-fcfe31d7127c", "giphy3.gif"]
+    }
+  ],
+  "name":"hello-toro-4444",
+  "description":"hello-toro-2",
+  "layerOrder":["IDLayer1","IDLayer2"]
 }
 
 
 
+### Update nft collection generator
+PUT {{baseUrl}}/api/v1/ntf-collections/
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{
+  "id":"10d021d1c368cfeb9b990e6eeaed3fda",
+  "name":"hello-toro3339",
+  "description":"hello-toro333"
+}
+
+
+
+### Get all collections
+GET {{baseUrl}}/api/v1/ntf-collections/
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+
+
 ### Get generator status
-GET {{baseUrl}}/api/v1/ntf-collections/589e4386-73db-4336-b4ee-a5ab86273245
+GET {{baseUrl}}/api/v1/ntf-collections/10d021d1c368cfeb9b990e6eeaed3fda
 content-type: application/json
 Authorization: Bearer {{accessToken}}

@@ -1,5 +1,8 @@
 import { getAppEnv } from '@crustnft-explore/util-config-api';
-import { NftGeneratorDto } from '@crustnft-explore/data-access';
+import {
+  NftCollectionDto,
+  NftCollectionQueryParams,
+} from '@crustnft-explore/data-access';
 import datastore from '../client/datastore';
 import {
   mappingDtoToColumns,
@@ -15,20 +18,38 @@ const CollectionSchema: DatastoreEntitySchema = {
       name: 'id',
     },
     {
+      name: 'name',
+    },
+    {
+      name: 'description',
+      excludeFromIndexes: true,
+    },
+    {
+      name: 'creator',
+    },
+    {
       name: 'status',
     },
     {
-      name: 'medias',
+      name: 'images',
       excludeFromIndexes: true,
     },
     {
-      name: 'ipfsFiles',
-      defaultValue: [],
+      name: 'layers',
       excludeFromIndexes: true,
     },
     {
-      name: 'gcsFiles',
-      defaultValue: [],
+      name: 'layerOrder',
+      excludeFromIndexes: true,
+    },
+    {
+      name: 'collectionCID',
+      defaultValue: '',
+      excludeFromIndexes: true,
+    },
+    {
+      name: 'metadataCID',
+      defaultValue: '',
       excludeFromIndexes: true,
     },
     {
@@ -42,7 +63,7 @@ export function getKey(id: string) {
   return datastore.key([ENTITY_NAME, id]);
 }
 
-function createEntity(dto: NftGeneratorDto) {
+function createEntity(dto: NftCollectionDto) {
   const key = getKey(dto.id);
   const entity = {
     key,
@@ -51,7 +72,7 @@ function createEntity(dto: NftGeneratorDto) {
   return entity;
 }
 
-export async function insertEntity(contractDto: NftGeneratorDto) {
+export async function insertEntity(contractDto: NftCollectionDto) {
   const entity = createEntity(contractDto);
   return datastore.insert(entity);
 }
@@ -99,8 +120,12 @@ export async function findById(id: string) {
   return datastore.get(key);
 }
 
-export async function search(pageSize: number, pageCursor: string) {
+export async function search(queryParams: NftCollectionQueryParams) {
+  const { pageSize = 100, pageCursor, creator } = queryParams;
   let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
+  if (creator) {
+    query = query.filter('creator', '=', creator);
+  }
   if (pageCursor) {
     query = query.start(pageCursor);
   }

@@ -1,7 +1,9 @@
 import crypto from 'crypto';
 import axios from 'axios';
 import {
-  CreateNftGeneratorDto,
+  CreateNftCollectionDto,
+  UpdateNftCollectionDto,
+  NftCollectionQueryParams,
   TaskStatus,
 } from '@crustnft-explore/data-access';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-generator';
@@ -13,16 +15,21 @@ import { getGoogleClientHeaders } from '../../clients/google-auth';
 const { NFT_GENERATOR_UPLOAD_BUCKET, NFT_GENERATOR_WORKER_API } = process.env;
 const logger = Logger('nft-collection/service');
 
-export async function createNftGenerator(createDto: CreateNftGeneratorDto) {
+export async function createNftGenerator(
+  createDto: CreateNftCollectionDto,
+  currentUser: any
+) {
   await validateMedia(createDto);
   const dto = {
     status: TaskStatus.Pending,
-    medias: createDto.medias,
+    ...createDto,
+    creator: currentUser.account,
   };
   const collectionId = crypto
     .createHash('md5')
     .update(JSON.stringify(dto), 'utf8')
     .digest('hex');
+
   await nftGeneratorEntity.insertEntity({ id: collectionId, ...dto });
   logger.info(`Registered an NFT generator Id: ${collectionId}`);
 
@@ -36,13 +43,17 @@ async function kickStartWorker(taskId: string) {
   if (task.status !== TaskStatus.Pending) {
     throw Error('Task is already in process');
   }
-  await triggerWorker(taskId);
+  try {
+    await triggerWorker(taskId);
+  } catch (error) {
+    logger.error({ err: error }, 'Can not trigger worker');
+  }
 }
 
-async function validateMedia(createDto: CreateNftGeneratorDto) {
+async function validateMedia(createDto: CreateNftCollectionDto) {
   const existedList = await Promise.all(
-    createDto.medias.map((media) =>
-      storage.bucket(NFT_GENERATOR_UPLOAD_BUCKET).file(media.mediaId).exists()
+    createDto.images.map((media) =>
+      storage.bucket(NFT_GENERATOR_UPLOAD_BUCKET).file(media.id).exists()
     )
   );
   logger.debug(existedList, 'Checking existing results.');
@@ -52,9 +63,26 @@ async function validateMedia(createDto: CreateNftGeneratorDto) {
   }
 }
 
+export async function update(
+  updateDto: UpdateNftCollectionDto,
+  currentUser: any
+) {
+  const existing = await findOne(updateDto.id);
+  if (currentUser.account !== existing?.creator) {
+    throw new Error('Can not edit other user collection.');
+  }
+  const { id, ...restDto } = updateDto;
+  await nftGeneratorEntity.updateEntity(id, restDto);
+  return updateDto;
+}
+
 export async function findOne(id: string) {
   const [first] = await nftGeneratorEntity.findById(id);
   return first;
+}
+
+export async function search(query: NftCollectionQueryParams) {
+  return nftGeneratorEntity.search(query);
 }
 
 async function triggerWorker(taskId: string) {
