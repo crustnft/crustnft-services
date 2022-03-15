@@ -9,7 +9,10 @@ import * as UserEntity from '../../entities/user';
 
 export async function save(createUserDto: CreateUserDto) {
   try {
-    await UserEntity.insertEntity(createUserDto);
+    await UserEntity.insertEntity({
+      ...createUserDto,
+      account: createUserDto.account.toLowerCase(),
+    });
     return createUserDto;
   } catch (error) {
     if (error.code === 6) {
