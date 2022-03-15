@@ -1,4 +1,5 @@
 import app from '../../src/app';
+import * as chainService from '../../src/services/chain-service';
 import { createMockServer } from '../helper';
 
 const mockFindById = jest.fn();
@@ -7,9 +8,7 @@ jest.mock('../../src/endpoints/users/service', () => ({
   findById: jest.fn().mockImplementation(() => mockFindById()),
 }));
 
-jest.mock('../../src/services/chain-service', () => ({
-  verifySignature: jest.fn().mockReturnValue(true),
-}));
+const verifySignatureSpy = jest.spyOn(chainService, 'verifySignature');
 
 const { ACCOUNT } = process.env;
 const request = createMockServer(app);
@@ -35,6 +34,7 @@ describe('test authentication', () => {
   });
 
   test('should return a jwt token', async () => {
+    verifySignatureSpy.mockImplementation(() => true);
     mockFindById.mockResolvedValue({
       nonce: 123123,
       account: ACCOUNT,
