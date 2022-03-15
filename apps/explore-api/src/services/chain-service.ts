@@ -38,3 +38,19 @@ function validateReceipt(
     throw new Error(`TxHash does not meet requirements`);
   }
 }
+
+export function getSigningMessage(nonce: string, account: string) {
+  return `Welcome to CrustNft!
+
+Click to sign in and accept the CrustNft Terms of Service: https://crustnft.io/tos
+
+This request will not trigger a blockchain transaction or cost any gas fees.
+
+Your authentication status will reset after 24 hours.
+
+Wallet address:
+${account}
+
+Nonce:
+${nonce}`;
+}
