@@ -13,9 +13,9 @@ export async function checkTransaction(contract: Contract) {
 export function verifySignature(
   account: string,
   signature: string,
-  userNonce: string
+  signingMessage: string
 ) {
-  const decodedAddress = ethers.utils.verifyMessage(userNonce, signature);
+  const decodedAddress = ethers.utils.verifyMessage(signingMessage, signature);
   return account.toLowerCase() === decodedAddress.toLowerCase();
 }
 
