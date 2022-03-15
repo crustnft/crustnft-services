@@ -1,32 +1,26 @@
 import createHttpError from 'http-errors';
 import jwt from 'jsonwebtoken';
 import * as userService from '../users/service';
-import { verifySignature } from '../../services/chain-service';
+import {
+  verifySignature,
+  getSigningMessage,
+} from '../../services/chain-service';
 import { LoginDto } from './types';
 
 export async function getUserNonce(account: string) {
   const nonce: number = Math.floor(Math.random() * 10000000);
-  const message = `Welcome to CrustNft!
-
-Click to sign in and accept the CrustNft Terms of Service: https://crustnft.io/tos
-
-This request will not trigger a blockchain transaction or cost any gas fees.
-
-Your authentication status will reset after 24 hours.
-
-Wallet address:
-${account}
-
-Nonce:
-${nonce}`;
   await userService.update({ account, nonce: nonce.toString() });
-  return message;
+  return getSigningMessage(nonce.toString(), account);
 }
 
 export async function login(loginDto: LoginDto) {
   const { account, signature } = loginDto;
   const user = await userService.findById(account);
-  const authenticated = verifySignature(account, signature, user.nonce);
+  const authenticated = verifySignature(
+    account,
+    signature,
+    getSigningMessage(user.nonce, account)
+  );
   if (authenticated) {
     const jwtToken = await generateJwtToken(user);
     await userService.update({
