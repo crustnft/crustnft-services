@@ -24,11 +24,11 @@ export const CreateNftCollectionDtoSchema = Joi.object<CreateNftCollectionDto>({
     .required(),
   layerOrder: Joi.array().items(Joi.string()).required(),
   name: Joi.string().required(),
-  description: Joi.string().required(),
+  description: Joi.string().optional(),
 });
 
 export const UpdateNftCollectionDtoSchema = Joi.object<UpdateNftCollectionDto>({
   id: Joi.string().required(),
   name: Joi.string().required(),
-  description: Joi.string().required(),
+  description: Joi.string().optional(),
 });
