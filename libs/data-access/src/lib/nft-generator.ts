@@ -17,7 +17,7 @@ export type CreateNftCollectionDto = Omit<
 
 export type UpdateNftCollectionDto = Pick<
   NftCollectionDto,
-  'name' | 'description' | 'id'
+  'name' | 'description' | 'id' | 'images' | 'layers' | 'layerOrder'
 >;
 
 export interface NftCollectionDto {
