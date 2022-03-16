@@ -6,11 +6,7 @@ import { ContractQueryParams, CreateContractDto } from './types';
 export async function save(createContractDto: CreateContractDto) {
   try {
     await checkTransaction(createContractDto);
-    await ContractEntity.insertEntity({
-      ...createContractDto,
-      account: createContractDto.account.toLowerCase(),
-      contractAddress: createContractDto.contractAddress.toLowerCase(),
-    });
+    await ContractEntity.insertEntity(createContractDto);
     return createContractDto;
   } catch (error) {
     if (error.code === 6) {

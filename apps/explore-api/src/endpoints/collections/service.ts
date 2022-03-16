@@ -8,10 +8,7 @@ import {
 
 export async function save(createCollectionDto: CreateCollectionDto) {
   try {
-    await CollectionEntity.insertEntity({
-      ...createCollectionDto,
-      account: createCollectionDto.account.toLowerCase(),
-    });
+    await CollectionEntity.insertEntity(createCollectionDto);
     return createCollectionDto;
   } catch (error) {
     if (error.code === 6) {
