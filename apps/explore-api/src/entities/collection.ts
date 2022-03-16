@@ -21,6 +21,7 @@ const CollectionSchema: DatastoreEntitySchema = {
     },
     {
       name: 'account',
+      lowercase: true,
     },
     {
       name: 'avatarCID',

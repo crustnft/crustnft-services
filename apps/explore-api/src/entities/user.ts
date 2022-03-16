@@ -18,6 +18,7 @@ const UserSchema: DatastoreEntitySchema = {
   columns: [
     {
       name: 'account',
+      lowercase: true,
     },
     {
       name: 'avatarCID',

@@ -26,6 +26,7 @@ const CollectionSchema: DatastoreEntitySchema = {
     },
     {
       name: 'creator',
+      lowercase: true,
     },
     {
       name: 'status',

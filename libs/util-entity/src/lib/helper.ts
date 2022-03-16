@@ -6,9 +6,11 @@ export function mappingDtoToColumns(dto, schema: DatastoreEntitySchema) {
     const excludeFromIndexes = colum.excludeFromIndexes ?? false;
     let fieldData = {};
     if (columName in dto) {
+      const value = dto[columName];
       fieldData = {
         name: columName,
-        value: dto[columName],
+        value:
+          colum.lowercase && value !== undefined ? value.toLowerCase() : value,
       };
     } else if (colum.defaultValue !== undefined) {
       fieldData = {
@@ -21,6 +23,7 @@ export function mappingDtoToColumns(dto, schema: DatastoreEntitySchema) {
     } else {
       throw new Error(`Entity is missing ${columName} field`);
     }
+
     return {
       ...fieldData,
       excludeFromIndexes,

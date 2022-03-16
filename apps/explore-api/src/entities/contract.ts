@@ -17,15 +17,18 @@ const ContractSchema: DatastoreEntitySchema = {
   columns: [
     {
       name: 'txHash',
+      lowercase: true,
     },
     {
       name: 'chainId',
     },
     {
       name: 'account',
+      lowercase: true,
     },
     {
       name: 'contractAddress',
+      lowercase: true,
     },
     {
       name: 'contractContent',

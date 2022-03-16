@@ -8,6 +8,10 @@ describe('mapping dto', () => {
         name: 'id',
       },
       {
+        name: 'name',
+        lowercase: true,
+      },
+      {
         name: 'medias',
         excludeFromIndexes: true,
       },
@@ -23,13 +27,28 @@ describe('mapping dto', () => {
       {
         id: 1,
         medias: [],
+        name: 'CurstNFT',
       },
       SCHEMA
     );
     expect(data).toEqual([
       { excludeFromIndexes: false, name: 'id', value: 1 },
+      { excludeFromIndexes: false, name: 'name', value: 'curstnft' },
       { excludeFromIndexes: true, name: 'medias', value: [] },
       { excludeFromIndexes: true, name: 'ipfsFiles', value: [] },
     ]);
+  });
+
+  test('should has throw error', () => {
+    expect(() => {
+      mappingDtoToColumns(
+        {
+          id: 1,
+          medias: [],
+          name2: 'CurstNFT',
+        },
+        SCHEMA
+      );
+    }).toThrow(new Error(`Entity is missing name field`));
   });
 });

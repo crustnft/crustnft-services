@@ -7,4 +7,5 @@ interface ColumnType {
   name: string;
   excludeFromIndexes?: boolean;
   defaultValue?: any;
+  lowercase?: boolean;
 }
