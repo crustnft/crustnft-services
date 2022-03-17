@@ -8,9 +8,11 @@ import * as service from './service';
 import createHttpError from 'http-errors';
 
 export async function create(req: Request, res: Response) {
+  const currentUser = req.user as UserSession;
+
   const initiatedCollection = await service.createNftCollection(
     req.body,
-    req.user as UserSession
+    currentUser
   );
 
   res.json({
@@ -27,9 +29,9 @@ export async function update(req: Request, res: Response) {
 }
 
 export async function findOne(req: Request, res: Response) {
-  const { collectionId } = req.params;
   const currentUser = req.user as UserSession;
 
+  const { collectionId } = req.params;
   const collection = await service.findOne(collectionId);
   if (currentUser.account === collection.creator) {
     res.json({

@@ -1,5 +1,4 @@
 import { Response, Request } from 'express';
-
 import * as service from './service';
 
 export async function create(req: Request, res: Response) {

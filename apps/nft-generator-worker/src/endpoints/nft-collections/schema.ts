@@ -1,6 +1,6 @@
 import Joi from 'joi';
-import { NftGeneratorDto } from './types';
+import { NftCollectionWorkerDto } from '@crustnft-explore/data-access';
 
-export const InitialNftGeneratorDtoSchema = Joi.object<NftGeneratorDto>({
+export const InitialNftGeneratorDtoSchema = Joi.object<NftCollectionWorkerDto>({
   id: Joi.string().required(),
 });

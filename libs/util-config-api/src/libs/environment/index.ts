@@ -9,3 +9,7 @@ export function getAppEnv() {
 export function isLocal() {
   return getAppEnv() === 'local';
 }
+
+export function isTest() {
+  return getAppEnv() === 'test';
+}

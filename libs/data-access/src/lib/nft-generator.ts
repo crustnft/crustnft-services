@@ -36,6 +36,10 @@ export interface NftCollectionDto {
   metadataCID?: string;
 }
 
+export interface NftCollectionWorkerDto {
+  id: string;
+}
+
 export enum TaskStatus {
   Pending = 'pending',
   Assigned = 'assigned',

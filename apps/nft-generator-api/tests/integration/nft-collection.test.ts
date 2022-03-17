@@ -1,34 +1,34 @@
 import supertest from 'supertest';
+import jwt from 'jsonwebtoken';
 import app from '../../src/app';
 
-jest.mock('@crustnft-explore/util-config-api', () => {
-  const actualModule = jest.requireActual('@crustnft-explore/util-config-api');
-  return {
-    ...actualModule,
-    checkAuthentication: jest.fn().mockImplementation(() => {
-      return function (req, res, next) {
-        return next();
-      };
-    }),
-  };
-});
-
 const mockFindOne = jest.fn();
-const mockCreateNftGenerator = jest.fn();
+const mockCreateNftCollection = jest.fn();
 jest.mock('../../src/endpoints/nft-collections/service', () => ({
   findOne: jest.fn().mockImplementation(() => mockFindOne()),
-  createNftGenerator: jest
+  createNftCollection: jest
     .fn()
-    .mockImplementation((dto) => mockCreateNftGenerator(dto)),
+    .mockImplementation((dto) => mockCreateNftCollection(dto)),
 }));
 const request = supertest(app);
 
 describe('test authentication', () => {
+  const token = jwt.sign(
+    {
+      account: process.env.ACCOUNT,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: '1d',
+      issuer: process.env.JWT_ISSUER,
+    }
+  );
   test('should return error on validation', async () => {
     const response = await request
       .post('/api/v1/ntf-collections')
       .send({ account: 'invalid-account' })
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(400);
   });
@@ -73,25 +73,31 @@ describe('test authentication', () => {
     const response = await request
       .post('/api/v1/ntf-collections')
       .send(payload)
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
-    expect(mockCreateNftGenerator).toBeCalledWith(payload);
+    expect(mockCreateNftCollection).toBeCalledWith(payload);
   });
 
   test('should return an nft-generator status ', async () => {
     mockFindOne.mockResolvedValue({
       id: 'ntf-generator-id',
       'mock-object': 'ok',
+      creator: process.env.ACCOUNT,
     });
+
     const response = await request
       .get('/api/v1/ntf-collections/ntf-generator-id')
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${token}`);
 
     expect(response.status).toBe(200);
+
     expect(response.body.data).toEqual({
       id: 'ntf-generator-id',
       'mock-object': 'ok',
+      creator: process.env.ACCOUNT,
     });
   });
 });
