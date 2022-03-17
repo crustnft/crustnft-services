@@ -29,8 +29,6 @@ export const CreateNftCollectionDtoSchema = Joi.object<CreateNftCollectionDto>({
 
 export const UpdateNftCollectionDtoSchema = Joi.object<UpdateNftCollectionDto>({
   id: Joi.string().required(),
-  name: Joi.string().optional(),
-  description: Joi.string().allow('').optional(),
   images: Joi.array()
     .items(
       Joi.object({
@@ -38,7 +36,7 @@ export const UpdateNftCollectionDtoSchema = Joi.object<UpdateNftCollectionDto>({
         name: Joi.string().required(),
       })
     )
-    .optional(),
+    .required(),
   layers: Joi.array()
     .items(
       Joi.object({
@@ -47,6 +45,8 @@ export const UpdateNftCollectionDtoSchema = Joi.object<UpdateNftCollectionDto>({
         imageIds: Joi.array().items(Joi.string()).required(),
       })
     )
-    .optional(),
-  layerOrder: Joi.array().items(Joi.string()).optional(),
+    .required(),
+  layerOrder: Joi.array().items(Joi.string()).required(),
+  name: Joi.string().required(),
+  description: Joi.string().allow('').required(),
 });

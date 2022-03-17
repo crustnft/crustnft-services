@@ -78,12 +78,20 @@ export async function insertEntity(contractDto: NftCollectionDto) {
   return datastore.insert(entity);
 }
 
-export async function updateEntity(id: string, updateDto) {
+export async function updateEntity(
+  id: string,
+  updateDto: Partial<NftCollectionDto>,
+  existing?: NftCollectionDto
+) {
   const key = getKey(id);
   const transaction = datastore.transaction();
   try {
     await transaction.run();
-    const [existingCollection] = await transaction.get(key);
+    let existingCollection = existing;
+    if (!existingCollection) {
+      const collections = await transaction.get(key);
+      existingCollection = collections[0];
+    }
     if (existingCollection) {
       const updateData = mappingDtoToColumns(
         { ...existingCollection, ...updateDto },

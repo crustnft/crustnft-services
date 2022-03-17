@@ -8,7 +8,13 @@ import {
   CreateNftCollectionDtoSchema,
   UpdateNftCollectionDtoSchema,
 } from './schema';
-import { create, update, findOne, searchCollection } from './controller';
+import {
+  create,
+  update,
+  findOne,
+  searchCollection,
+  generateNft,
+} from './controller';
 
 const router = express.Router();
 
@@ -25,6 +31,8 @@ router.put(
   validateRequestBody(UpdateNftCollectionDtoSchema),
   asyncHandler(update)
 );
+
+router.post('/:collectionId', asyncHandler(generateNft));
 
 router.get('/:collectionId', asyncHandler(findOne));
 

@@ -43,6 +43,9 @@ export async function createNftGenerator(generatorDto: NftGeneratorDto) {
 
 export async function findOne(id: string) {
   const [first] = await nftGeneratorEntity.findById(id);
+  if (!first) {
+    throw new createHttpError[404]('Not found entity');
+  }
   return first;
 }
 
@@ -92,11 +95,6 @@ async function startGenerator(nftCollectionRecord: NftCollection) {
     );
     logger.debug(`Uploaded to GCS: ${filePath}`);
     createdFilePaths.push(filePath);
-    await nftGeneratorEntity.updateEntity(collectionId, {
-      gcsFiles: createdFilePaths.map((path) => ({
-        id: path,
-      })),
-    });
   }
   logger.debug(`Uploaded files to ${NFT_GENERATOR_CREATED_BUCKET}`);
 
