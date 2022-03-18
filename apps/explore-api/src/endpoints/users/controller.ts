@@ -1,33 +1,34 @@
-import { Context } from 'koa';
+import { Response, Request } from 'express';
 import * as service from './service';
-import { UserQueryParams } from '@crustnft-explore/data-access';
+import { UserQueryParams, UserSession } from '@crustnft-explore/data-access';
 
-export async function create(ctx: Context) {
-  ctx.body = {
-    data: await service.save(ctx.request.body),
-  };
+export async function create(req: Request, res: Response) {
+  res.json({
+    data: await service.save(req.body),
+  });
 }
 
-export async function update(ctx: Context) {
-  ctx.body = {
-    data: await service.update(ctx.request.body, ctx.state.user),
-  };
+export async function update(req: Request, res: Response) {
+  const currentUser = req.user as UserSession;
+  res.json({
+    data: await service.update(req.body, currentUser),
+  });
 }
 
-export async function search(ctx: Context) {
+export async function search(req: Request, res: Response) {
   const [data, pagination] = await service.search(
-    ctx.query as unknown as UserQueryParams
+    req.query as unknown as UserQueryParams
   );
-  ctx.body = {
+  res.json({
     data,
     pagination,
-  };
+  });
 }
 
-export async function findById(ctx: Context) {
-  const accountAddress = ctx.params.accountAddress as string;
+export async function findById(req: Request, res: Response) {
+  const accountAddress = req.params.accountAddress as string;
   const user = await service.findById(accountAddress);
-  ctx.body = {
+  res.json({
     data: user,
-  };
+  });
 }

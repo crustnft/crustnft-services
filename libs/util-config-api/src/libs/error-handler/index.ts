@@ -11,11 +11,12 @@ export function errorHandler() {
     }
     logger.error({ err: error }, `errorHandler - ${error.message}`);
     if (HttpError.isHttpError(error)) {
-      res.status(error.statusCode);
+      const httpError = error as HttpError;
+      res.status(httpError.statusCode);
       return res.json({
         error: {
-          message: error.message,
-          details: error.details,
+          message: httpError.message,
+          details: httpError.details,
         },
       });
     }

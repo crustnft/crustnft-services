@@ -9,7 +9,7 @@ import {
   DatastoreEntitySchema,
 } from '@crustnft-explore/util-entity';
 
-const ENTITY_NAME = `${getAppEnv()}-nft-generator-api-collections`;
+const ENTITY_NAME = `${getAppEnv()}-nft-collections`;
 
 const CollectionSchema: DatastoreEntitySchema = {
   name: ENTITY_NAME,

@@ -1,10 +1,10 @@
-import Router from '@koa/router';
+import express from 'express';
+import asyncHandler from 'express-async-handler';
 import {
   validateRequestBody,
-  validateRequestParams,
   validateRequestQuery,
-} from '../../middlewares/validate-request';
-
+  validateRequestParams,
+} from '@crustnft-explore/util-config-api';
 import { create, search, findById } from './controller';
 import {
   CreateContractDtoSchema,
@@ -12,16 +12,24 @@ import {
   SearchContractSchema,
 } from './schema';
 
-const router = new Router({ prefix: '/api/v1/contracts' });
+const router = express.Router();
 
-router.post('/', validateRequestBody(CreateContractDtoSchema), create);
+router.post(
+  '/',
+  validateRequestBody(CreateContractDtoSchema),
+  asyncHandler(create)
+);
 
 router.get(
   '/:txHash',
   validateRequestParams(GetContractByTxHashSchema),
-  findById
+  asyncHandler(findById)
 );
 
-router.get('/', validateRequestQuery(SearchContractSchema), search);
+router.get(
+  '/',
+  validateRequestQuery(SearchContractSchema),
+  asyncHandler(search)
+);
 
-export default router.routes();
+export default router;

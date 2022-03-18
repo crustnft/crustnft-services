@@ -1,19 +1,13 @@
-import { Context } from 'koa';
+import { Response, Request } from 'express';
 
 import * as authenticationService from './service';
 
-export async function challengeLogin(ctx: Context) {
-  const data = await authenticationService.getUserNonce(
-    ctx.request.body.account
-  );
-  ctx.body = {
-    data,
-  };
+export async function challengeLogin(req: Request, res: Response) {
+  const data = await authenticationService.getUserNonce(req.body.account);
+  res.json({ data });
 }
 
-export async function login(ctx: Context) {
-  const data = await authenticationService.login(ctx.request.body);
-  ctx.body = {
-    data,
-  };
+export async function login(req: Request, res: Response) {
+  const data = await authenticationService.login(req.body);
+  res.json({ data });
 }

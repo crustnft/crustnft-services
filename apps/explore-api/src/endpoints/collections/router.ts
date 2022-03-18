@@ -1,41 +1,42 @@
-import Router from '@koa/router';
-import { checkAuthentication } from '../../middlewares/authentication';
+import express from 'express';
+import asyncHandler from 'express-async-handler';
 import {
   validateRequestBody,
   validateRequestQuery,
-} from '../../middlewares/validate-request';
+  checkAuthentication,
+} from '@crustnft-explore/util-config-api';
 
 import * as collectionController from './controller';
 import { CreateCollectionDtoSchema } from './schema';
 
-const router = new Router({ prefix: '/api/v1/collections' });
+const router = express.Router();
 
 router.post(
   '/',
-  checkAuthentication,
+  checkAuthentication(),
   validateRequestBody(CreateCollectionDtoSchema),
-  collectionController.create
+  asyncHandler(collectionController.create)
 );
 
 router.put(
   '/',
-  checkAuthentication,
+  checkAuthentication(),
   validateRequestBody(CreateCollectionDtoSchema),
-  collectionController.update
+  asyncHandler(collectionController.update)
 );
 
-router.get('/:collectionId', collectionController.findById);
+router.get('/:collectionId', asyncHandler(collectionController.findById));
 
 router.delete(
   '/:collectionId',
-  checkAuthentication,
-  collectionController.deleteById
+  checkAuthentication(),
+  asyncHandler(collectionController.deleteById)
 );
 
 router.get(
   '/',
   validateRequestQuery(CreateCollectionDtoSchema),
-  collectionController.search
+  asyncHandler(collectionController.search)
 );
 
-export default router.routes();
+export default router;

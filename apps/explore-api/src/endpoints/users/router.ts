@@ -1,26 +1,29 @@
-import Router from '@koa/router';
-import { checkAuthentication } from '../../middlewares/authentication';
-import { validateRequestBody } from '../../middlewares/validate-request';
+import express from 'express';
+import asyncHandler from 'express-async-handler';
+import {
+  validateRequestBody,
+  checkAuthentication,
+} from '@crustnft-explore/util-config-api';
 
 import * as userController from './controller';
 import { CreateUserDtoSchema } from './schema';
 
-const router = new Router({ prefix: '/api/v1/users' });
+const router = express.Router();
 
 router.post(
   '/',
   validateRequestBody(CreateUserDtoSchema),
-  userController.create
+  asyncHandler(userController.create)
 );
 router.put(
   '/',
-  checkAuthentication,
+  checkAuthentication(),
   validateRequestBody(CreateUserDtoSchema),
-  userController.update
+  asyncHandler(userController.update)
 );
 
-router.get('/:accountAddress', userController.findById);
+router.get('/:accountAddress', asyncHandler(userController.findById));
 
-router.get('/', userController.search);
+router.get('/', asyncHandler(userController.search));
 
-export default router.routes();
+export default router;

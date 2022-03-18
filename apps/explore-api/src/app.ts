@@ -1,24 +1,21 @@
-import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
-import cors from '@koa/cors';
-import endpoints from './endpoints';
-import { errorHandler } from './middlewares/error-handler';
-import healthCheck from './middlewares/health-check';
-import httpLogger from 'koa-logger';
+import express from 'express';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import { healthCheck, errorHandler } from '@crustnft-explore/util-config-api';
+import registerRoutes from './endpoints';
 
-const app = new Koa();
+const app: express.Application = express();
 
-if (process.env.APP_ENV === 'local') {
-  app.use(httpLogger());
-}
 app.use(
   cors({
-    maxAge: 3600,
+    maxAge: 24 * 60 * 60,
   })
 );
+
+app.use(bodyParser.json());
 app.use(healthCheck());
-app.use(bodyParser());
+registerRoutes(app);
+
 app.use(errorHandler());
-app.use(endpoints);
 
 export default app;

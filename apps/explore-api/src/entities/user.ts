@@ -1,6 +1,6 @@
 import datastore from '../clients/datastore';
 import { SERVICE_NAME } from '../constants';
-import { getAppEnv } from '../utils/environment';
+import { getAppEnv } from '@crustnft-explore/util-config-api';
 import {
   mappingDtoToColumns,
   DatastoreEntitySchema,

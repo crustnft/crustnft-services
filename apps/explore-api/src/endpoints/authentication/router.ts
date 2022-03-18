@@ -1,21 +1,22 @@
-import Router from '@koa/router';
-import { validateRequestBody } from '../../middlewares/validate-request';
+import express from 'express';
+import { validateRequestBody } from '@crustnft-explore/util-config-api';
+import asyncHandler from 'express-async-handler';
 
 import * as userController from './controller';
 import { ChallengeLoginDtoSchema, LoginDtoSchema } from './schema';
 
-const router = new Router({ prefix: '/api/v1/authentication' });
+const router = express.Router();
 
 router.post(
   '/challenge-login',
   validateRequestBody(ChallengeLoginDtoSchema),
-  userController.challengeLogin
+  asyncHandler(userController.challengeLogin)
 );
 
 router.post(
   '/login',
   validateRequestBody(LoginDtoSchema),
-  userController.login
+  asyncHandler(userController.login)
 );
 
-export default router.routes();
+export default router;

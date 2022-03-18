@@ -1,8 +1,8 @@
-import 'source-map-support/register';
 import './utils/load-env';
 import app from './app';
-import type { HttpFunction } from '@google-cloud/functions-framework/build/src/functions';
-import { isCloudFunctions } from './utils/environment';
+import 'source-map-support/register';
+
+import { isCloudFunctions } from './utils/runtime-environment';
 
 const port = process.env.PORT || 3000;
 
@@ -14,4 +14,4 @@ if (!isCloudFunctions()) {
     .on('error', console.error);
 }
 
-export const api: HttpFunction = app.callback();
+export const api = app;

@@ -5,7 +5,7 @@ import {
   CreateCollectionDto,
   UpdateCollectionDto,
 } from '../endpoints/collections/types';
-import { getAppEnv } from '../utils/environment';
+import { getAppEnv } from '@crustnft-explore/util-config-api';
 import {
   mappingDtoToColumns,
   DatastoreEntitySchema,
