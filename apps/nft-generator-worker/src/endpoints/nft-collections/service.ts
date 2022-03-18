@@ -4,7 +4,7 @@ import {
   NftCollectionDto,
   NftCollectionWorkerDto,
 } from '@crustnft-explore/data-access';
-import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-generator';
+import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles, uploadFile } from '../../services/gcsService';
 import {
   convertToDatastoreTypes,

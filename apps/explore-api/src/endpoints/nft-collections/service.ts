@@ -8,7 +8,7 @@ import {
   TaskStatus,
   UserSession,
 } from '@crustnft-explore/data-access';
-import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-generator';
+import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import storage from '../../clients/storage';
 import createHttpError from 'http-errors';
 import { Logger } from '@crustnft-explore/util-config-api';

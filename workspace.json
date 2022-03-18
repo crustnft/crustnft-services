@@ -3,7 +3,7 @@
   "projects": {
     "cleanup-worker": "apps/cleanup-worker",
     "data-access": "libs/data-access",
-    "entity-nft-generator": "libs/entity-nft-generator",
+    "entity-nft-collection": "libs/entity-nft-collection",
     "explore-api": "apps/explore-api",
     "nft-generator-api": "apps/nft-generator-api",
     "nft-generator-worker": "apps/nft-generator-worker",
