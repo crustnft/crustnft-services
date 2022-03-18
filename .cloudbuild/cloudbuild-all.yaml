@@ -63,22 +63,22 @@ steps:
       - --project=$PROJECT_ID
       - --set-env-vars=APP_ENV=${_APP_ENV}
 
-  # - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
-  #   id: 'deploy-nft-generator-api'
-  #   entrypoint: gcloud
-  #   args:
-  #     - functions
-  #     - deploy
-  #     - ${_APP_ENV}-nft-generator-api
-  #     - --source=./dist/apps/nft-generator-api
-  #     - --trigger-http
-  #     - --entry-point=api
-  #     - --runtime=nodejs16
-  #     - --allow-unauthenticated
-  #     - --service-account=${_SERVICE_ACCOUNT}
-  #     - --region=${_REGION}
-  #     - --project=$PROJECT_ID
-  #     - --set-env-vars=APP_ENV=${_APP_ENV}
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk:376.0.0-slim
+    id: 'deploy-functions-explore-api'
+    entrypoint: gcloud
+    args:
+      - functions
+      - deploy
+      - ${_APP_ENV}-explore-api
+      - --source=./dist/apps/explore-api
+      - --trigger-http
+      - --entry-point=api
+      - --runtime=nodejs16
+      - --allow-unauthenticated
+      - --service-account=${_SERVICE_ACCOUNT}
+      - --region=${_REGION}
+      - --project=$PROJECT_ID
+      - --set-env-vars=APP_ENV=${_APP_ENV}
 
   - name: 'gcr.io/cloud-builders/docker'
     args:

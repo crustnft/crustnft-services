@@ -5,7 +5,6 @@
     "data-access": "libs/data-access",
     "entity-nft-collection": "libs/entity-nft-collection",
     "explore-api": "apps/explore-api",
-    "nft-generator-api": "apps/nft-generator-api",
     "nft-generator-worker": "apps/nft-generator-worker",
     "util-config-api": "libs/util-config-api",
     "util-entity": "libs/util-entity"
