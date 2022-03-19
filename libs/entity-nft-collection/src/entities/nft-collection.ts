@@ -121,11 +121,16 @@ export async function findById(id: string) {
 }
 
 export async function search(queryParams: NftCollectionQueryParams) {
-  const { pageSize = 100, pageCursor, creator } = queryParams;
+  const { pageSize = 100, pageCursor, creator, status } = queryParams;
   let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
   if (creator) {
     query = query.filter('creator', '=', creator);
   }
+
+  if (status) {
+    query = query.filter('status', '=', status);
+  }
+
   if (pageCursor) {
     query = query.start(pageCursor);
   }

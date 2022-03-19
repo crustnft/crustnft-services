@@ -3,6 +3,7 @@ import R from 'ramda';
 import {
   NftCollectionQueryParams,
   UserSession,
+  TaskStatus,
 } from '@crustnft-explore/data-access';
 
 import * as service from './service';
@@ -50,6 +51,7 @@ export async function listingCollection(req: Request, res: Response) {
 
   const [collections, pagination] = await service.search({
     ...query,
+    status: TaskStatus.Completed,
   });
 
   res.json({

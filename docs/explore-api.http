@@ -154,7 +154,7 @@ Content-Type: image/png
 
 ### NFT Collections
 
-### Create nft collection generator
+### Create nft collection
 POST {{baseUrl}}/api/v1/ntf-collections/
 content-type: application/json
 Authorization: Bearer {{accessToken}}
@@ -195,7 +195,7 @@ Authorization: Bearer {{accessToken}}
   "layerOrder":["IDLayer1","IDLayer2"]
 }
 
-### Update nft collection generator
+### Update nft collection
 PUT {{baseUrl}}/api/v1/ntf-collections/
 content-type: application/json
 Authorization: Bearer {{accessToken}}
@@ -254,6 +254,11 @@ Authorization: Bearer {{accessToken}}
 
 ### Get all collections summary
 GET {{baseUrl}}/api/v1/ntf-collections/listing
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+### Start generate NFT collection
+POST {{baseUrl}}/api/v1/ntf-collections/540850332dab49dcafd089b7c8d2044f
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 

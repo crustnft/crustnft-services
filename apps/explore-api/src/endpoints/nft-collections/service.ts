@@ -119,7 +119,7 @@ async function kickStartWorker(taskId: string) {
   logger.info(`Kick start worker with taskId: ${taskId}`);
   const task = await findOne(taskId);
   if (task.status !== TaskStatus.Pending) {
-    throw Error('Task is already in process');
+    throw Error(`Can not start task with status ${task.status}`);
   }
   try {
     await triggerWorker(taskId);
