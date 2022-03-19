@@ -1,4 +1,5 @@
 import storage from '../clients/storage';
+import { DownloadedFile } from '../types/file';
 
 export async function downloadFile(bucketName: string, fileName: string) {
   const [buffer] = await storage.bucket(bucketName).file(fileName).download();
@@ -19,12 +20,7 @@ export async function deleteFiles(bucketName: string, filePaths: string[]) {
 export async function downloadFiles(
   bucketName: string,
   fileList: string[]
-): Promise<
-  {
-    fileName: string;
-    content: Buffer;
-  }[]
-> {
+): Promise<DownloadedFile[]> {
   return Promise.all(
     fileList.map((fileName) => downloadFile(bucketName, fileName))
   );
@@ -33,8 +29,12 @@ export async function downloadFiles(
 export async function uploadFile(
   bucketName: string,
   fileName: string,
-  fileContent: Buffer,
-  contentType: 'image/png' | 'image/jpg' | 'image/jpeg' = 'image/png'
+  fileContent: Buffer | string,
+  contentType:
+    | 'application/json'
+    | 'image/png'
+    | 'image/jpg'
+    | 'image/jpeg' = 'image/png'
 ) {
   return storage.bucket(bucketName).file(fileName).save(fileContent, {
     contentType,

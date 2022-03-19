@@ -1,31 +1,22 @@
 import { Logger } from '@crustnft-explore/util-config-api';
-import createPermutation from '../utils/permutation';
+import { NftSeed } from '../types/file';
 import { compositeImages, normalizeImages } from './imageService';
 
 const logger = Logger('nftGenerator');
 
-export function nftGenerator(background: Buffer, layers: Buffer[]) {
+export function nftGenerator(nftSeeds: NftSeed[]) {
   return {
     async *[Symbol.asyncIterator]() {
-      const normalizedLayers = await normalizeImages(background, layers);
-      const nftList = getPermutations(normalizedLayers);
-      for (const nft of nftList) {
-        logger.debug(`Start generate NFT ${nft.name}`);
-        const content = await compositeImages(background, nft.layers);
-        yield {
-          name: nft.name,
-          content,
-        };
+      for (const seed of nftSeeds) {
+        const [background, ...layers] = seed;
+        const normalizedLayers = await normalizeImages(background, layers);
+        const content = await compositeImages(
+          background.content,
+          normalizedLayers
+        );
+        yield content;
+        logger.debug(`Start generate NFT ${seed.map((image) => image.name)}`);
       }
     },
   };
-}
-
-function getPermutations(layers: Buffer[]) {
-  const members = Array.from(Array(layers.length), (_, x) => x + 1);
-  const permutations = createPermutation(members);
-  return permutations.map((permutation) => ({
-    name: permutation.join(''),
-    layers: permutation.map((item: number) => layers[item - 1]),
-  }));
 }

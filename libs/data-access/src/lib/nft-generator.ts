@@ -1,10 +1,10 @@
-interface Image {
+export interface Image {
   id: string;
   name: string;
   imageUrl?: string;
 }
 
-interface Layer {
+export interface Layer {
   id: string;
   name: string;
   imageIds: string[];

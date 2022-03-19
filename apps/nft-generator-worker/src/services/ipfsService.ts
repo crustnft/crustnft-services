@@ -31,7 +31,7 @@ export async function uploadToIPFS(fromBucketName: string, fileIds: string[]) {
 export function convertToDatastoreTypes(addResults: any[]) {
   return addResults.map(({ path, cid, size }) => ({
     path: path,
-    cid: cid.toV1().toString(),
+    cid: cid.toV0().toString(),
     size,
   }));
 }

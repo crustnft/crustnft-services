@@ -84,32 +84,23 @@ export async function updateEntity(
   existing?: NftCollectionDto
 ) {
   const key = getKey(id);
-  const transaction = datastore.transaction();
-  try {
-    await transaction.run();
-    let existingCollection = existing;
-    if (!existingCollection) {
-      const collections = await transaction.get(key);
-      existingCollection = collections[0];
-    }
-    if (existingCollection) {
-      const updateData = mappingDtoToColumns(
-        { ...existingCollection, ...updateDto },
-        CollectionSchema
-      );
-      transaction.update({
-        key,
-        data: updateData,
-      });
-      await transaction.commit();
-      return updateData;
-    } else {
-      await transaction.rollback();
-      throw new Error('Collection not existed');
-    }
-  } catch (error) {
-    await transaction.rollback();
-    throw new Error(error.message);
+  let existingCollection = existing;
+  if (!existingCollection) {
+    const collections = await datastore.get(key);
+    existingCollection = collections[0];
+  }
+  if (existingCollection) {
+    const updateData = mappingDtoToColumns(
+      { ...existingCollection, ...updateDto },
+      CollectionSchema
+    );
+    datastore.update({
+      key,
+      data: updateData,
+    });
+    return updateData;
+  } else {
+    throw new Error('Collection not existed');
   }
 }
 
