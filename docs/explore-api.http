@@ -35,6 +35,9 @@ content-type: application/json
 GET {{baseUrl}}/api/v1/contracts/0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35
 
 
+### Get all contracts with countOnly
+GET {{baseUrl}}/api/v1/contracts?countOnly=true&pageSize=12&order=createdAt desc&account=0xa647e98d78f56075dcc894ed273146d3be1bbe03
+
 ### Get all contracts with order by
 GET {{baseUrl}}/api/v1/contracts?pageSize=12&order=createdAt desc&account=0xa647e98d78f56075dcc894ed273146d3be1bbe03
 
@@ -247,13 +250,13 @@ Authorization: Bearer {{accessToken}}
 }
 
 ### Get all collections of currentUser
-GET {{baseUrl}}/api/v1/ntf-collections/
+GET {{baseUrl}}/api/v1/ntf-collections/?countOnly=true
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 
 ### Get all collections summary
-GET {{baseUrl}}/api/v1/ntf-collections/listing
+GET {{baseUrl}}/api/v1/ntf-collections/listing?countOnly=false
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 

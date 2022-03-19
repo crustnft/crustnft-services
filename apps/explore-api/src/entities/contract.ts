@@ -70,25 +70,41 @@ export async function findById(contractId) {
 }
 
 export async function search(queryParams: ContractQueryParams) {
-  const { pageSize = 100, pageCursor, account, order, offset } = queryParams;
-  let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
+  const {
+    pageSize = 100,
+    pageCursor,
+    account,
+    order,
+    offset,
+    countOnly,
+  } = queryParams;
+
+  let query;
+  if (countOnly === 'true') {
+    query = datastore
+      .createQuery(ENTITY_NAME)
+      .select('__key__')
+      .limit(pageSize > 1000 ? pageSize : 1000);
+  } else {
+    query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
+    if (offset) {
+      query = query.offset(offset);
+    }
+
+    if (pageCursor) {
+      query = query.start(pageCursor);
+    }
+
+    if (order) {
+      const [orderField, direction] = order.split(' ');
+      query = query.order(orderField, {
+        descending: direction === 'desc',
+      });
+    }
+  }
+
   if (account) {
     query = query.filter('account', '=', account);
-  }
-
-  if (offset) {
-    query = query.offset(offset);
-  }
-
-  if (pageCursor) {
-    query = query.start(pageCursor);
-  }
-
-  if (order) {
-    const [orderField, direction] = order.split(' ');
-    query = query.order(orderField, {
-      descending: direction === 'desc',
-    });
   }
 
   return datastore.runQuery(query);

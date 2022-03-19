@@ -49,6 +49,18 @@ export async function findOne(req: Request, res: Response) {
 export async function listingCollection(req: Request, res: Response) {
   const query = req.query as unknown as NftCollectionQueryParams;
 
+  if (query.countOnly === 'true') {
+    const [collections] = await service.search({
+      ...query,
+      status: TaskStatus.Completed,
+    });
+
+    res.json({
+      data: collections.length,
+    });
+    return;
+  }
+
   const [collections, pagination] = await service.search({
     ...query,
     status: TaskStatus.Completed,
@@ -66,6 +78,18 @@ export async function searchCollection(req: Request, res: Response) {
   const currentUser = req.user as UserSession;
 
   const query = req.query as unknown as NftCollectionQueryParams;
+
+  if (query.countOnly === 'true') {
+    const [collections] = await service.search({
+      ...query,
+      creator: currentUser.account,
+    });
+
+    res.json({
+      data: collections.length,
+    });
+    return;
+  }
 
   const [data, pagination] = await service.search({
     ...query,

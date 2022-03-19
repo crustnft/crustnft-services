@@ -9,7 +9,7 @@ import {
   DatastoreEntitySchema,
 } from '@crustnft-explore/util-entity';
 
-const ENTITY_NAME = `${getAppEnv()}-nft-collections`;
+const ENTITY_NAME = `${getAppEnv()}-explore-api-nft-collections`;
 
 const CollectionSchema: DatastoreEntitySchema = {
   name: ENTITY_NAME,
@@ -121,18 +121,33 @@ export async function findById(id: string) {
 }
 
 export async function search(queryParams: NftCollectionQueryParams) {
-  const { pageSize = 100, pageCursor, creator, status } = queryParams;
-  let query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
-  if (creator) {
-    query = query.filter('creator', '=', creator);
+  const {
+    pageSize = 100,
+    pageCursor,
+    creator,
+    status,
+    countOnly,
+  } = queryParams;
+
+  let query;
+  if (countOnly === 'true') {
+    query = datastore
+      .createQuery(ENTITY_NAME)
+      .select('__key__')
+      .limit(pageSize > 1000 ? pageSize : 1000);
+  } else {
+    query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
+    if (pageCursor) {
+      query = query.start(pageCursor);
+    }
   }
 
   if (status) {
     query = query.filter('status', '=', status);
   }
 
-  if (pageCursor) {
-    query = query.start(pageCursor);
+  if (creator) {
+    query = query.filter('creator', '=', creator);
   }
 
   return datastore.runQuery(query);

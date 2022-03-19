@@ -9,9 +9,17 @@ export async function create(req: Request, res: Response) {
 }
 
 export async function search(req: Request, res: Response) {
-  const [data, pagination] = await service.search(
-    req.query as unknown as ContractQueryParams
-  );
+  const query = req.query as unknown as ContractQueryParams;
+
+  if (query.countOnly === 'true') {
+    const [collections] = await service.search(query);
+    res.json({
+      data: collections.length,
+    });
+    return;
+  }
+
+  const [data, pagination] = await service.search(query);
   res.json({
     data,
     pagination,

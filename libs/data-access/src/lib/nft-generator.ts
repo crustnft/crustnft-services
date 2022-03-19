@@ -51,4 +51,5 @@ export enum TaskStatus {
 export type NftCollectionQueryParams = Partial<NftCollectionDto> & {
   pageSize: number;
   pageCursor?: string;
+  countOnly?: 'true' | 'false';
 };
