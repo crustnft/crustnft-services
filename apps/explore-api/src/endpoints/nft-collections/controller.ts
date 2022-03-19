@@ -37,6 +37,7 @@ export async function findOne(req: Request, res: Response) {
     res.json({
       data: collection,
     });
+    return;
   }
   throw new createHttpError[403]();
 }
@@ -69,6 +70,7 @@ export async function generateNft(req: Request, res: Response) {
     res.json({
       data,
     });
+    return;
   }
   throw new createHttpError[403]();
 }
