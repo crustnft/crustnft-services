@@ -131,10 +131,7 @@ export async function search(queryParams: NftCollectionQueryParams) {
 
   let query;
   if (countOnly === 'true') {
-    query = datastore
-      .createQuery(ENTITY_NAME)
-      .select('__key__')
-      .limit(pageSize > 1000 ? pageSize : 1000);
+    query = datastore.createQuery(ENTITY_NAME).select('__key__');
   } else {
     query = datastore.createQuery(ENTITY_NAME).limit(pageSize);
     if (pageCursor) {
