@@ -73,6 +73,35 @@ export async function search(query: NftCollectionQueryParams) {
   return nftGeneratorEntity.search(query);
 }
 
+export function validateImageIds(
+  dto: CreateNftCollectionDto | UpdateNftCollectionDto
+) {
+  const imageIds = dto.images.map((img) => img.id);
+  const setImageIds = new Set(imageIds);
+  if (setImageIds.size !== imageIds.length) {
+    throw createHttpError(400, 'images contains duplicated items');
+  }
+
+  const imageIdsOfLayers = dto.layers
+    .map((layer) => layer.imageIds)
+    .flatMap((item) => item);
+  const setImageIdsOfLayers = new Set(imageIdsOfLayers);
+
+  if (setImageIds.size !== setImageIdsOfLayers.size) {
+    throw createHttpError(
+      400,
+      'images size and total number images in layers are different'
+    );
+  }
+
+  for (const imageId of imageIdsOfLayers) {
+    if (!setImageIds.has(imageId)) {
+      throw createHttpError(400, `ImageId ${imageId} is not found in images`);
+    }
+  }
+  return true;
+}
+
 async function validateImages(createDto: CreateNftCollectionDto) {
   const existedList = await Promise.all(
     createDto.images.map((image) =>

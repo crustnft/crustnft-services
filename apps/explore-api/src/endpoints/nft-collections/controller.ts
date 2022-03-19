@@ -10,6 +10,7 @@ import createHttpError from 'http-errors';
 export async function create(req: Request, res: Response) {
   const currentUser = req.user as UserSession;
 
+  service.validateImageIds(req.body);
   const initiatedCollection = await service.createNftCollection(
     req.body,
     currentUser
@@ -21,6 +22,7 @@ export async function create(req: Request, res: Response) {
 }
 
 export async function update(req: Request, res: Response) {
+  service.validateImageIds(req.body);
   const data = await service.update(req.body, req.user as UserSession);
 
   res.json({
