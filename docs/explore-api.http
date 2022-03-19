@@ -246,8 +246,14 @@ Authorization: Bearer {{accessToken}}
   ]
 }
 
-### Get all collections
+### Get all collections of currentUser
 GET {{baseUrl}}/api/v1/ntf-collections/
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+
+### Get all collections summary
+GET {{baseUrl}}/api/v1/ntf-collections/listing
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 

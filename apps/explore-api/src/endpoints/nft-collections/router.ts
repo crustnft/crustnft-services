@@ -13,6 +13,7 @@ import {
   update,
   findOne,
   searchCollection,
+  listingCollection,
   generateNft,
 } from './controller';
 
@@ -33,6 +34,8 @@ router.put(
 );
 
 router.post('/:collectionId', asyncHandler(generateNft));
+
+router.get('/listing', asyncHandler(listingCollection));
 
 router.get('/:collectionId', asyncHandler(findOne));
 

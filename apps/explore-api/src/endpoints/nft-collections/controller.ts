@@ -1,4 +1,5 @@
 import { Response, Request } from 'express';
+import R from 'ramda';
 import {
   NftCollectionQueryParams,
   UserSession,
@@ -42,6 +43,21 @@ export async function findOne(req: Request, res: Response) {
     return;
   }
   throw new createHttpError[403]();
+}
+
+export async function listingCollection(req: Request, res: Response) {
+  const query = req.query as unknown as NftCollectionQueryParams;
+
+  const [collections, pagination] = await service.search({
+    ...query,
+  });
+
+  res.json({
+    data: collections.map((collection) =>
+      R.omit(['images', 'layers', 'layerOrder'], collection)
+    ),
+    pagination,
+  });
 }
 
 export async function searchCollection(req: Request, res: Response) {
