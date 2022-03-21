@@ -13,6 +13,7 @@ import createHttpError from 'http-errors';
 import { combine } from '../../utils/combination';
 import { DownloadedFile, NftSeed } from '../../types/file';
 import sha1 from '../../utils/sha1';
+import shuffle from '../../utils/shuffle';
 
 const logger = Logger('nft-collections:service');
 
@@ -66,10 +67,11 @@ async function startGenerator(nftCollection: NftCollectionDto) {
   logger.debug('Downloaded files');
   const listDNA = combine(nftCollection.layers);
   const nftSeeds = createSeeds(listDNA, nftCollection, downloadedFileList);
+  const shuffledNftSeeds = shuffle(nftSeeds);
   const folderName = collectionId;
   const createdFilePaths = [];
   let counter = 0;
-  for await (const nftImage of nftGenerator(nftSeeds)) {
+  for await (const nftImage of nftGenerator(shuffledNftSeeds)) {
     counter++;
     const filePath = `${folderName}/images/${counter}.${JPEG_FILE_EXTENSION}`;
     await uploadFile(
@@ -90,7 +92,7 @@ async function startGenerator(nftCollection: NftCollectionDto) {
 
   const ipfsImagesDirectory = getIpfsFolder(ipfsFiles);
   const ipfsMetaDirectory = await uploadMetadataFiles(
-    nftSeeds,
+    shuffledNftSeeds,
     nftCollection,
     ipfsImagesDirectory
   );

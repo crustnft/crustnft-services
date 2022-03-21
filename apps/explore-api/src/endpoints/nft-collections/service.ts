@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import axios from 'axios';
 import {
   CreateNftCollectionDto,
@@ -13,6 +12,7 @@ import storage from '../../clients/storage';
 import createHttpError from 'http-errors';
 import { Logger } from '@crustnft-explore/util-config-api';
 import { getGoogleClientHeaders } from '../../clients/google-auth';
+import sha1 from '../../utils/sha1';
 
 const { NFT_GENERATOR_UPLOAD_BUCKET, NFT_GENERATOR_WORKER_API } = process.env;
 const logger = Logger('nft-collection/service');
@@ -27,10 +27,7 @@ export async function createNftCollection(
     creator: currentUser.account,
   };
 
-  const collectionId = crypto
-    .createHash('md5')
-    .update(JSON.stringify(dto), 'utf8')
-    .digest('hex');
+  const collectionId = sha1(JSON.stringify(dto));
 
   await nftGeneratorEntity.insertEntity({ id: collectionId, ...dto });
   logger.info(`Registered an NFT generator Id: ${collectionId}`);
