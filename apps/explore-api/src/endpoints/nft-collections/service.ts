@@ -37,6 +37,7 @@ export async function createNftCollection(
 export async function generateNft(collection: NftCollectionDto) {
   await validateImages(collection);
   await kickStartWorker(collection.id);
+  return collection;
 }
 
 export async function update(
