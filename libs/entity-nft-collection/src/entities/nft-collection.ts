@@ -92,7 +92,8 @@ export async function updateEntity(
   if (existingCollection) {
     const updateData = mappingDtoToColumns(
       { ...existingCollection, ...updateDto },
-      CollectionSchema
+      CollectionSchema,
+      true
     );
     datastore.update({
       key,

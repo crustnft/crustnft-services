@@ -64,7 +64,7 @@ async function startGenerator(nftCollection: NftCollectionDto) {
     status: TaskStatus.Processing,
   });
 
-  logger.debug('Downloaded files');
+  logger.debug({ fileIdList }, 'Downloaded files');
   const listDNA = combine(nftCollection.layers);
   const nftSeeds = createSeeds(listDNA, nftCollection, downloadedFileList);
   const shuffledNftSeeds = shuffle(nftSeeds);
@@ -150,11 +150,14 @@ function createSeeds(
       const layer = nftCollection.layers.find((layer) => layer.id === layerId);
       const imageId = layer.imageIds[indexes[i]];
       const image = nftCollection.images.find((image) => image.id === imageId);
+      const file = downloadFiles.find((file) => file.fileName === imageId);
+      if (!file) {
+        throw new Error(`Not found file id: ${imageId}`);
+      }
       seed.push({
         layer,
         ...image,
-        content: downloadFiles.find((file) => file.fileName === imageId)
-          .content,
+        content: file.content,
       });
     }
     return seed;

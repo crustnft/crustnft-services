@@ -1,7 +1,11 @@
 import { DatastoreEntitySchema } from './types';
 
-export function mappingDtoToColumns(dto, schema: DatastoreEntitySchema) {
-  return schema.columns.map((colum) => {
+export function mappingDtoToColumns(
+  dto,
+  schema: DatastoreEntitySchema,
+  isUpdate = false
+) {
+  const columns = schema.columns.map((colum) => {
     const columName = colum.name;
     const excludeFromIndexes = colum.excludeFromIndexes ?? false;
     let fieldData = {};
@@ -29,4 +33,9 @@ export function mappingDtoToColumns(dto, schema: DatastoreEntitySchema) {
       excludeFromIndexes,
     };
   });
+
+  if (isUpdate) {
+    return [...columns, { name: 'updatedAt', value: new Date().toISOString() }];
+  }
+  return columns;
 }
