@@ -1,6 +1,6 @@
-import { combine } from './combination';
+import createPermutation, { combine } from './array';
 
-describe('Test combination', () => {
+describe('Test array', () => {
   test('should return combined values', () => {
     const layers = [
       {
@@ -50,5 +50,11 @@ describe('Test combination', () => {
       '2;2;1',
       '2;2;2',
     ]);
+  });
+
+  test('should generate cases ', () => {
+    expect(JSON.stringify(createPermutation([1, 2, 3]))).toEqual(
+      '[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]'
+    );
   });
 });

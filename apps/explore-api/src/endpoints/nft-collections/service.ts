@@ -106,7 +106,7 @@ async function validateImages(createDto: CreateNftCollectionDto) {
       storage.bucket(NFT_GENERATOR_UPLOAD_BUCKET).file(image.id).exists()
     )
   );
-  logger.debug(existedList, 'Checking existing results.');
+  logger.debug('Checking existing results %j', existedList);
   const allFound = existedList.every(([existed]) => existed);
   if (!allFound) {
     throw createHttpError(500, 'At least one imageId is not existed');

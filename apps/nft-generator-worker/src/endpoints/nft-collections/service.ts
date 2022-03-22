@@ -10,10 +10,9 @@ import { uploadToIPFS } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
 import { JPEG_FILE_EXTENSION, JPEG_MIME_TYPE } from '../../constants/image';
 import createHttpError from 'http-errors';
-import { combine } from '../../utils/combination';
-import { DownloadedFile, NftSeed } from '../../types/file';
+import { NftSeed } from '../../types/file';
 import sha1 from '../../utils/sha1';
-import shuffle from '../../utils/shuffle';
+import { createSeeds } from '../../utils/nft-generator';
 
 const logger = Logger('nft-collections:service');
 
@@ -23,6 +22,7 @@ const { NFT_GENERATOR_UPLOAD_BUCKET, NFT_GENERATOR_CREATED_BUCKET } =
 export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
   const collectionId = generatorDto.id;
   const nftCollectionRecord = await findOne(collectionId);
+  logger.debug('Collection to start generate NFT : %j', nftCollectionRecord);
   await nftGeneratorEntity.updateEntity(collectionId, {
     status: TaskStatus.Assigned,
   });
@@ -64,14 +64,12 @@ async function startGenerator(nftCollection: NftCollectionDto) {
     status: TaskStatus.Processing,
   });
 
-  logger.debug({ fileIdList }, 'Downloaded files');
-  const listDNA = combine(nftCollection.layers);
-  const nftSeeds = createSeeds(listDNA, nftCollection, downloadedFileList);
-  const shuffledNftSeeds = shuffle(nftSeeds);
+  logger.debug('Downloaded files %j ', fileIdList);
+  const nftSeeds = createSeeds(nftCollection, downloadedFileList);
   const folderName = collectionId;
   const createdFilePaths = [];
   let counter = 0;
-  for await (const nftImage of nftGenerator(shuffledNftSeeds)) {
+  for await (const nftImage of nftGenerator(nftSeeds)) {
     counter++;
     const filePath = `${folderName}/images/${counter}.${JPEG_FILE_EXTENSION}`;
     await uploadFile(
@@ -92,7 +90,7 @@ async function startGenerator(nftCollection: NftCollectionDto) {
 
   const ipfsImagesDirectory = getIpfsFolder(ipfsFiles);
   const ipfsMetaDirectory = await uploadMetadataFiles(
-    shuffledNftSeeds,
+    nftSeeds,
     nftCollection,
     ipfsImagesDirectory
   );
@@ -134,34 +132,6 @@ async function uploadMetadataFiles(
 function getIpfsFolder(ipfsList: any[]) {
   const directory = ipfsList.find((ipfs) => ipfs.path === '');
   return directory.cid.toV0().toString();
-}
-
-function createSeeds(
-  listDNA: string[],
-  nftCollection: NftCollectionDto,
-  downloadFiles: DownloadedFile[]
-): NftSeed[] {
-  const orders = nftCollection.layerOrder;
-  return listDNA.map((dna: string) => {
-    const indexes = dna.split(';');
-    const seed = [];
-    for (let i = 0; i < indexes.length; i++) {
-      const layerId = orders[i];
-      const layer = nftCollection.layers.find((layer) => layer.id === layerId);
-      const imageId = layer.imageIds[indexes[i]];
-      const image = nftCollection.images.find((image) => image.id === imageId);
-      const file = downloadFiles.find((file) => file.fileName === imageId);
-      if (!file) {
-        throw new Error(`Not found file id: ${imageId}`);
-      }
-      seed.push({
-        layer,
-        ...image,
-        content: file.content,
-      });
-    }
-    return seed;
-  });
 }
 
 function createImageMeta(
