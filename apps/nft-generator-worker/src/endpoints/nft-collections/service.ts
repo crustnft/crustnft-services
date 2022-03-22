@@ -8,7 +8,7 @@ import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles, uploadFile } from '../../services/gcsService';
 import { uploadToIPFS } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
-import { JPEG_FILE_EXTENSION, JPEG_MIME_TYPE } from '../../constants/image';
+import { PNG_FILE_EXTENSION, JPEG_MIME_TYPE } from '../../constants/image';
 import createHttpError from 'http-errors';
 import { NftSeed } from '../../types/file';
 import sha1 from '../../utils/sha1';
@@ -71,7 +71,7 @@ async function startGenerator(nftCollection: NftCollectionDto) {
   let counter = 0;
   for await (const nftImage of nftGenerator(nftSeeds)) {
     counter++;
-    const filePath = `${folderName}/images/${counter}.${JPEG_FILE_EXTENSION}`;
+    const filePath = `${folderName}/images/${counter}.${PNG_FILE_EXTENSION}`;
     await uploadFile(
       NFT_GENERATOR_CREATED_BUCKET,
       filePath,
@@ -143,7 +143,7 @@ function createImageMeta(
   const metadata = {
     name: `${nftCollection.name} #${nftNumber}`,
     description: nftCollection.description,
-    image: `ipfs://${ipfsDirectory}/${nftNumber}.jpeg`,
+    image: `ipfs://${ipfsDirectory}/${nftNumber}.${PNG_FILE_EXTENSION}`,
     dna: getDnaHash(nftSeed),
     date: new Date().toISOString(),
     edition: nftNumber,

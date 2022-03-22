@@ -2,6 +2,7 @@ import sharp from 'sharp';
 import { Logger } from '@crustnft-explore/util-config-api';
 import { getFitSize } from '../utils/image';
 import { ImageMeta } from '../types/file';
+import { PNG_FILE_EXTENSION } from '../constants/image';
 
 const resizedImageCache = new Map<string, Buffer>();
 
@@ -32,7 +33,7 @@ async function resizeImage(
     return cached;
   }
 
-  logger.debug('Start resizing image : ', image.id, {
+  logger.debug('Start resizing image %s %j', image.id, {
     preferHeight,
     preferWidth,
     height,
@@ -63,6 +64,6 @@ export async function compositeImages(
 
   return sharp(background)
     .composite(toComposeLayers)
-    .toFormat('jpeg')
+    .toFormat(PNG_FILE_EXTENSION)
     .toBuffer();
 }
