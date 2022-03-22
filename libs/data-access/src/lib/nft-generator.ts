@@ -34,6 +34,8 @@ export interface NftCollectionDto {
   status: TaskStatus;
   collectionCID?: string;
   metadataCID?: string;
+  txHash?: string;
+  whitelist?: string[];
 }
 
 export interface NftCollectionWorkerDto {

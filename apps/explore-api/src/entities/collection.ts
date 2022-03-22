@@ -24,6 +24,10 @@ const CollectionSchema: DatastoreEntitySchema = {
       lowercase: true,
     },
     {
+      name: 'txHash',
+      defaultValue: '',
+    },
+    {
       name: 'avatarCID',
       defaultValue: '',
     },
@@ -33,6 +37,11 @@ const CollectionSchema: DatastoreEntitySchema = {
     },
     {
       name: 'description',
+      excludeFromIndexes: true,
+    },
+    {
+      name: 'whitelist',
+      defaultValue: [],
       excludeFromIndexes: true,
     },
     {
