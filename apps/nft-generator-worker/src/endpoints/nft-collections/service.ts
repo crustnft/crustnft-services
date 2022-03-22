@@ -66,7 +66,7 @@ async function startGenerator(nftCollection: NftCollectionDto) {
 
   logger.debug('Downloaded files %j ', fileIdList);
   const nftSeeds = createSeeds(nftCollection, downloadedFileList);
-  const folderName = collectionId;
+  const folderName = `${nftCollection.creator}/${collectionId}`;
   const createdFilePaths = [];
   let counter = 0;
   for await (const nftImage of nftGenerator(nftSeeds)) {
@@ -106,7 +106,7 @@ async function uploadMetadataFiles(
   nftCollection: NftCollectionDto,
   ipfsImagesDirectory: any
 ) {
-  const folderName = nftCollection.id;
+  const folderName = `${nftCollection.creator}/${nftCollection.id}`;
   const createdMetaFilePaths = [];
   for (let i = 0; i < nftSeeds.length; i++) {
     const metadataPath = `${folderName}/metadata/${i + 1}.json`;
