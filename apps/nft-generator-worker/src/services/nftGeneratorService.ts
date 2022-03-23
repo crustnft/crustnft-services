@@ -4,19 +4,28 @@ import { compositeImages, normalizeImages } from './imageService';
 
 const logger = Logger('nftGenerator');
 
-export function nftGenerator(nftSeeds: NftSeed[]) {
+export function nftGenerator(nftSeeds: NftSeed[], batchSize: number) {
   return {
     async *[Symbol.asyncIterator]() {
-      for (const seed of nftSeeds) {
-        const [background, ...layers] = seed;
-        const normalizedLayers = await normalizeImages(background, layers);
-        const content = await compositeImages(
-          background.content,
-          normalizedLayers
-        );
-        yield content;
-        logger.debug(`Start generate NFT ${seed.map((image) => image.name)}`);
+      let counter = 0;
+      while (nftSeeds.length > counter) {
+        const seeds = nftSeeds.slice(counter, counter + batchSize);
+        counter += batchSize;
+        const contents = await generateNfts(seeds);
+        yield contents;
       }
     },
   };
+}
+
+async function generateNfts(seeds: NftSeed[]) {
+  return Promise.all(seeds.map((seed) => generateNft(seed)));
+}
+
+async function generateNft(seed: NftSeed) {
+  logger.debug(`Start generate NFT ${seed.map((image) => image.name)}`);
+  const [background, ...layers] = seed;
+  const normalizedLayers = await normalizeImages(background, layers);
+  const content = await compositeImages(background.content, normalizedLayers);
+  return content;
 }

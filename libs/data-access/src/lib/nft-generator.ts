@@ -40,6 +40,7 @@ export interface NftCollectionDto {
 
 export interface NftCollectionWorkerDto {
   id: string;
+  composingBatchSize: number;
 }
 
 export enum TaskStatus {

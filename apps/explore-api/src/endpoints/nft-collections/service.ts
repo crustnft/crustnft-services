@@ -6,6 +6,7 @@ import {
   NftCollectionDto,
   TaskStatus,
   UserSession,
+  NftCollectionWorkerDto,
 } from '@crustnft-explore/data-access';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import storage from '../../clients/storage';
@@ -130,15 +131,14 @@ async function triggerWorker(taskId: string) {
   const url = `${NFT_GENERATOR_WORKER_API}/api/v1/ntf-collections`;
   logger.debug(`trigger Worker url: ${url}, taskId: ${taskId}`);
   const { Authorization } = await getGoogleClientHeaders(url);
-  axios.post(
-    url,
-    {
-      id: taskId,
+  const body: NftCollectionWorkerDto = {
+    id: taskId,
+    composingBatchSize: 5,
+  };
+
+  axios.post(url, body, {
+    headers: {
+      Authorization,
     },
-    {
-      headers: {
-        Authorization,
-      },
-    }
-  );
+  });
 }
