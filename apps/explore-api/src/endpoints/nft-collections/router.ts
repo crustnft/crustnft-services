@@ -33,7 +33,7 @@ router.put(
   asyncHandler(update)
 );
 
-router.post('/:collectionId', asyncHandler(generateNft));
+router.post('/generate-nft-collection', asyncHandler(generateNft));
 
 router.get('/listing', asyncHandler(listingCollection));
 

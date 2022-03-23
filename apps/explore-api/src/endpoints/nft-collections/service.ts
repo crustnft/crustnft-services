@@ -35,9 +35,12 @@ export async function createNftCollection(
   return { id: collectionId, ...dto };
 }
 
-export async function generateNft(collection: NftCollectionDto) {
+export async function generateNft(
+  collection: NftCollectionDto,
+  workerDto: NftCollectionWorkerDto
+) {
   await validateImages(collection);
-  await kickStartWorker(collection.id);
+  await kickStartWorker(workerDto);
   return collection;
 }
 
@@ -114,29 +117,26 @@ async function validateImages(createDto: CreateNftCollectionDto) {
   }
 }
 
-async function kickStartWorker(taskId: string) {
+async function kickStartWorker(workerDto: NftCollectionWorkerDto) {
+  const taskId = workerDto.id;
   logger.info(`Kick start worker with taskId: ${taskId}`);
   const task = await findOne(taskId);
   if (task.status !== TaskStatus.Pending) {
     throw Error(`Can not start task with status ${task.status}`);
   }
   try {
-    await triggerWorker(taskId);
+    await triggerWorker(workerDto);
   } catch (error) {
     logger.error({ err: error }, 'Can not trigger worker');
   }
 }
 
-async function triggerWorker(taskId: string) {
+async function triggerWorker(workerDto: NftCollectionWorkerDto) {
   const url = `${NFT_GENERATOR_WORKER_API}/api/v1/ntf-collections`;
-  logger.debug(`trigger Worker url: ${url}, taskId: ${taskId}`);
+  logger.debug(`trigger Worker url: ${url}, workerDto: %j`, workerDto);
   const { Authorization } = await getGoogleClientHeaders(url);
-  const body: NftCollectionWorkerDto = {
-    id: taskId,
-    composingBatchSize: 5,
-  };
 
-  axios.post(url, body, {
+  axios.post(url, workerDto, {
     headers: {
       Authorization,
     },

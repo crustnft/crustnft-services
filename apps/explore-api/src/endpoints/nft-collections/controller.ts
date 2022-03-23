@@ -4,6 +4,7 @@ import {
   NftCollectionQueryParams,
   UserSession,
   TaskStatus,
+  NftCollectionWorkerDto,
 } from '@crustnft-explore/data-access';
 
 import * as service from './service';
@@ -105,12 +106,12 @@ export async function searchCollection(req: Request, res: Response) {
 export async function generateNft(req: Request, res: Response) {
   const currentUser = req.user as UserSession;
 
-  const { collectionId } = req.params;
+  const body = req.body as NftCollectionWorkerDto;
 
-  const collection = await service.findOne(collectionId);
+  const collection = await service.findOne(body.id);
 
   if (currentUser.account === collection.creator) {
-    const data = await service.generateNft(collection);
+    const data = await service.generateNft(collection, body);
     res.json({
       data,
     });

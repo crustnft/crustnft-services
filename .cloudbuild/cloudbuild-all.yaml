@@ -106,8 +106,9 @@ steps:
       - --platform=managed
       - --ingress=all
       - --no-allow-unauthenticated
-      - --memory=1Gi
+      - --memory=2Gi
       - --timeout=60m
+      - --max-instances=10
       - --service-account=${_SERVICE_ACCOUNT}
       - --region=${_REGION}
       - --project=$PROJECT_ID

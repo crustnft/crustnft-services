@@ -261,10 +261,14 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 ### Start generate NFT collection
-POST {{baseUrl}}/api/v1/ntf-collections/540850332dab49dcafd089b7c8d2044f
+POST {{baseUrl}}/api/v1/ntf-collections/generate-nft-collection
 content-type: application/json
 Authorization: Bearer {{accessToken}}
 
+{
+  "id":"540850332dab49dcafd089b7c8d2044f",
+  "composingBatchSize": 2
+}
 
 ### Get generator status
 GET {{baseUrl}}/api/v1/ntf-collections/10d021d1c368cfeb9b990e6eeaed3fda
