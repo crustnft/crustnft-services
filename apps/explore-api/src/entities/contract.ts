@@ -2,7 +2,9 @@ import datastore from '../clients/datastore';
 import {
   ContractQueryParams,
   CreateContractDto,
-} from '../endpoints/contracts/types';
+  UpdateContractDto,
+  ContractDto,
+} from '@crustnft-explore/data-access';
 import { SERVICE_NAME } from '../constants';
 import { getAppEnv } from '@crustnft-explore/util-config-api';
 import {
@@ -23,7 +25,7 @@ const ContractSchema: DatastoreEntitySchema = {
       name: 'chainId',
     },
     {
-      name: 'account',
+      name: 'creator',
       lowercase: true,
     },
     {
@@ -73,7 +75,7 @@ export async function search(queryParams: ContractQueryParams) {
   const {
     pageSize = 100,
     pageCursor,
-    account,
+    creator,
     order,
     offset,
     countOnly,
@@ -100,9 +102,36 @@ export async function search(queryParams: ContractQueryParams) {
     }
   }
 
-  if (account) {
-    query = query.filter('account', '=', account);
+  if (creator) {
+    query = query.filter('creator', '=', creator);
   }
 
   return datastore.runQuery(query);
+}
+
+export async function updateEntity(
+  txHash: string,
+  updateDto: Partial<UpdateContractDto>,
+  existing?: ContractDto
+) {
+  const key = getKey(txHash);
+  let existingCollection = existing;
+  if (!existingCollection) {
+    const collections = await datastore.get(key);
+    existingCollection = collections[0];
+  }
+  if (existingCollection) {
+    const updateData = mappingDtoToColumns(
+      { ...existingCollection, ...updateDto },
+      ContractSchema,
+      true
+    );
+    datastore.update({
+      key,
+      data: updateData,
+    });
+    return updateData;
+  } else {
+    throw new Error('Collection not existed');
+  }
 }

@@ -1,7 +1,12 @@
 import createHttpError from 'http-errors';
 import * as ContractEntity from '../../entities/contract';
 import { checkTransaction } from '../../services/chain-service';
-import { ContractQueryParams, CreateContractDto } from './types';
+import {
+  ContractDto,
+  ContractQueryParams,
+  CreateContractDto,
+  UpdateContractDto,
+} from '@crustnft-explore/data-access';
 
 export async function save(createContractDto: CreateContractDto) {
   try {
@@ -16,11 +21,18 @@ export async function save(createContractDto: CreateContractDto) {
   }
 }
 
+export async function update(
+  update: UpdateContractDto,
+  existing?: ContractDto
+) {
+  return ContractEntity.updateEntity(existing.txHash, update, existing);
+}
+
 export async function search(queryParams: ContractQueryParams) {
   return ContractEntity.search(queryParams);
 }
 
-export async function findById(txHash: string) {
+export async function findById(txHash: string): Promise<ContractDto> {
   const [firstContract] = await ContractEntity.findById(txHash);
   return firstContract;
 }

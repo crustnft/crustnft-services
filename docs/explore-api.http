@@ -53,22 +53,18 @@ content-type: application/json
 {
   "txHash":"0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35",
   "chainId":4,
-  "account":"0xa647e98d78f56075dcc894ed273146d3be1bbe03",
   "contractAddress":"0x75b7933b3be098e39cca412de5cfbf64f22cc59b",
   "contractContent":"long long long content"
 }
 
 
-### Create Contract Prod
-POST {{baseUrl}}/api/v1/contracts
+### Update Contract
+PUT {{baseUrl}}/api/v1/contracts
 content-type: application/json
 
 {
   "txHash":"0x2df1ce27b2a75d498baf2ce3fcb27a1d2c3e2797f49b4f683659f6ecfa300b4b",
-  "chainId":56,
-  "account":"0xaa1e9d7142e09c04028f9a3bf1fe0245a6c47030",
-  "contractAddress":"0x0a064a4c650d9b9580c37fe8c319e22971e02e21",
-  "contractContent":"long long long content"
+  "published": true
 }
 
 ##### Users ######

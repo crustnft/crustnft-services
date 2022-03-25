@@ -1,13 +1,13 @@
 import { TransactionReceipt } from '@ethersproject/abstract-provider';
 import { ethers } from 'ethers';
 import getProviderInstance from '../clients/etherjs';
-import { Contract } from '../endpoints/contracts/types';
+import { ContractDto } from '@crustnft-explore/data-access';
 
-export async function checkTransaction(contract: Contract) {
-  const { chainId, txHash, account, contractAddress } = contract;
+export async function checkTransaction(contract: ContractDto) {
+  const { chainId, txHash, creator, contractAddress } = contract;
   const provider = getProviderInstance(chainId);
   const receipt = await provider.getTransactionReceipt(txHash);
-  validateReceipt(txHash, receipt, account, contractAddress);
+  validateReceipt(txHash, receipt, creator, contractAddress);
 }
 
 export function verifySignature(
