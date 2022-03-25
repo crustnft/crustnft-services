@@ -8,7 +8,7 @@ import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles, uploadFile } from '../../services/gcsService';
 import { uploadToIPFS } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
-import { PNG_FILE_EXTENSION, JPEG_MIME_TYPE } from '../../constants/image';
+import { PNG_FILE_EXTENSION, PNG_MIME_TYPE } from '../../constants/image';
 import createHttpError from 'http-errors';
 import { NftSeed } from '../../types/file';
 import sha1 from '../../utils/sha1';
@@ -116,7 +116,7 @@ async function updateNftToGCS(
         NFT_GENERATOR_CREATED_BUCKET,
         filePath,
         nftImage,
-        JPEG_MIME_TYPE
+        PNG_MIME_TYPE
       );
       logger.debug(`Uploaded to GCS: ${filePath}`);
       return filePath;
