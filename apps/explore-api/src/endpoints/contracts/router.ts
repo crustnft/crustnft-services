@@ -16,16 +16,16 @@ import {
 
 const router = express.Router();
 
-router.use(checkAuthentication());
-
 router.post(
   '/',
+  checkAuthentication(),
   validateRequestBody(CreateContractDtoSchema),
   asyncHandler(create)
 );
 
 router.put(
   '/',
+  checkAuthentication(),
   validateRequestBody(UpdateContractDtoSchema),
   asyncHandler(update)
 );

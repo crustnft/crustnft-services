@@ -49,6 +49,7 @@ GET {{baseUrl}}/api/v1/contracts?pageSize=2&pageCursor=Co4BChYKCWNyZWF0ZWRBdBIJC
 ### Create Contract Stage
 POST {{baseUrl}}/api/v1/contracts
 content-type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "txHash":"0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35",
@@ -61,6 +62,7 @@ content-type: application/json
 ### Update Contract
 PUT {{baseUrl}}/api/v1/contracts
 content-type: application/json
+Authorization: Bearer {{accessToken}}
 
 {
   "txHash":"0x2df1ce27b2a75d498baf2ce3fcb27a1d2c3e2797f49b4f683659f6ecfa300b4b",
