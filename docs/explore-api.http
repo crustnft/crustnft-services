@@ -36,14 +36,18 @@ GET {{baseUrl}}/api/v1/contracts/0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d7
 
 
 ### Get all contracts with countOnly
-GET {{baseUrl}}/api/v1/contracts?countOnly=true&pageSize=12&order=createdAt desc&account=0xa647e98d78f56075dcc894ed273146d3be1bbe03
+GET {{baseUrl}}/api/v1/contracts?countOnly=true
 
 ### Get all contracts with order by
-GET {{baseUrl}}/api/v1/contracts?pageSize=12&order=createdAt desc&account=0xa647e98d78f56075dcc894ed273146d3be1bbe03
+GET {{baseUrl}}/api/v1/contracts?pageSize=12&order=createdAt desc
 
 
-### Get contracts of an account
+### Get next contracts
 GET {{baseUrl}}/api/v1/contracts?pageSize=2&pageCursor=Co4BChYKCWNyZWF0ZWRBdBIJCLjt44DdnfYCEnBqCm5%2BY3J1c3RuZnRyYgsSGnN0YWdlLWV4cGxvcmUtYXBpLWNvbnRyYWN0IkIweDlkYTUyNjQ5YTk0ZTU1ZDhiZWQ3ZDg4NWNhZTU2NGIxNzZhOGRhMmM3Mzg3MmY2YzIzYzAxNDJjNzFlYjBlY2YMGAAgAA%3D%3D
+
+
+### Get contracts with skip param
+GET {{baseUrl}}/api/v1/contracts?offset=5&pageSize=2&order=createdAt desc
 
 
 ### Create Contract Stage
