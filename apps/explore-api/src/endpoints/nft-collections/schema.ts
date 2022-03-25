@@ -59,5 +59,6 @@ export const UpdateNftCollectionDtoSchema = Joi.object<UpdateNftCollectionDto>({
 export const GenerateNftCollectionDtoSchema =
   Joi.object<NftCollectionWorkerDto>({
     id: Joi.string().required(),
-    composingBatchSize: Joi.number().required(),
+    composingBatchSize: Joi.number().optional(),
+    collectionSize: Joi.number().optional(),
   });

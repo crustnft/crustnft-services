@@ -4,6 +4,7 @@ import {
   NftCollectionDto,
   NftCollectionWorkerDto,
 } from '@crustnft-explore/data-access';
+import R from 'ramda';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles, uploadFile } from '../../services/gcsService';
 import { uploadToIPFS } from '../../services/ipfsService';
@@ -20,11 +21,11 @@ const { NFT_GENERATOR_UPLOAD_BUCKET, NFT_GENERATOR_CREATED_BUCKET } =
   process.env;
 
 export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
-  const { id: collectionId, composingBatchSize = 2 } = generatorDto;
+  const { id: collectionId } = generatorDto;
   const nftCollectionRecord = await findOne(collectionId);
-  logger.debug(
-    'Start generate NFT composingBatchSize=%d; Collection=%j',
-    composingBatchSize,
+  logger.info(
+    'Start generate NFT generatorDto=%d; Collection=%j',
+    generatorDto,
     nftCollectionRecord
   );
   await nftGeneratorEntity.updateEntity(collectionId, {
@@ -33,7 +34,7 @@ export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
 
   const { collectionCID, metadataCID } = await startGenerator(
     nftCollectionRecord,
-    composingBatchSize
+    generatorDto
   );
 
   const updateEntity = {
@@ -57,9 +58,13 @@ export async function findOne(id: string): Promise<NftCollectionDto> {
 
 async function startGenerator(
   nftCollection: NftCollectionDto,
-  composingBatchSize: number
+  generatorDto: NftCollectionWorkerDto
 ) {
-  const collectionId = nftCollection.id;
+  const {
+    id: collectionId,
+    composingBatchSize = 2,
+    collectionSize,
+  } = generatorDto;
 
   const fileIdList = nftCollection.images.map((image) => image.id);
 
@@ -73,7 +78,11 @@ async function startGenerator(
   });
 
   logger.debug('Downloaded files %j ', fileIdList);
-  const nftSeeds = createSeeds(nftCollection, downloadedFileList);
+  const initialNftSeeds = createSeeds(nftCollection, downloadedFileList);
+  const nftSeeds = collectionSize
+    ? R.take(collectionSize, initialNftSeeds)
+    : initialNftSeeds;
+
   const folderName = `${nftCollection.creator}/${collectionId}`;
   const createdFilePaths = [];
   let counter = 1;

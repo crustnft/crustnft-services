@@ -265,7 +265,8 @@ Authorization: Bearer {{accessToken}}
 
 {
   "id":"540850332dab49dcafd089b7c8d2044f",
-  "composingBatchSize": 2
+  "composingBatchSize": 2,
+  "collectionSize":100
 }
 
 ### Get generator status
