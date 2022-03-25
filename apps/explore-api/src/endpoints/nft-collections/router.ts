@@ -6,6 +6,7 @@ import {
 } from '@crustnft-explore/util-config-api';
 import {
   CreateNftCollectionDtoSchema,
+  GenerateNftCollectionDtoSchema,
   UpdateNftCollectionDtoSchema,
 } from './schema';
 import {
@@ -33,7 +34,11 @@ router.put(
   asyncHandler(update)
 );
 
-router.post('/generate-nft-collection', asyncHandler(generateNft));
+router.post(
+  '/generate-nft-collection',
+  validateRequestBody(GenerateNftCollectionDtoSchema),
+  asyncHandler(generateNft)
+);
 
 router.get('/listing', asyncHandler(listingCollection));
 

@@ -1,6 +1,7 @@
 import Joi from 'joi';
 import {
   CreateNftCollectionDto,
+  NftCollectionWorkerDto,
   UpdateNftCollectionDto,
 } from '@crustnft-explore/data-access';
 
@@ -54,3 +55,9 @@ export const UpdateNftCollectionDtoSchema = Joi.object<UpdateNftCollectionDto>({
   txHash: Joi.string().optional(),
   whitelist: Joi.array().optional(),
 });
+
+export const GenerateNftCollectionDtoSchema =
+  Joi.object<NftCollectionWorkerDto>({
+    id: Joi.string().required(),
+    composingBatchSize: Joi.number().required(),
+  });
