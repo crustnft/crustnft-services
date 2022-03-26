@@ -35,7 +35,7 @@ gcloud builds submit --config .cloudbuild/cloudbuild-runs.yaml . --substitutions
 - All in one
 
 ```
-gcloud builds submit --config .cloudbuild/cloudbuild-all.yaml . --substitutions=SHORT_SHA=local,_APP_ENV=stage,_REGION=us-east1
+gcloud builds submit --config .cloudbuild/cloudbuild-all.yaml . --substitutions=SHORT_SHA=local,_APP_ENV=stage,_REGION=us-east1,_SERVICE_ACCOUNT=
 ```
 
 # IPFS

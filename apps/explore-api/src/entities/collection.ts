@@ -114,16 +114,14 @@ export async function update(collectionDto: UpdateCollectionDto) {
     await transaction.run();
     const [existingCollection] = await transaction.get(key);
     if (existingCollection) {
-      const updateData = mappingDtoToColumns(
-        { ...existingCollection, ...collectionDto },
-        CollectionSchema
-      );
+      const updatedDto = { ...existingCollection, ...collectionDto };
+      const updateData = mappingDtoToColumns(updatedDto, CollectionSchema);
       transaction.update({
         key,
         data: updateData,
       });
       await transaction.commit();
-      return updateData;
+      return updatedDto;
     } else {
       await transaction.rollback();
       throw new Error('Collection not existed');

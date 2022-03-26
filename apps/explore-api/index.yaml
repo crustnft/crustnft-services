@@ -16,6 +16,20 @@ indexes:
       - name: createdAt
         direction: asc
 
+  - kind: local-explore-api-contract
+    ancestor: no
+    properties:
+      - name: creator
+      - name: createdAt
+        direction: desc
+
+  - kind: local-explore-api-contract
+    ancestor: no
+    properties:
+      - name: creator
+      - name: createdAt
+        direction: asc
+
   - kind: stage-explore-api-contract
     ancestor: no
     properties:
@@ -32,6 +46,20 @@ indexes:
       - name: createdAt
         direction: asc
 
+  - kind: stage-explore-api-contract
+    ancestor: no
+    properties:
+      - name: creator
+      - name: createdAt
+        direction: desc
+
+  - kind: stage-explore-api-contract
+    ancestor: no
+    properties:
+      - name: creator
+      - name: createdAt
+        direction: asc
+
   - kind: prod-explore-api-contract
     ancestor: no
     properties:
@@ -45,5 +73,19 @@ indexes:
     properties:
       - name: creator
       - name: published
+      - name: createdAt
+        direction: asc
+
+  - kind: prod-explore-api-contract
+    ancestor: no
+    properties:
+      - name: creator
+      - name: createdAt
+        direction: desc
+
+  - kind: prod-explore-api-contract
+    ancestor: no
+    properties:
+      - name: creator
       - name: createdAt
         direction: asc

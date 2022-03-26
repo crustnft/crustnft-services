@@ -83,16 +83,14 @@ export async function update(updateDto: UpdateUserDto) {
     await transaction.run();
     const [existingUser] = await transaction.get(key);
     if (existingUser) {
-      const updateData = mappingDtoToColumns(
-        { ...existingUser, ...updateDto },
-        UserSchema
-      );
+      const updatedDto = { ...existingUser, ...updateDto };
+      const updateData = mappingDtoToColumns(updateDto, UserSchema);
       transaction.update({
         key,
         data: updateData,
       });
       await transaction.commit();
-      return updateData;
+      return updatedDto;
     } else {
       await transaction.rollback();
       throw new Error('Account not existed');

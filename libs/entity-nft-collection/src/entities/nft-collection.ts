@@ -90,16 +90,13 @@ export async function updateEntity(
     existingCollection = collections[0];
   }
   if (existingCollection) {
-    const updateData = mappingDtoToColumns(
-      { ...existingCollection, ...updateDto },
-      CollectionSchema,
-      true
-    );
+    const updatedDto = { ...existingCollection, ...updateDto };
+    const updateData = mappingDtoToColumns(updatedDto, CollectionSchema, true);
     datastore.update({
       key,
       data: updateData,
     });
-    return updateData;
+    return updatedDto;
   } else {
     throw new Error('Collection not existed');
   }

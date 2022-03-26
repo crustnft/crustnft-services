@@ -39,9 +39,11 @@ steps:
       - --allow-unauthenticated
       - --region=${_REGION}
       - --project=$PROJECT_ID
+      - --service-account=${_SERVICE_ACCOUNT}
       - --set-env-vars=APP_ENV=${_APP_ENV}
 
 substitutions:
   _APP_ENV: prod
   _REGION: us-east1
   _SERVICE_NAME: nft-generator-api
+  _SERVICE_ACCOUNT: stage-crust-nft-explore@crustnft.iam.gserviceaccount.com

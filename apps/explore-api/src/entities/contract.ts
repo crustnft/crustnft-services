@@ -126,16 +126,13 @@ export async function updateEntity(
     existingCollection = collections[0];
   }
   if (existingCollection) {
-    const updateData = mappingDtoToColumns(
-      { ...existingCollection, ...updateDto },
-      ContractSchema,
-      true
-    );
+    const updatedDto = { ...existingCollection, ...updateDto };
+    const updateData = mappingDtoToColumns(updatedDto, ContractSchema, true);
     datastore.update({
       key,
       data: updateData,
     });
-    return updateData;
+    return updatedDto;
   } else {
     throw new Error('Collection not existed');
   }
