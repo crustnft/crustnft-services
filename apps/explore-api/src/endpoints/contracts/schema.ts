@@ -45,4 +45,5 @@ export const SearchContractSchema = Joi.object<ContractQueryParams>({
   order: Joi.optional(),
   offset: Joi.optional(),
   countOnly: Joi.optional().allow('true', 'false'),
+  published: Joi.optional().allow('true', 'false'),
 });

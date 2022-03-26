@@ -79,6 +79,7 @@ export async function search(queryParams: ContractQueryParams) {
     order,
     offset,
     countOnly,
+    published,
   } = queryParams;
 
   let query;
@@ -104,6 +105,10 @@ export async function search(queryParams: ContractQueryParams) {
 
   if (creator) {
     query = query.filter('creator', '=', creator);
+  }
+
+  if (published) {
+    query = query.filter('published', '=', published);
   }
 
   return datastore.runQuery(query);

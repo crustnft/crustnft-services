@@ -6,7 +6,7 @@ import {
   validateRequestParams,
   checkAuthentication,
 } from '@crustnft-explore/util-config-api';
-import { create, search, findById, update } from './controller';
+import { create, search, findById, update, listing } from './controller';
 import {
   CreateContractDtoSchema,
   GetContractByTxHashSchema,
@@ -31,6 +31,12 @@ router.put(
 );
 
 router.get(
+  '/listing',
+  validateRequestQuery(SearchContractSchema),
+  asyncHandler(listing)
+);
+
+router.get(
   '/:txHash',
   validateRequestParams(GetContractByTxHashSchema),
   asyncHandler(findById)
@@ -38,6 +44,7 @@ router.get(
 
 router.get(
   '/',
+  checkAuthentication(),
   validateRequestQuery(SearchContractSchema),
   asyncHandler(search)
 );

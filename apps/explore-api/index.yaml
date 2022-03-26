@@ -4,6 +4,7 @@ indexes:
     ancestor: no
     properties:
       - name: creator
+      - name: published
       - name: createdAt
         direction: desc
 
@@ -11,6 +12,7 @@ indexes:
     ancestor: no
     properties:
       - name: creator
+      - name: published
       - name: createdAt
         direction: asc
 
@@ -18,6 +20,7 @@ indexes:
     ancestor: no
     properties:
       - name: creator
+      - name: published
       - name: createdAt
         direction: desc
 
@@ -25,6 +28,7 @@ indexes:
     ancestor: no
     properties:
       - name: creator
+      - name: published
       - name: createdAt
         direction: asc
 
@@ -32,6 +36,7 @@ indexes:
     ancestor: no
     properties:
       - name: creator
+      - name: published
       - name: createdAt
         direction: desc
 
@@ -39,5 +44,6 @@ indexes:
     ancestor: no
     properties:
       - name: creator
+      - name: published
       - name: createdAt
         direction: asc
