@@ -1,6 +1,5 @@
 import createHttpError from 'http-errors';
 import * as ContractEntity from '../../entities/contract';
-import { checkTransaction } from '../../services/chain-service';
 import {
   ContractDto,
   ContractQueryParams,
@@ -10,7 +9,6 @@ import {
 
 export async function save(createContractDto: CreateContractDto) {
   try {
-    await checkTransaction(createContractDto);
     await ContractEntity.insertEntity(createContractDto);
     return createContractDto;
   } catch (error) {
