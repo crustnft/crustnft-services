@@ -25,6 +25,12 @@ async function resizeImage(
   image: ImageMeta
 ) {
   const { height, width } = await sharp(image.content).metadata();
+
+  if (preferHeight === height && preferWidth === width) {
+    logger.debug(`Skipped resize image , cause of same height and width`);
+    return image.content;
+  }
+
   const fitSize = getFitSize(preferHeight, preferWidth, height, width);
   const cacheKey = `${image.id}-${fitSize.height}-${fitSize.width}`;
   const cached = resizedImageCache.get(cacheKey);
