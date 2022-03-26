@@ -39,7 +39,7 @@ GET {{baseUrl}}/api/v1/contracts/0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d7
 GET {{baseUrl}}/api/v1/contracts?countOnly=true
 
 ### Get all contracts with order by
-GET {{baseUrl}}/api/v1/contracts?pageSize=12&order=createdAt desc
+GET {{baseUrl}}/api/v1/contracts?pageSize=12&order=createdAt desc&creator=0xa228cfab80a6738522476dec11d793d6129968b2
 
 
 ### Get next contracts

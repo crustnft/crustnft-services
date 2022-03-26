@@ -39,6 +39,7 @@ export const SearchContractSchema = Joi.object<ContractQueryParams>({
     .pattern(/^0x[a-fA-F0-9]+$/),
   chainId: Joi.number().greater(0),
   contractAddress: Joi.string().empty('').pattern(ACCOUNT_REGEX),
+  creator: Joi.string().empty('').pattern(ACCOUNT_REGEX),
   pageSize: Joi.number().greater(0),
   pageCursor: Joi.optional(),
   order: Joi.optional(),
