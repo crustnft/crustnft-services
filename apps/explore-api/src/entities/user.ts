@@ -84,7 +84,7 @@ export async function update(updateDto: UpdateUserDto) {
     const [existingUser] = await transaction.get(key);
     if (existingUser) {
       const updatedDto = { ...existingUser, ...updateDto };
-      const updateData = mappingDtoToColumns(updateDto, UserSchema);
+      const updateData = mappingDtoToColumns(updatedDto, UserSchema);
       transaction.update({
         key,
         data: updateData,
