@@ -34,6 +34,7 @@ export async function uploadFile(
     | 'application/json'
     | 'image/png'
     | 'image/jpg'
+    | 'image/webp'
     | 'image/jpeg' = 'image/png'
 ) {
   return storage.bucket(bucketName).file(fileName).save(fileContent, {

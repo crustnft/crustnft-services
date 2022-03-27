@@ -2,7 +2,7 @@ import sharp from 'sharp';
 import { Logger } from '@crustnft-explore/util-config-api';
 import { getFitSize } from '../utils/image';
 import { ImageMeta } from '../types/file';
-import { PNG_FILE_EXTENSION } from '../constants/image';
+import { WEBP_FILE_EXTENSION } from '../constants/image';
 
 const resizedImageCache = new Map<string, Buffer>();
 
@@ -70,6 +70,7 @@ export async function compositeImages(
 
   return sharp(background)
     .composite(toComposeLayers)
-    .toFormat(PNG_FILE_EXTENSION)
+    .flatten({ background: '#ffffff' })
+    .toFormat(WEBP_FILE_EXTENSION)
     .toBuffer();
 }

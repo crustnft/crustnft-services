@@ -9,7 +9,7 @@ import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles, uploadFile } from '../../services/gcsService';
 import { uploadToIPFS } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
-import { PNG_FILE_EXTENSION, PNG_MIME_TYPE } from '../../constants/image';
+import { WEBP_FILE_EXTENSION, WEBP_MIME_TYPE } from '../../constants/image';
 import createHttpError from 'http-errors';
 import { NftSeed } from '../../types/file';
 import sha1 from '../../utils/sha1';
@@ -120,12 +120,12 @@ async function updateNftToGCS(
     nftImages.map(async (nftImage: Buffer, index) => {
       const filePath = `${folderName}/images/${
         counter + index
-      }.${PNG_FILE_EXTENSION}`;
+      }.${WEBP_FILE_EXTENSION}`;
       await uploadFile(
         NFT_GENERATOR_CREATED_BUCKET,
         filePath,
         nftImage,
-        PNG_MIME_TYPE
+        WEBP_MIME_TYPE
       );
       logger.debug(`Uploaded to GCS: ${filePath}`);
       return filePath;
@@ -175,7 +175,7 @@ function createImageMeta(
   const metadata = {
     name: `${nftCollection.name} #${nftNumber}`,
     description: nftCollection.description,
-    image: `ipfs://${ipfsDirectory}/${nftNumber}.${PNG_FILE_EXTENSION}`,
+    image: `ipfs://${ipfsDirectory}/${nftNumber}.${WEBP_FILE_EXTENSION}`,
     dna: getDnaHash(nftSeed),
     date: new Date().toISOString(),
     edition: nftNumber,
