@@ -9,7 +9,7 @@ import {
 import { create, search, findById, update, listing } from './controller';
 import {
   CreateContractDtoSchema,
-  GetContractByTxHashSchema,
+  GetContractByIdSchema,
   SearchContractSchema,
   UpdateContractDtoSchema,
 } from './schema';
@@ -37,8 +37,8 @@ router.get(
 );
 
 router.get(
-  '/:txHash',
-  validateRequestParams(GetContractByTxHashSchema),
+  '/:id',
+  validateRequestParams(GetContractByIdSchema),
   asyncHandler(findById)
 );
 

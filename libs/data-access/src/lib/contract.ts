@@ -1,7 +1,7 @@
 export interface ContractDto {
+  id: string;
   chainId: number;
   creator: string;
-  txHash: string;
   contractAddress: string;
   contractContent: string;
   published: boolean;
@@ -9,7 +9,7 @@ export interface ContractDto {
 }
 
 export type CreateContractDto = ContractDto;
-export type UpdateContractDto = Pick<ContractDto, 'txHash' | 'published'>;
+export type UpdateContractDto = Pick<ContractDto, 'id' | 'published'>;
 
 export type ContractQueryParams = Partial<ContractDto> & {
   pageSize: number;

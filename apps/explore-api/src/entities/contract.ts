@@ -18,7 +18,7 @@ const ContractSchema: DatastoreEntitySchema = {
   name: ENTITY_NAME,
   columns: [
     {
-      name: 'txHash',
+      name: 'id',
       lowercase: true,
     },
     {
@@ -48,7 +48,7 @@ export function getKey(contractId) {
 }
 
 function createEntity(dto) {
-  const key = datastore.key([ENTITY_NAME, dto.txHash]);
+  const key = datastore.key([ENTITY_NAME, dto.id]);
   const entity = {
     key,
     data: mappingDtoToColumns(dto, ContractSchema),
@@ -115,11 +115,11 @@ export async function search(queryParams: ContractQueryParams) {
 }
 
 export async function updateEntity(
-  txHash: string,
+  id: string,
   updateDto: Partial<UpdateContractDto>,
   existing?: ContractDto
 ) {
-  const key = getKey(txHash);
+  const key = getKey(id);
   let existingCollection = existing;
   if (!existingCollection) {
     const collections = await datastore.get(key);

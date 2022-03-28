@@ -18,7 +18,7 @@ export async function update(req: Request, res: Response) {
   const currentUser = req.user as UserSession;
   const updateBody = req.body as UpdateContractDto;
 
-  const existingContract = await service.findById(updateBody.txHash);
+  const existingContract = await service.findById(updateBody.id);
   if (existingContract.creator !== currentUser.account) {
     throw new createHttpError[403]();
   }
@@ -68,7 +68,7 @@ export async function search(req: Request, res: Response) {
 }
 
 export async function findById(req: Request, res: Response) {
-  const txHash = req.params.txHash as string;
-  const data = await service.findById(txHash);
+  const contractId = req.params.id as string;
+  const data = await service.findById(contractId);
   res.json({ data });
 }

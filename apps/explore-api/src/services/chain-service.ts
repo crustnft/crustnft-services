@@ -4,7 +4,7 @@ import getProviderInstance from '../clients/etherjs';
 import { ContractDto } from '@crustnft-explore/data-access';
 
 export async function checkTransaction(contract: ContractDto) {
-  const { chainId, txHash, creator, contractAddress } = contract;
+  const { chainId, id: txHash, creator, contractAddress } = contract;
   const provider = getProviderInstance(chainId);
   const receipt = await provider.getTransactionReceipt(txHash);
   validateReceipt(txHash, receipt, creator, contractAddress);

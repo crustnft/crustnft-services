@@ -7,7 +7,7 @@ import {
 } from '@crustnft-explore/data-access';
 
 export const CreateContractDtoSchema = Joi.object<CreateContractDto>({
-  txHash: Joi.string()
+  id: Joi.string()
     .empty('')
     .required()
     .pattern(/^0x[a-fA-F0-9]+$/),
@@ -19,22 +19,22 @@ export const CreateContractDtoSchema = Joi.object<CreateContractDto>({
 });
 
 export const UpdateContractDtoSchema = Joi.object<UpdateContractDto>({
-  txHash: Joi.string()
+  id: Joi.string()
     .empty('')
     .required()
     .pattern(/^0x[a-fA-F0-9]+$/),
   published: Joi.boolean().required(),
 });
 
-export const GetContractByTxHashSchema = Joi.object({
-  txHash: Joi.string()
+export const GetContractByIdSchema = Joi.object({
+  id: Joi.string()
     .empty('')
     .required()
     .pattern(/^0x[a-fA-F0-9]+$/),
 });
 
 export const SearchContractSchema = Joi.object<ContractQueryParams>({
-  txHash: Joi.string()
+  id: Joi.string()
     .empty('')
     .pattern(/^0x[a-fA-F0-9]+$/),
   chainId: Joi.number().greater(0),

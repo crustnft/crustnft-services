@@ -23,14 +23,14 @@ export async function update(
   update: UpdateContractDto,
   existing?: ContractDto
 ) {
-  return ContractEntity.updateEntity(existing.txHash, update, existing);
+  return ContractEntity.updateEntity(existing.id, update, existing);
 }
 
 export async function search(queryParams: ContractQueryParams) {
   return ContractEntity.search(queryParams);
 }
 
-export async function findById(txHash: string): Promise<ContractDto> {
-  const [firstContract] = await ContractEntity.findById(txHash);
+export async function findById(id: string): Promise<ContractDto> {
+  const [firstContract] = await ContractEntity.findById(id);
   return firstContract;
 }
