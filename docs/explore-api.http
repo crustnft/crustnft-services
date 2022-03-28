@@ -59,7 +59,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "txHash":"0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35",
+  "id":"0x886ba7003e844bfdcd98f7df9f41eb413b347b0fd81d77fefcc1c0dff7ca9d35",
   "chainId":4,
   "contractAddress":"0x75b7933b3be098e39cca412de5cfbf64f22cc59b",
   "contractContent":"long long long content"
@@ -72,7 +72,7 @@ content-type: application/json
 Authorization: Bearer {{accessToken}}
 
 {
-  "txHash":"0x2df1ce27b2a75d498baf2ce3fcb27a1d2c3e2797f49b4f683659f6ecfa300b4b",
+  "id":"0x2df1ce27b2a75d498baf2ce3fcb27a1d2c3e2797f49b4f683659f6ecfa300b4b",
   "published": true
 }
 
