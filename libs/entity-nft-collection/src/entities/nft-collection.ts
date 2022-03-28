@@ -25,6 +25,15 @@ const CollectionSchema: DatastoreEntitySchema = {
       excludeFromIndexes: true,
     },
     {
+      name: 'txHash',
+      defaultValue: '',
+    },
+    {
+      name: 'whitelist',
+      defaultValue: [],
+      excludeFromIndexes: true,
+    },
+    {
       name: 'creator',
       lowercase: true,
     },
