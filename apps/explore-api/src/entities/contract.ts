@@ -25,6 +25,10 @@ const ContractSchema: DatastoreEntitySchema = {
       name: 'chainId',
     },
     {
+      name: 'published',
+      defaultValue: false,
+    },
+    {
       name: 'creator',
       lowercase: true,
     },
