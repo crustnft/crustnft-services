@@ -29,6 +29,9 @@ const ContractSchema: DatastoreEntitySchema = {
       defaultValue: false,
     },
     {
+      name: 'collectionType',
+    },
+    {
       name: 'creator',
       lowercase: true,
     },
