@@ -7,7 +7,7 @@ import {
 import R from 'ramda';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles, uploadFile } from '../../services/gcsService';
-import { uploadToIPFS } from '../../services/ipfsService';
+import { crustNetworkPin, uploadToIPFS } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
 import { WEBP_FILE_EXTENSION, WEBP_MIME_TYPE } from '../../constants/image';
 import createHttpError from 'http-errors';
@@ -98,17 +98,33 @@ async function startGenerator(
     createdFilePaths
   );
 
-  const ipfsImagesDirectory = getIpfsFolder(ipfsFiles);
-  const ipfsMetaDirectory = await uploadMetadataFiles(
+  const imageDirectoryCID = getIpfsFolderCID(ipfsFiles);
+  const metadataDirectoryCID = await uploadMetadataFiles(
     nftSeeds,
     nftCollection,
-    ipfsImagesDirectory
+    imageDirectoryCID
   );
 
+  pinToCrustNode(imageDirectoryCID, metadataDirectoryCID);
+
   return {
-    collectionCID: ipfsImagesDirectory,
-    metadataCID: ipfsMetaDirectory,
+    collectionCID: imageDirectoryCID,
+    metadataCID: metadataDirectoryCID,
   };
+}
+
+async function pinToCrustNode(
+  imageDirectoryCID: string,
+  metadataDirectoryCID: string
+) {
+  try {
+    await Promise.all([
+      crustNetworkPin(imageDirectoryCID, 'imageDirectoryCID'),
+      crustNetworkPin(metadataDirectoryCID, 'metadataDirectoryCID'),
+    ]);
+  } catch (error) {
+    logger.warn({ err: error }, 'Error on pinning CIDs to CrustNode');
+  }
 }
 
 async function updateNftToGCS(
@@ -157,11 +173,11 @@ async function uploadMetadataFiles(
     createdMetaFilePaths
   );
 
-  const ipfsMetaDirectory = getIpfsFolder(ipfsMetaFiles);
-  return ipfsMetaDirectory;
+  const ipfsMetaDirectoryCID = getIpfsFolderCID(ipfsMetaFiles);
+  return ipfsMetaDirectoryCID;
 }
 
-function getIpfsFolder(ipfsList: any[]) {
+function getIpfsFolderCID(ipfsList: any[]) {
   const directory = ipfsList.find((ipfs) => ipfs.path === '');
   return directory.cid.toV0().toString();
 }
