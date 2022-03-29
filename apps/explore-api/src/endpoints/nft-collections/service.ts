@@ -45,11 +45,19 @@ export async function generateNft(
 }
 
 export async function update(
-  updateDto: UpdateNftCollectionDto,
+  nftCollection: UpdateNftCollectionDto,
   currentUser: UserSession
 ) {
+  let updateDto: Partial<UpdateNftCollectionDto> = nftCollection;
+
   const existing = await findOne(updateDto.id);
-  if (existing.status !== TaskStatus.Pending) {
+  if (existing.status === TaskStatus.Completed) {
+    updateDto = {
+      id: nftCollection.id,
+      txHash: nftCollection.txHash,
+      whitelist: nftCollection.whitelist,
+    };
+  } else if (existing.status !== TaskStatus.Pending) {
     throw new Error(
       `You can't update collection with status ${existing.status}.`
     );
