@@ -38,6 +38,18 @@ gcloud builds submit --config .cloudbuild/cloudbuild-runs.yaml . --substitutions
 gcloud builds submit --config .cloudbuild/cloudbuild-all.yaml . --substitutions=SHORT_SHA=local,_APP_ENV=stage,_REGION=us-east1,_SERVICE_ACCOUNT=
 ```
 
+### Production
+
+Create a new tag to deploy production
+
+Versioning : https://semver.org/
+
+Tagging:
+
+- Add a tag in your current branch: `git tag tag_name`
+- Check if it's created or not: `git tag`
+- Push in your remote origin: `git push origin tag_name`
+
 # IPFS
 
 ## Gateway
