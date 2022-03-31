@@ -7,10 +7,11 @@ const logger = Logger('ipfsService');
 
 const { IPFS_CRUSTCODE_ENDPOINT, IPFS_CRUSTCODE_ACCESS_TOKEN } = process.env;
 
+const ONE_HOUR_IN_MS = 3600_000;
 const ADD_OPTIONS = {
   pin: true,
   wrapWithDirectory: true,
-  timeout: 100_000,
+  timeout: ONE_HOUR_IN_MS,
 };
 
 export async function uploadToIPFS(fromBucketName: string, fileIds: string[]) {
