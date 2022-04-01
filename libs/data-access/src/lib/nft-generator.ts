@@ -50,6 +50,7 @@ export enum TaskStatus {
   Processing = 'processing',
   Completed = 'completed',
   Canceled = 'canceled',
+  Failed = 'failed',
 }
 
 export type NftCollectionQueryParams = Partial<NftCollectionDto> & {

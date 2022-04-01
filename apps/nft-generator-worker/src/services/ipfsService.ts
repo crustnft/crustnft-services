@@ -1,5 +1,5 @@
 import { Logger } from '@crustnft-explore/util-config-api';
-import { urlSource } from 'ipfs-http-client';
+import { globSource, urlSource } from 'ipfs-http-client';
 import ipfs from '../clients/ipfs-http-client';
 import axios from 'axios';
 
@@ -14,7 +14,10 @@ const ADD_OPTIONS = {
   timeout: ONE_HOUR_IN_MS,
 };
 
-export async function uploadToIPFS(fromBucketName: string, fileIds: string[]) {
+export async function uploadToIPFSFromGCS(
+  fromBucketName: string,
+  fileIds: string[]
+) {
   logger.info(
     `Start uploading to IPFS from bucket: ${fromBucketName}, fileIds: ${fileIds}`
   );
@@ -28,7 +31,29 @@ export async function uploadToIPFS(fromBucketName: string, fileIds: string[]) {
   )) {
     addResults.push(file);
   }
-  logger.info('Uploaded file to IPFS: ', addResults);
+  logger.info(
+    'Uploaded %d files to IPFS, last file result: %j',
+    addResults.length,
+    addResults[addResults.length - 1]
+  );
+  return addResults;
+}
+
+export async function uploadFolderToIPFS(path: string, globPattern = '**/*') {
+  logger.info(`Start uploading to IPFS from path: ${path}`);
+
+  const addResults = [];
+  for await (const file of ipfs.addAll(
+    globSource(path, globPattern),
+    ADD_OPTIONS
+  )) {
+    addResults.push(file);
+  }
+  logger.info(
+    'Uploaded %d files to IPFS, last file result: %j',
+    addResults.length,
+    addResults[addResults.length - 1]
+  );
   return addResults;
 }
 

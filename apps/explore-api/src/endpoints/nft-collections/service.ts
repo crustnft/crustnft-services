@@ -129,7 +129,7 @@ async function kickStartWorker(workerDto: NftCollectionWorkerDto) {
   const taskId = workerDto.id;
   logger.info(`Kick start worker with taskId: ${taskId}`);
   const task = await findOne(taskId);
-  if (task.status !== TaskStatus.Pending) {
+  if (task.status !== TaskStatus.Pending && task.status !== TaskStatus.Failed) {
     throw Error(`Can not start task with status ${task.status}`);
   }
   try {

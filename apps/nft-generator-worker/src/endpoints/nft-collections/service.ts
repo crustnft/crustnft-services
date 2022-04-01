@@ -6,19 +6,22 @@ import {
 } from '@crustnft-explore/data-access';
 import R from 'ramda';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
-import { downloadFiles, uploadFile } from '../../services/gcsService';
-import { crustNetworkPin, uploadToIPFS } from '../../services/ipfsService';
+import { downloadFiles } from '../../services/gcsService';
+import {
+  crustNetworkPin,
+  uploadFolderToIPFS,
+} from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
-import { WEBP_FILE_EXTENSION, WEBP_MIME_TYPE } from '../../constants/image';
+import { WEBP_FILE_EXTENSION } from '../../constants/image';
 import createHttpError from 'http-errors';
 import { NftSeed } from '../../types/file';
 import sha1 from '../../utils/sha1';
 import { createSeeds } from '../../utils/nft-generator';
+import { promises as fs } from 'fs';
 
 const logger = Logger('nft-collections:service');
 
-const { NFT_GENERATOR_UPLOAD_BUCKET, NFT_GENERATOR_CREATED_BUCKET } =
-  process.env;
+const { NFT_GENERATOR_UPLOAD_BUCKET } = process.env;
 
 export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
   const { id: collectionId } = generatorDto;
@@ -28,23 +31,28 @@ export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
     generatorDto,
     nftCollectionRecord
   );
-  await nftGeneratorEntity.updateEntity(collectionId, {
-    status: TaskStatus.Assigned,
-  });
 
-  const { collectionCID, metadataCID } = await startGenerator(
-    nftCollectionRecord,
-    generatorDto
-  );
+  try {
+    await nftGeneratorEntity.updateEntity(collectionId, {
+      status: TaskStatus.Assigned,
+    });
 
-  const updateEntity = {
-    status: TaskStatus.Completed,
-    collectionCID,
-    metadataCID,
-  };
+    const { collectionCID, metadataCID } = await startGenerator(
+      nftCollectionRecord,
+      generatorDto
+    );
 
-  await nftGeneratorEntity.updateEntity(collectionId, updateEntity);
-
+    await nftGeneratorEntity.updateEntity(collectionId, {
+      status: TaskStatus.Completed,
+      collectionCID,
+      metadataCID,
+    });
+  } catch (error) {
+    logger.error({ err: error }, 'Error when creating NFT collection');
+    await nftGeneratorEntity.updateEntity(collectionId, {
+      status: TaskStatus.Failed,
+    });
+  }
   return findOne(collectionId);
 }
 
@@ -83,23 +91,23 @@ async function startGenerator(
     ? R.take(collectionSize, initialNftSeeds)
     : initialNftSeeds;
 
-  const folderName = `${nftCollection.creator}/${collectionId}`;
+  const nftFolder = `/tmp/${nftCollection.creator}/${collectionId}/images`;
+  const metadataFolder = `/tmp/${nftCollection.creator}/${collectionId}/metadata`;
+  await createDirectories([nftFolder, metadataFolder]);
   const createdFilePaths = [];
   let counter = 1;
   for await (const nftImages of nftGenerator(nftSeeds, composingBatchSize)) {
-    const filePaths = await updateNftToGCS(folderName, nftImages, counter);
+    const filePaths = await storeNFT(nftFolder, nftImages, counter);
     createdFilePaths.push(...filePaths);
     counter += nftImages.length;
   }
-  logger.debug(`Uploaded files to ${NFT_GENERATOR_CREATED_BUCKET}`);
+  logger.debug(`Stored all NFTs at ${nftFolder}`);
 
-  const ipfsFiles = await uploadToIPFS(
-    NFT_GENERATOR_CREATED_BUCKET,
-    createdFilePaths
-  );
+  const ipfsFiles = await uploadFolderToIPFS(nftFolder);
 
   const imageDirectoryCID = getIpfsFolderCID(ipfsFiles);
   const metadataDirectoryCID = await uploadMetadataFiles(
+    metadataFolder,
     nftSeeds,
     nftCollection,
     imageDirectoryCID
@@ -127,51 +135,41 @@ async function pinToCrustNode(
   }
 }
 
-async function updateNftToGCS(
+async function storeNFT(
   folderName: string,
   nftImages: Buffer[],
   counter: number
 ) {
   return Promise.all(
     nftImages.map(async (nftImage: Buffer, index) => {
-      const filePath = `${folderName}/images/${
+      const filePath = `${folderName}/${
         counter + index
       }.${WEBP_FILE_EXTENSION}`;
-      await uploadFile(
-        NFT_GENERATOR_CREATED_BUCKET,
-        filePath,
-        nftImage,
-        WEBP_MIME_TYPE
-      );
-      logger.debug(`Uploaded to GCS: ${filePath}`);
+      await fs.writeFile(filePath, nftImage);
+      logger.debug(`Stored NFT at: ${filePath}`);
       return filePath;
     })
   );
 }
 
 async function uploadMetadataFiles(
+  metadataFolder: string,
   nftSeeds: NftSeed[],
   nftCollection: NftCollectionDto,
-  ipfsImagesDirectory: any
+  ipfsNftDirectory: string
 ) {
-  const folderName = `${nftCollection.creator}/${nftCollection.id}`;
   const createdMetaFilePaths = [];
   for (let i = 0; i < nftSeeds.length; i++) {
-    const metadataPath = `${folderName}/metadata/${i + 1}.json`;
-    await uploadFile(
-      NFT_GENERATOR_CREATED_BUCKET,
+    const metadataPath = `${metadataFolder}/${i + 1}.json`;
+    await fs.writeFile(
       metadataPath,
-      createImageMeta(nftSeeds[i], nftCollection, i + 1, ipfsImagesDirectory),
-      'application/json'
+      createImageMeta(nftSeeds[i], nftCollection, i + 1, ipfsNftDirectory)
     );
-    logger.debug(`Uploaded to GCS: ${metadataPath}`);
+    logger.debug(`Stored metadata at: ${metadataPath}`);
     createdMetaFilePaths.push(metadataPath);
   }
 
-  const ipfsMetaFiles = await uploadToIPFS(
-    NFT_GENERATOR_CREATED_BUCKET,
-    createdMetaFilePaths
-  );
+  const ipfsMetaFiles = await uploadFolderToIPFS(metadataFolder);
 
   const ipfsMetaDirectoryCID = getIpfsFolderCID(ipfsMetaFiles);
   return ipfsMetaDirectoryCID;
@@ -186,12 +184,12 @@ function createImageMeta(
   nftSeed: NftSeed,
   nftCollection: NftCollectionDto,
   nftNumber: number,
-  ipfsDirectory: string
+  ipfsNftDirectory: string
 ): string {
   const metadata = {
     name: `${nftCollection.name} #${nftNumber}`,
     description: nftCollection.description,
-    image: `ipfs://${ipfsDirectory}/${nftNumber}.${WEBP_FILE_EXTENSION}`,
+    image: `ipfs://${ipfsNftDirectory}/${nftNumber}.${WEBP_FILE_EXTENSION}`,
     dna: getDnaHash(nftSeed),
     date: new Date().toISOString(),
     edition: nftNumber,
@@ -206,4 +204,16 @@ function createImageMeta(
 function getDnaHash(nftSeed: NftSeed) {
   const content = nftSeed.map((image) => image.id).join();
   return isLocal() ? content : sha1(content);
+}
+
+async function createDirectories(directories: string[]) {
+  try {
+    await Promise.all(
+      directories.map((directory: string) =>
+        fs.mkdir(directory, { recursive: true })
+      )
+    );
+  } catch (error) {
+    logger.debug({ err: error }, 'create directories');
+  }
 }
