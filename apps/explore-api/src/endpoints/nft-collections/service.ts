@@ -57,7 +57,10 @@ export async function update(
       txHash: nftCollection.txHash,
       whitelist: nftCollection.whitelist,
     };
-  } else if (existing.status !== TaskStatus.Pending) {
+  } else if (
+    existing.status !== TaskStatus.Pending &&
+    existing.status !== TaskStatus.Failed
+  ) {
     throw new Error(
       `You can't update collection with status ${existing.status}.`
     );
