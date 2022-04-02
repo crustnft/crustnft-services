@@ -15,5 +15,6 @@ content-type: application/json
 
 {
   "id":"6a6df4af-5d5c-4cd0-962e-8c747b89b72c",
-  "composingBatchSize": 2
+  "composingBatchSize": 2,
+  "collectionSize": 100
 }

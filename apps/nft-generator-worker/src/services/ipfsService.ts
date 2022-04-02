@@ -34,7 +34,7 @@ export async function uploadToIPFSFromGCS(
   logger.info(
     'Uploaded %d files to IPFS, last file result: %j',
     addResults.length,
-    addResults[addResults.length - 1]
+    convertToV0(addResults[addResults.length - 1])
   );
   return addResults;
 }
@@ -49,20 +49,20 @@ export async function uploadFolderToIPFS(path: string, globPattern = '**/*') {
   )) {
     addResults.push(file);
   }
+
   logger.info(
     'Uploaded %d files to IPFS, last file result: %j',
     addResults.length,
-    addResults[addResults.length - 1]
+    convertToV0(addResults[addResults.length - 1])
   );
   return addResults;
 }
 
-export function convertToDatastoreTypes(addResults: any[]) {
-  return addResults.map(({ path, cid, size }) => ({
-    path: path,
-    cid: cid.toV0().toString(),
-    size,
-  }));
+export function convertToV0(addResult: any) {
+  return {
+    ...addResult,
+    cid: addResult.cid.toV0().toString(),
+  };
 }
 
 export async function crustNetworkPin(cid: string, name: string) {

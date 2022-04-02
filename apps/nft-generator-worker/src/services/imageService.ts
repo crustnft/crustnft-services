@@ -61,7 +61,9 @@ export async function compositeImages(
   background: Buffer,
   layerBuffers: Buffer[]
 ) {
-  logger.debug(`Start composite background with ${layerBuffers.length} layers`);
+  logger.debug(
+    `Start composite a background with ${layerBuffers.length} layers`
+  );
   const toComposeLayers = layerBuffers.map((buffer) => ({
     input: buffer,
     top: 0,

@@ -27,7 +27,7 @@ export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
   const { id: collectionId } = generatorDto;
   const nftCollectionRecord = await findOne(collectionId);
   logger.info(
-    'Start generate NFT generatorDto=%d; Collection=%j',
+    'Start generate NFT generatorDto=%j; Collection=%j',
     generatorDto,
     nftCollectionRecord
   );
