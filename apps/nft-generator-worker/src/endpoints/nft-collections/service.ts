@@ -7,10 +7,7 @@ import {
 import R from 'ramda';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles } from '../../services/gcsService';
-import {
-  crustNetworkPin,
-  uploadFolderToIPFS,
-} from '../../services/ipfsService';
+import { crustNetworkPin, uploadUsingCar } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
 import { WEBP_FILE_EXTENSION } from '../../constants/image';
 import createHttpError from 'http-errors';
@@ -20,6 +17,7 @@ import { createSeeds } from '../../utils/nft-generator';
 import { promises as fs } from 'fs';
 
 const logger = Logger('nft-collections:service');
+const outputRoot = `${process.cwd()}/output`;
 
 const { NFT_GENERATOR_UPLOAD_BUCKET } = process.env;
 
@@ -42,18 +40,17 @@ export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
       generatorDto
     );
 
-    await nftGeneratorEntity.updateEntity(collectionId, {
+    return nftGeneratorEntity.updateEntity(collectionId, {
       status: TaskStatus.Completed,
       collectionCID,
       metadataCID,
     });
   } catch (error) {
     logger.error({ err: error }, 'Error when creating NFT collection');
-    await nftGeneratorEntity.updateEntity(collectionId, {
-      status: TaskStatus.Failed,
-    });
   }
-  return findOne(collectionId);
+  return nftGeneratorEntity.updateEntity(collectionId, {
+    status: TaskStatus.Failed,
+  });
 }
 
 export async function findOne(id: string): Promise<NftCollectionDto> {
@@ -91,8 +88,8 @@ async function startGenerator(
     ? R.take(collectionSize, initialNftSeeds)
     : initialNftSeeds;
 
-  const nftFolder = `/tmp/${nftCollection.creator}/${collectionId}/images`;
-  const metadataFolder = `/tmp/${nftCollection.creator}/${collectionId}/metadata`;
+  const nftFolder = `${outputRoot}/${nftCollection.creator}/${collectionId}/images`;
+  const metadataFolder = `${outputRoot}/${nftCollection.creator}/${collectionId}/metadata`;
   await createDirectories([nftFolder, metadataFolder]);
   const createdFilePaths = [];
   let counter = 1;
@@ -103,9 +100,8 @@ async function startGenerator(
   }
   logger.debug(`Stored all NFTs at ${nftFolder}`);
 
-  const ipfsFiles = await uploadFolderToIPFS(nftFolder);
+  const imageDirectoryCID = await uploadUsingCar(nftFolder);
 
-  const imageDirectoryCID = getIpfsFolderCID(ipfsFiles);
   const metadataDirectoryCID = await uploadMetadataFiles(
     metadataFolder,
     nftSeeds,
@@ -169,15 +165,7 @@ async function uploadMetadataFiles(
     createdMetaFilePaths.push(metadataPath);
   }
 
-  const ipfsMetaFiles = await uploadFolderToIPFS(metadataFolder);
-
-  const ipfsMetaDirectoryCID = getIpfsFolderCID(ipfsMetaFiles);
-  return ipfsMetaDirectoryCID;
-}
-
-function getIpfsFolderCID(ipfsList: any[]) {
-  const directory = ipfsList.find((ipfs) => ipfs.path === '');
-  return directory.cid.toV0().toString();
+  return uploadUsingCar(metadataFolder);
 }
 
 function createImageMeta(

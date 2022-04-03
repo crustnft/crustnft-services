@@ -24,6 +24,7 @@
     "express-async-handler": "^1.2.0",
     "express-jwt": "^6.1.1",
     "http-errors": "^2.0.0",
+    "ipfs-car": "^0.6.2",
     "ipfs-http-client": "^56.0.1",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",

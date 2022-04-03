@@ -1,6 +1,10 @@
 import { Logger } from '@crustnft-explore/util-config-api';
 import { globSource, urlSource } from 'ipfs-http-client';
 import ipfs from '../clients/ipfs-http-client';
+import { packToFs } from 'ipfs-car/pack/fs';
+import { FsBlockStore } from 'ipfs-car/blockstore/fs';
+import fs from 'fs';
+
 import axios from 'axios';
 
 const logger = Logger('ipfsService');
@@ -56,6 +60,26 @@ export async function uploadFolderToIPFS(path: string, globPattern = '**/*') {
     convertToV0(addResults[addResults.length - 1])
   );
   return addResults;
+}
+
+export async function uploadUsingCar(folder: string): Promise<string> {
+  const carFilePath = `${folder.replace(/\/$/, '')}.car`;
+  await packToFs({
+    input: folder,
+    output: carFilePath,
+    wrapWithDirectory: false,
+    blockstore: new FsBlockStore(),
+  });
+  for await (const result of ipfs.dag.import(
+    [fs.createReadStream(carFilePath)],
+    {
+      timeout: ONE_HOUR_IN_MS,
+    }
+  )) {
+    const cidV0 = result.root.cid.toV0().toString();
+    logger.info('Uploaded folder %s with CAR, result: %s', folder, cidV0);
+    return cidV0;
+  }
 }
 
 export function convertToV0(addResult: any) {
