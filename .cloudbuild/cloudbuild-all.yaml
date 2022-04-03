@@ -106,6 +106,7 @@ steps:
       - --platform=managed
       - --ingress=all
       - --no-allow-unauthenticated
+      - --concurrency=1
       - --memory=2Gi
       - --timeout=60m
       - --max-instances=10

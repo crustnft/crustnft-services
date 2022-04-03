@@ -63,6 +63,8 @@ export async function uploadFolderToIPFS(path: string, globPattern = '**/*') {
 }
 
 export async function uploadUsingCar(folder: string): Promise<string> {
+  const timeLabel = `Uploaded ${folder}`;
+  console.time(timeLabel);
   const carFilePath = `${folder.replace(/\/$/, '')}.car`;
   await packToFs({
     input: folder,
@@ -78,6 +80,7 @@ export async function uploadUsingCar(folder: string): Promise<string> {
   )) {
     const cidV0 = result.root.cid.toV0().toString();
     logger.info('Uploaded folder %s with CAR, result: %s', folder, cidV0);
+    console.timeEnd(timeLabel);
     return cidV0;
   }
 }
