@@ -5,11 +5,7 @@ import { packToFs } from 'ipfs-car/pack/fs';
 import { FsBlockStore } from 'ipfs-car/blockstore/fs';
 import fs from 'fs';
 
-import axios from 'axios';
-
 const logger = Logger('ipfsService');
-
-const { IPFS_CRUSTCODE_ENDPOINT, IPFS_CRUSTCODE_ACCESS_TOKEN } = process.env;
 
 const BYTES_PER_MB = 1024 ** 2;
 const ONE_HOUR_IN_MS = 3600_000;
@@ -68,12 +64,14 @@ export async function uploadUsingCar(folder: string): Promise<string> {
   console.time(timeLabel);
   const carFilePath = `${folder.replace(/\/$/, '')}.car`;
   const fileStat = await fs.promises.stat(carFilePath);
+
   await packToFs({
     input: folder,
     output: carFilePath,
     wrapWithDirectory: false,
     blockstore: new FsBlockStore(),
   });
+
   for await (const result of ipfs.dag.import(
     [fs.createReadStream(carFilePath)],
     {
@@ -97,20 +95,4 @@ export function convertToV0(addResult: any) {
     ...addResult,
     cid: addResult.cid.toV0().toString(),
   };
-}
-
-export async function crustNetworkPin(cid: string, name: string) {
-  return axios.post(
-    `${IPFS_CRUSTCODE_ENDPOINT}/pins`,
-    {
-      cid,
-      name,
-    },
-    {
-      headers: {
-        authorization: `Bearer ${IPFS_CRUSTCODE_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
 }

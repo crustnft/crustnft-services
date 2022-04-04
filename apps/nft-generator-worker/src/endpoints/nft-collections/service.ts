@@ -7,7 +7,7 @@ import {
 import R from 'ramda';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles } from '../../services/gcsService';
-import { crustNetworkPin, uploadUsingCar } from '../../services/ipfsService';
+import { uploadUsingCar } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
 import { WEBP_FILE_EXTENSION } from '../../constants/image';
 import createHttpError from 'http-errors';
@@ -109,26 +109,10 @@ async function startGenerator(
     imageDirectoryCID
   );
 
-  pinToCrustNode(imageDirectoryCID, metadataDirectoryCID);
-
   return {
     collectionCID: imageDirectoryCID,
     metadataCID: metadataDirectoryCID,
   };
-}
-
-async function pinToCrustNode(
-  imageDirectoryCID: string,
-  metadataDirectoryCID: string
-) {
-  try {
-    await Promise.all([
-      crustNetworkPin(imageDirectoryCID, 'imageDirectoryCID'),
-      crustNetworkPin(metadataDirectoryCID, 'metadataDirectoryCID'),
-    ]);
-  } catch (error) {
-    logger.warn({ err: error }, 'Error on pinning CIDs to CrustNode');
-  }
 }
 
 async function storeNFT(
