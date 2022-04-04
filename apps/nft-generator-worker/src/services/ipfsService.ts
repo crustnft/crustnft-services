@@ -11,6 +11,7 @@ const logger = Logger('ipfsService');
 
 const { IPFS_CRUSTCODE_ENDPOINT, IPFS_CRUSTCODE_ACCESS_TOKEN } = process.env;
 
+const BYTES_PER_MB = 1024 ** 2;
 const ONE_HOUR_IN_MS = 3600_000;
 const ADD_OPTIONS = {
   pin: true,
@@ -66,6 +67,7 @@ export async function uploadUsingCar(folder: string): Promise<string> {
   const timeLabel = `Uploaded ${folder}`;
   console.time(timeLabel);
   const carFilePath = `${folder.replace(/\/$/, '')}.car`;
+  const fileStat = await fs.promises.stat(carFilePath);
   await packToFs({
     input: folder,
     output: carFilePath,
@@ -79,7 +81,12 @@ export async function uploadUsingCar(folder: string): Promise<string> {
     }
   )) {
     const cidV0 = result.root.cid.toV0().toString();
-    logger.info('Uploaded folder %s with CAR, result: %s', folder, cidV0);
+    logger.info(
+      'Uploaded folder %s with CAR, file size:%s MB, result: %s',
+      folder,
+      (fileStat.size / BYTES_PER_MB).toFixed(3),
+      cidV0
+    );
     console.timeEnd(timeLabel);
     return cidV0;
   }
