@@ -9,7 +9,7 @@ export function nftGenerator(nftSeeds: NftSeed[], batchSize: number) {
     async *[Symbol.asyncIterator]() {
       let counter = 0;
       while (nftSeeds.length > counter) {
-        const timeLabel = `Done ${counter} NFTs, creating ${batchSize} new NFTs`;
+        const timeLabel = `Done ${counter} NFTs, creating new ${batchSize} NFTs`;
         console.time(timeLabel);
         const seeds = nftSeeds.slice(counter, counter + batchSize);
         counter += batchSize;

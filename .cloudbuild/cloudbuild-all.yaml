@@ -107,7 +107,7 @@ steps:
       - --ingress=all
       - --no-allow-unauthenticated
       - --concurrency=1
-      - --memory=4Gi
+      - --memory=2Gi
       - --timeout=60m
       - --max-instances=10
       - --service-account=${_SERVICE_ACCOUNT}
