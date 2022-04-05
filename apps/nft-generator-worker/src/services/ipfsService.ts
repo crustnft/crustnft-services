@@ -88,6 +88,7 @@ export async function uploadUsingCar(folder: string): Promise<string> {
       cidV0
     );
     console.timeEnd(timeLabel);
+    crustNetworkPin(cidV0, carFilePath.split('/').pop());
     return cidV0;
   }
 }
@@ -100,17 +101,21 @@ export function convertToV0(addResult: any) {
 }
 
 export async function crustNetworkPin(cid: string, name: string) {
-  return axios.post(
-    `${IPFS_CRUSTCODE_ENDPOINT}/pins`,
-    {
-      cid,
-      name,
-    },
-    {
-      headers: {
-        authorization: `Bearer ${IPFS_CRUSTCODE_ACCESS_TOKEN}`,
-        'Content-Type': 'application/json',
+  try {
+    return axios.post(
+      `${IPFS_CRUSTCODE_ENDPOINT}/pins`,
+      {
+        cid,
+        name,
       },
-    }
-  );
+      {
+        headers: {
+          authorization: `Bearer ${IPFS_CRUSTCODE_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (error) {
+    logger.warn({ err: error });
+  }
 }

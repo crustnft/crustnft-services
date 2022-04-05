@@ -5,16 +5,16 @@ import {
   NftCollectionWorkerDto,
 } from '@crustnft-explore/data-access';
 import R from 'ramda';
+import { promises as fs } from 'fs';
 import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles } from '../../services/gcsService';
-import { crustNetworkPin, uploadUsingCar } from '../../services/ipfsService';
+import { uploadUsingCar } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
 import { WEBP_FILE_EXTENSION } from '../../constants/image';
 import createHttpError from 'http-errors';
 import { NftSeed } from '../../types/file';
 import sha1 from '../../utils/sha1';
 import { createSeeds } from '../../utils/nft-generator';
-import { promises as fs } from 'fs';
 
 const logger = Logger('nft-collections:service');
 const outputRoot = `${process.cwd()}/output`;
@@ -109,26 +109,10 @@ async function startGenerator(
     imageDirectoryCID
   );
 
-  pinToCrustNode(imageDirectoryCID, metadataDirectoryCID);
-
   return {
     collectionCID: imageDirectoryCID,
     metadataCID: metadataDirectoryCID,
   };
-}
-
-async function pinToCrustNode(
-  imageDirectoryCID: string,
-  metadataDirectoryCID: string
-) {
-  try {
-    await Promise.all([
-      crustNetworkPin(imageDirectoryCID, 'imageDirectoryCID'),
-      crustNetworkPin(metadataDirectoryCID, 'metadataDirectoryCID'),
-    ]);
-  } catch (error) {
-    logger.warn({ err: error }, 'Error on pinning CIDs to CrustNode');
-  }
 }
 
 async function storeNFT(
