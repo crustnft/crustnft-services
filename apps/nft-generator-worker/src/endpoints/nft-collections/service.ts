@@ -46,7 +46,11 @@ export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
       metadataCID,
     });
   } catch (error) {
-    logger.error({ err: error }, 'Error when creating NFT collection');
+    logger.error(
+      { err: error },
+      'Error when creating NFT collection: %s',
+      error.message
+    );
   }
   return nftGeneratorEntity.updateEntity(collectionId, {
     status: TaskStatus.Failed,
