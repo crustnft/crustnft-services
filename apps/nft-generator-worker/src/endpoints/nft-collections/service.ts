@@ -75,7 +75,9 @@ async function startGenerator(
     collectionSize,
   } = generatorDto;
 
-  const fileIdList = nftCollection.images.map((image) => image.id);
+  const fileIdList = nftCollection.images.map(
+    (image) => `${nftCollection.creator}/${image.id}`
+  );
 
   const downloadedFileList = await downloadFiles(
     NFT_GENERATOR_UPLOAD_BUCKET,
