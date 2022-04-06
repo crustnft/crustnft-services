@@ -138,7 +138,7 @@ async function kickStartWorker(workerDto: NftCollectionWorkerDto) {
   try {
     await triggerWorker(workerDto);
   } catch (error) {
-    logger.error({ err: error }, 'Can not trigger worker');
+    logger.error({ err: error }, 'Can not trigger worker: %s', error.message);
   }
 }
 

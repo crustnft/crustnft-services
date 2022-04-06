@@ -67,13 +67,16 @@ export async function uploadUsingCar(folder: string): Promise<string> {
   const timeLabel = `Uploaded ${folder}`;
   console.time(timeLabel);
   const carFilePath = `${folder.replace(/\/$/, '')}.car`;
-  const fileStat = await fs.promises.stat(carFilePath);
+
   await packToFs({
     input: folder,
     output: carFilePath,
     wrapWithDirectory: false,
     blockstore: new FsBlockStore(),
   });
+
+  const fileStat = await fs.promises.stat(carFilePath);
+
   for await (const result of ipfs.dag.import(
     [fs.createReadStream(carFilePath)],
     {
