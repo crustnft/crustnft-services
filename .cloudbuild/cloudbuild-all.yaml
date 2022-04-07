@@ -107,7 +107,8 @@ steps:
       - --ingress=all
       - --no-allow-unauthenticated
       - --concurrency=1
-      - --memory=4Gi
+      - --cpu=${_NFT_WORKER_CPU}
+      - --memory=${_NFT_WORKER_MEMORY}
       - --timeout=60m
       - --max-instances=10
       - --service-account=${_SERVICE_ACCOUNT}
@@ -137,6 +138,8 @@ substitutions:
   _APP_ENV: stage
   _REGION: us-east1
   _SERVICE_ACCOUNT: stage-crust-nft-explore@crustnft.iam.gserviceaccount.com
+  _NFT_WORKER_MEMORY: 2Gi
+  _NFT_WORKER_CPU: '1'
 
 images:
   - 'gcr.io/$PROJECT_ID/explore-api:$SHORT_SHA'
