@@ -24,7 +24,9 @@ export function createSeeds(
       const layer = nftCollection.layers.find((layer) => layer.id === layerId);
       const imageId = layer.imageIds[indexes[i]];
       const image = nftCollection.images.find((image) => image.id === imageId);
-      const file = downloadFiles.find((file) => file.fileName === imageId);
+      const file = downloadFiles.find(
+        (file) => file.fileName === `${nftCollection.creator}/${imageId}`
+      );
       seed.push({
         layer,
         ...image,
