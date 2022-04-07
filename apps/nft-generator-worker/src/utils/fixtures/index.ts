@@ -65,35 +65,44 @@ export const nftCollectionFixture = {
 
 export const mockDownloadedFiles = [
   {
-    fileName: '5a2b4181-05e4-4680-96c3-6bb259636968',
-    content: 'Content-5a2b4181-05e4-4680-96c3-6bb259636968',
+    fileName:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50d/5a2b4181-05e4-4680-96c3-6bb259636968',
+    content:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50dContent-5a2b4181-05e4-4680-96c3-6bb259636968',
   },
   {
-    fileName: '94ed537a-b85e-4ff6-9514-eda775797716',
+    fileName:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50d/94ed537a-b85e-4ff6-9514-eda775797716',
     content: 'Content-94ed537a-b85e-4ff6-9514-eda775797716',
   },
   {
-    fileName: '006987c4-fdf1-45d1-ad5b-5c57170c45ba',
+    fileName:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50d/006987c4-fdf1-45d1-ad5b-5c57170c45ba',
     content: 'Content-006987c4-fdf1-45d1-ad5b-5c57170c45ba',
   },
   {
-    fileName: '229504f5-d328-4ce4-9c7d-e071e4f34eb0',
+    fileName:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50d/229504f5-d328-4ce4-9c7d-e071e4f34eb0',
     content: 'Content-229504f5-d328-4ce4-9c7d-e071e4f34eb0',
   },
   {
-    fileName: 'd840a7b0-80f3-45a5-85d0-f8e760eb99a8',
+    fileName:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50d/d840a7b0-80f3-45a5-85d0-f8e760eb99a8',
     content: 'Content-d840a7b0-80f3-45a5-85d0-f8e760eb99a8',
   },
   {
-    fileName: '9cfadd06-51b4-4595-84f3-1c22580a76d2',
+    fileName:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50d/9cfadd06-51b4-4595-84f3-1c22580a76d2',
     content: 'Content-9cfadd06-51b4-4595-84f3-1c22580a76d2',
   },
   {
-    fileName: '8e7421ad-0715-4fa7-8d4e-2bc2c173e983',
+    fileName:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50d/8e7421ad-0715-4fa7-8d4e-2bc2c173e983',
     content: 'Content-8e7421ad-0715-4fa7-8d4e-2bc2c173e983',
   },
   {
-    fileName: 'dbe5e3eb-d9d0-4904-a2cc-d35d989b2139',
+    fileName:
+      '0x3cd12956572f7805dac4e67c1d87426b27ecf50d/dbe5e3eb-d9d0-4904-a2cc-d35d989b2139',
     content: 'Content-dbe5e3eb-d9d0-4904-a2cc-d35d989b2139',
   },
 ];
