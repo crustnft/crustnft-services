@@ -111,7 +111,7 @@ export async function generateNft(req: Request, res: Response) {
   const collection = await service.findOne(body.id);
 
   if (currentUser.account === collection.creator) {
-    const data = await service.generateNft(collection, body, currentUser);
+    const data = await service.generateNft(collection, body);
     res.json({
       data,
     });
