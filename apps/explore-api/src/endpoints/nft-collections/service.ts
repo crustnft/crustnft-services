@@ -118,7 +118,10 @@ export function validateImageIds(
 async function validateImages(createDto: CreateNftCollectionDto) {
   const existedList = await Promise.all(
     createDto.images.map((image) =>
-      storage.bucket(NFT_GENERATOR_UPLOAD_BUCKET).file(image.id).exists()
+      storage
+        .bucket(NFT_GENERATOR_UPLOAD_BUCKET)
+        .file(`${createDto.creator}/${image.id}`)
+        .exists()
     )
   );
   logger.debug('Checking existing results %j', existedList);
