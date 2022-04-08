@@ -37,9 +37,10 @@ export async function createNftCollection(
 
 export async function generateNft(
   collection: NftCollectionDto,
-  workerDto: NftCollectionWorkerDto
+  workerDto: NftCollectionWorkerDto,
+  currentUser: UserSession
 ) {
-  await validateImages(collection);
+  await validateImages(collection, currentUser.account);
   await kickStartWorker(workerDto);
   return collection;
 }
@@ -115,10 +116,16 @@ export function validateImageIds(
   return true;
 }
 
-async function validateImages(createDto: CreateNftCollectionDto) {
+async function validateImages(
+  createDto: CreateNftCollectionDto,
+  creator: string
+) {
   const existedList = await Promise.all(
     createDto.images.map((image) =>
-      storage.bucket(NFT_GENERATOR_UPLOAD_BUCKET).file(image.id).exists()
+      storage
+        .bucket(NFT_GENERATOR_UPLOAD_BUCKET)
+        .file(`${creator}/${image.id}`)
+        .exists()
     )
   );
   logger.debug('Checking existing results %j', existedList);
