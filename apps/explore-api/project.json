@@ -16,6 +16,11 @@
             "input": "apps/explore-api",
             "glob": ".env.{prod,test,local,stage}",
             "output": "."
+          },
+          {
+            "input": "apps/explore-api",
+            "glob": "app-engine.yaml",
+            "output": "."
           }
         ]
       },

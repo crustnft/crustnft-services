@@ -32,6 +32,12 @@ gcloud builds submit --config .cloudbuild/cloudbuild-functions.yaml . --substitu
 gcloud builds submit --config .cloudbuild/cloudbuild-runs.yaml . --substitutions=SHORT_SHA=local,_APP_ENV=stage,_REGION=abc-xyz
 ```
 
+- [Google App Engine](https://cloud.google.com/build/docs/deploying-builds/deploy-appengine)
+
+```
+gcloud builds submit --config .cloudbuild/cloudbuild-app-engine.yaml . --substitutions=SHORT_SHA=local
+```
+
 - All in one
 
 ```
