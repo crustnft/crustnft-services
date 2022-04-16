@@ -40,7 +40,7 @@ steps:
       - --region=${_REGION}
       - --project=$PROJECT_ID
       - --service-account=${_SERVICE_ACCOUNT}
-      - --set-env-vars=APP_ENV=${_APP_ENV}
+      - --set-env-vars=NODE_ENV=production,APP_ENV=${_APP_ENV}
 
 substitutions:
   _APP_ENV: prod

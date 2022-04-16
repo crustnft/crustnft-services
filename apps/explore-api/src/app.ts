@@ -6,6 +6,7 @@ import registerRoutes from './endpoints';
 
 const app: express.Application = express();
 
+app.disable('etag').disable('x-powered-by');
 app.use(
   cors({
     maxAge: 24 * 60 * 60,
