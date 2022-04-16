@@ -36,6 +36,9 @@ export interface NftCollectionDto {
   metadataCID?: string;
   txHash?: string;
   whitelist?: string[];
+
+  collectionSize: number;
+  generatedNfts: number;
 }
 
 export interface NftCollectionWorkerDto {

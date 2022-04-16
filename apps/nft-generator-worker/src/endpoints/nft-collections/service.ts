@@ -6,7 +6,7 @@ import {
 } from '@crustnft-explore/data-access';
 import R from 'ramda';
 import { promises as fs } from 'fs';
-import * as nftGeneratorEntity from '@crustnft-explore/entity-nft-collection';
+import * as nftCollectionEntity from '@crustnft-explore/entity-nft-collection';
 import { downloadFiles } from '../../services/gcsService';
 import { uploadUsingCar } from '../../services/ipfsService';
 import { nftGenerator } from '../../services/nftGeneratorService';
@@ -31,7 +31,7 @@ export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
   );
 
   try {
-    await nftGeneratorEntity.updateEntity(collectionId, {
+    await nftCollectionEntity.updateEntity(collectionId, {
       status: TaskStatus.Assigned,
     });
 
@@ -40,7 +40,7 @@ export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
       generatorDto
     );
 
-    return nftGeneratorEntity.updateEntity(collectionId, {
+    return nftCollectionEntity.updateEntity(collectionId, {
       status: TaskStatus.Completed,
       collectionCID,
       metadataCID,
@@ -52,13 +52,13 @@ export async function createNftGenerator(generatorDto: NftCollectionWorkerDto) {
       error.message
     );
   }
-  return nftGeneratorEntity.updateEntity(collectionId, {
+  return nftCollectionEntity.updateEntity(collectionId, {
     status: TaskStatus.Failed,
   });
 }
 
 export async function findOne(id: string): Promise<NftCollectionDto> {
-  const [first] = await nftGeneratorEntity.findById(id);
+  const [first] = await nftCollectionEntity.findById(id);
   if (!first) {
     throw new createHttpError[404]('Not found entity');
   }
@@ -80,7 +80,7 @@ async function startGenerator(
     fileIdList
   );
 
-  await nftGeneratorEntity.updateEntity(collectionId, {
+  await nftCollectionEntity.updateEntity(collectionId, {
     status: TaskStatus.Processing,
   });
 
@@ -101,6 +101,10 @@ async function startGenerator(
     const filePaths = await storeNFT(nftFolder, nftImages, counter);
     createdFilePaths.push(...filePaths);
     counter += nftImages.length;
+    await nftCollectionEntity.updateEntity(collectionId, {
+      collectionSize: nftSeeds.length,
+      generatedNfts: counter - 1,
+    });
   }
   logger.debug(`Stored all NFTs at ${nftFolder}`);
 

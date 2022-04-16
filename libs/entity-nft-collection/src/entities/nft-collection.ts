@@ -55,12 +55,18 @@ const CollectionSchema: DatastoreEntitySchema = {
     {
       name: 'collectionCID',
       defaultValue: '',
-      excludeFromIndexes: true,
     },
     {
       name: 'metadataCID',
       defaultValue: '',
-      excludeFromIndexes: true,
+    },
+    {
+      name: 'collectionSize',
+      defaultValue: 0,
+    },
+    {
+      name: 'generatedNfts',
+      defaultValue: 0,
     },
     {
       name: 'createdAt',
