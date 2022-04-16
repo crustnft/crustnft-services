@@ -59,16 +59,5 @@ export const UpdateNftCollectionDtoSchema = Joi.object<UpdateNftCollectionDto>({
 export const GenerateNftCollectionDtoSchema =
   Joi.object<NftCollectionWorkerDto>({
     id: Joi.string().required(),
-    composingBatchSize: Joi.number().optional().min(1).max(20),
-    collectionSize: Joi.number()
-      .optional()
-      .min(
-        Joi.ref('composingBatchSize', {
-          adjust: (value) => value * 2,
-        })
-      )
-      .messages({
-        'number.min':
-          'collectionSize must be greater than 2x of composingBatchSize',
-      }),
+    collectionSize: Joi.number().required(),
   });

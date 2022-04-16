@@ -69,11 +69,7 @@ async function startGenerator(
   nftCollection: NftCollectionDto,
   generatorDto: NftCollectionWorkerDto
 ) {
-  const {
-    id: collectionId,
-    composingBatchSize = 2,
-    collectionSize,
-  } = generatorDto;
+  const { id: collectionId, collectionSize } = generatorDto;
 
   const fileIdList = nftCollection.images.map(
     (image) => `${nftCollection.creator}/${image.id}`
@@ -99,6 +95,7 @@ async function startGenerator(
   await createDirectories([nftFolder, metadataFolder]);
   const createdFilePaths = [];
   let counter = 1;
+  const composingBatchSize = getComposingBatchSize(collectionSize);
   for await (const nftImages of nftGenerator(nftSeeds, composingBatchSize)) {
     const filePaths = await storeNFT(nftFolder, nftImages, counter);
     createdFilePaths.push(...filePaths);
@@ -194,4 +191,20 @@ async function createDirectories(directories: string[]) {
   } catch (error) {
     logger.debug({ err: error }, 'create directories');
   }
+}
+
+function getComposingBatchSize(collectionSize: number): number {
+  if (collectionSize <= 10) {
+    return 2;
+  }
+
+  if (collectionSize <= 1_000) {
+    return 5;
+  }
+
+  if (collectionSize > 1_000) {
+    return 10;
+  }
+
+  return 2;
 }
