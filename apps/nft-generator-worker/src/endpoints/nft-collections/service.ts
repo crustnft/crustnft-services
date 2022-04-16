@@ -86,16 +86,17 @@ async function startGenerator(
 
   logger.debug('Downloaded files %j ', fileIdList);
   const initialNftSeeds = createSeeds(nftCollection, downloadedFileList);
-  const nftSeeds = collectionSize
-    ? R.take(collectionSize, initialNftSeeds)
-    : initialNftSeeds;
+  const nftSeeds =
+    collectionSize && collectionSize < initialNftSeeds.length
+      ? R.take(collectionSize, initialNftSeeds)
+      : initialNftSeeds;
 
   const nftFolder = `${outputRoot}/${nftCollection.creator}/${collectionId}/images`;
   const metadataFolder = `${outputRoot}/${nftCollection.creator}/${collectionId}/metadata`;
   await createDirectories([nftFolder, metadataFolder]);
   const createdFilePaths = [];
   let counter = 1;
-  const composingBatchSize = getComposingBatchSize(collectionSize);
+  const composingBatchSize = getComposingBatchSize(nftSeeds.length);
   for await (const nftImages of nftGenerator(nftSeeds, composingBatchSize)) {
     const filePaths = await storeNFT(nftFolder, nftImages, counter);
     createdFilePaths.push(...filePaths);

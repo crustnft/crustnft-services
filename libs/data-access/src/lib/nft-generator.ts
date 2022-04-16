@@ -40,7 +40,7 @@ export interface NftCollectionDto {
 
 export interface NftCollectionWorkerDto {
   id: string;
-  collectionSize: number;
+  collectionSize?: number;
 }
 
 export enum TaskStatus {
