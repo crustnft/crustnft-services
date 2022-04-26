@@ -51,4 +51,22 @@ describe('mapping dto', () => {
       );
     }).toThrow(new Error(`Entity is missing name field`));
   });
+
+  test('should not return undefined value', () => {
+    const data = mappingDtoToColumns(
+      {
+        id: 1,
+        medias: [],
+        name: 'curstnft',
+        ipfsFiles: undefined,
+      },
+      SCHEMA
+    );
+    expect(data).toEqual([
+      { excludeFromIndexes: false, name: 'id', value: 1 },
+      { excludeFromIndexes: false, name: 'name', value: 'curstnft' },
+      { excludeFromIndexes: true, name: 'medias', value: [] },
+      { excludeFromIndexes: true, name: 'ipfsFiles', value: [] },
+    ]);
+  });
 });

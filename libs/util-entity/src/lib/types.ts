@@ -3,7 +3,7 @@ export interface DatastoreEntitySchema {
   columns: ColumnType[];
 }
 
-interface ColumnType {
+export interface ColumnType {
   name: string;
   excludeFromIndexes?: boolean;
   defaultValue?: any;
