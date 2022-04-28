@@ -2,6 +2,7 @@ import { getAppEnv } from '@crustnft-explore/util-config-api';
 import {
   NftCollectionDto,
   NftCollectionQueryParams,
+  TaskStatus,
 } from '@crustnft-explore/data-access';
 import datastore from '../client/datastore';
 import {
@@ -39,6 +40,7 @@ const CollectionSchema: DatastoreEntitySchema = {
     },
     {
       name: 'status',
+      defaultValue: TaskStatus.Pending,
     },
     {
       name: 'images',

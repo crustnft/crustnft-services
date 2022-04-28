@@ -1,7 +1,12 @@
 import express from 'express';
+import morgan from 'morgan';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import { healthCheck, errorHandler } from '@crustnft-explore/util-config-api';
+import {
+  healthCheck,
+  errorHandler,
+  isLocal,
+} from '@crustnft-explore/util-config-api';
 import registerRoutes from './endpoints';
 
 const app: express.Application = express();
@@ -13,6 +18,9 @@ app.use(
   })
 );
 
+if (isLocal()) {
+  app.use(morgan('dev'));
+}
 app.use(bodyParser.json());
 app.use(healthCheck());
 registerRoutes(app);

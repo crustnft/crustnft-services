@@ -70,8 +70,11 @@ export async function update(
     throw new Error('Can not edit other user collection.');
   }
   const { id, ...restDto } = updateDto;
-  await nftGeneratorEntity.updateEntity(id, restDto, existing);
-  return updateDto;
+  return nftGeneratorEntity.updateEntity(
+    id,
+    { ...restDto, status: TaskStatus.Pending },
+    existing
+  );
 }
 
 export async function findOne(id: string): Promise<NftCollectionDto> {
