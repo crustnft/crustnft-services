@@ -49,30 +49,33 @@ export async function update(
   currentUser: UserSession
 ) {
   let updateDto: Partial<UpdateNftCollectionDto> = nftCollection;
-
+  let collectionStatus = TaskStatus.Pending;
   const existing = await findOne(updateDto.id);
-  if (existing.status === TaskStatus.Completed) {
+
+  if (currentUser.account !== existing?.creator) {
+    throw new Error('Can not edit other user collection.');
+  }
+
+  collectionStatus = existing.status;
+  if (collectionStatus === TaskStatus.Completed) {
     updateDto = {
       id: nftCollection.id,
       txHash: nftCollection.txHash,
       whitelist: nftCollection.whitelist,
     };
   } else if (
-    existing.status !== TaskStatus.Pending &&
-    existing.status !== TaskStatus.Failed
+    collectionStatus !== TaskStatus.Pending &&
+    collectionStatus !== TaskStatus.Failed
   ) {
     throw new Error(
-      `You can't update collection with status ${existing.status}.`
+      `You can't update collection with status ${collectionStatus}.`
     );
   }
 
-  if (currentUser.account !== existing?.creator) {
-    throw new Error('Can not edit other user collection.');
-  }
   const { id, ...restDto } = updateDto;
   return nftGeneratorEntity.updateEntity(
     id,
-    { ...restDto, status: TaskStatus.Pending },
+    { ...restDto, status: collectionStatus },
     existing
   );
 }
